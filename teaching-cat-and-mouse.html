@@ -30,6 +30,7 @@
     - Transcript 'Read Full' button is static/grounded, not floating.
     - Chapters layout refined (removed messy borders, improved spacing & hover states).
     - Related Teachings cards perfectly match the split paper design with YT play buttons, adjusted to 4 cards per row.
+    - Reflection section completely rebuilt to match Pathfinder's premium 3-card option layout.
 
   Per-video things to replace when duplicating:
     1. <title> + meta description
@@ -366,26 +367,61 @@
     .tv-idea-card h3{position:relative;font-size:clamp(1.2rem,1.8vw,1.4rem);margin-bottom:12px}
     .tv-idea-card p{position:relative;color:var(--muted);line-height:1.6}
 
-    /* ===== Reflection (Refined Spacing) ===== */
-    .sit-section{background:var(--paper-pale);overflow:hidden}
-    .sit-shell{position:relative;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);padding:clamp(64px,7vw,90px) 0}
-    .sit-shell::before{content:'✦';position:absolute;top:-14px;left:50%;transform:translateX(-50%);padding:0 14px;background:var(--paper-pale);color:var(--ochre)}
-    .sit-head{max-width:600px;margin:0 auto 54px;text-align:center}
-    .sit-head h2{font-size:clamp(2.3rem,4vw,3.6rem)}
-    .sit-head p{margin-top:16px;font-size:1.1rem;font-style:italic;color:var(--muted)}
-    .sit-questions{max-width:840px;margin:0 auto;border-top:1px solid var(--line)}
-    .sit-question{display:grid;grid-template-columns:44px 1fr;gap:20px;align-items:baseline;padding:32px 0;border-bottom:1px solid var(--line)}
-    .sit-question-num{font-family:var(--display);font-size:.7rem;letter-spacing:.1em;color:var(--ochre)}
-    .sit-question p{font-size:clamp(1.2rem,1.8vw,1.4rem);font-style:italic;color:var(--ink);line-height:1.45;margin:0}
+    /* ===== Reflection-style question list (Imported from Pathfinder) ===== */
+    .exp-section { padding:clamp(88px,10vw,140px) 6vw; }
+    .exp-section--paper { background:var(--paper); }
+    .exp-inner { width:min(1280px,100%); margin:0 auto; }
+    .exp-heading { max-width:820px; margin-bottom:clamp(40px,5vw,64px); }
+    .exp-heading h2 { font-size:clamp(2.3rem,4.2vw,4.2rem); color:var(--ink); margin-bottom:20px; text-wrap:balance; }
+    .exp-heading p { font-size:1.24rem; color:var(--muted); max-width:56ch; }
+    .exp-heading p + p { margin-top:.4rem; }
     
-    .sit-practice{max-width:840px;margin:40px auto 0;padding:32px 34px;border:1px solid var(--line-strong);background:var(--paper-light);border-radius:2px;box-shadow:0 12px 30px rgba(36,27,20,.03)}
-    .sit-practice-label{display:block;margin-bottom:10px;font-family:var(--display);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ochre)}
-    .sit-actions{max-width:840px;margin:36px auto 0;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;font-family:var(--display);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}
-    .sit-actions button,.sit-actions a{position:relative;color:var(--ochre);background:transparent;border:0;padding:4px 2px}
-    .sit-actions button::after,.sit-actions a::after{content:'';position:absolute;left:0;right:100%;bottom:0;height:1px;background:var(--ochre);transition:right .3s var(--ease)}
-    .sit-actions button:hover::after,.sit-actions a:hover::after{right:0}
-    .sit-actions-sep{color:rgba(149,102,44,.4)}
-    .sit-privacy{max-width:560px;margin:26px auto 0;text-align:center;font-size:.95rem;font-style:italic;color:var(--muted)}
+    .exp-questions {
+      display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px 48px;
+      margin:14px 0 40px; padding-top:28px; border-top:1px solid var(--line);
+    }
+    .exp-question { display:grid; grid-template-columns:52px minmax(0,1fr); gap:16px; padding:22px 0; }
+    .exp-question-num { font-family:var(--display); font-size:1.7rem; font-weight:500; color:rgba(149,102,44,.55); line-height:1; padding-top:.05rem; }
+    .exp-question p { padding-bottom:20px; font-size:1.14rem; color:var(--ink); line-height:1.48; margin:0; border-bottom:1px solid var(--line); }
+    
+    .exp-reflection-close { max-width:60ch; margin:0 0 34px; font-size:1.16rem; color:rgba(36,27,20,.85); }
+    .exp-reflection-close p + p { margin-top:.5rem; }
+    .exp-reflection-options { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-bottom:34px; }
+    
+    .exp-option {
+      display:flex; flex-direction:column; min-height:100%;
+      background:var(--paper-light); border:1px solid var(--line); text-align:left;
+      transition:background .3s var(--ease), border-color .3s ease, transform .16s ease-out;
+    }
+    @media (hover:hover) and (pointer:fine) {
+      .exp-option:hover { border-color:rgba(149,102,44,.4); }
+      .exp-option:hover .exp-option-arrow { transform:translateX(4px); }
+    }
+    .exp-option:active { transform:scale(.98); }
+    .exp-option-text { padding:26px 24px 20px; }
+    .exp-option-text h3 { font-size:1.18rem; font-weight:500; color:var(--ink); margin-bottom:8px; }
+    .exp-option-text p { font-size:.95rem; color:var(--muted); line-height:1.48; }
+    .exp-option-footer {
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      margin-top:auto; padding:18px 24px;
+      border-top:1px solid var(--line);
+    }
+    .exp-option-action { display:inline-flex; align-items:center; gap:10px; font-family:var(--display); font-size:.66rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+    .exp-option-icon { width:15px; height:15px; flex:0 0 auto; display:grid; place-items:center; color:var(--muted); }
+    .exp-option-icon svg { width:100%; height:100%; }
+    .exp-option-arrow { color:var(--muted); font-size:.92rem; transition:transform .25s ease; }
+    
+    .exp-privacy {
+      display:flex; align-items:flex-start; gap:16px;
+      margin-top:8px; padding-top:28px; border-top:1px solid var(--line);
+    }
+    .exp-privacy p { margin:0; font-size:1rem; color:rgba(36,27,20,.8); font-style:italic; line-height:1.5; }
+    .exp-privacy-icon {
+      flex:0 0 auto; width:34px; height:34px; margin-top:2px;
+      display:grid; place-items:center;
+      border:1px solid rgba(149,102,44,.35); border-radius:50%; color:var(--ochre);
+    }
+    .exp-privacy-icon svg { width:15px; height:15px; }
 
     /* ===== Related teachings (Split Paper Layout - 4 Per Row) ===== */
     .tv-related{background:var(--paper-light)}
@@ -465,7 +501,19 @@
       .tv-hero h1{font-size:clamp(2.4rem,9vw,3.2rem)}
       .tv-hero-hook{padding-left:18px;font-size:1.2rem}
       .tv-idea-grid{grid-template-columns:1fr}
-      .sit-question{grid-template-columns:26px 1fr}
+      
+      .exp-questions { grid-template-columns:1fr; }
+      .exp-reflection-options { grid-template-columns:1fr; gap:10px; }
+      .exp-option-text { padding:20px 18px 16px; }
+      .exp-option-text h3 { font-size:1.05rem; }
+      .exp-option-text p { font-size:.9rem; line-height:1.42; }
+      .exp-option-footer { padding:14px 18px; }
+      .exp-question { grid-template-columns:36px minmax(0,1fr); gap:12px; padding:6px 0; }
+      .exp-question-num { font-size:1.3rem; }
+      .exp-question p { font-size:1.16rem; }
+      .exp-privacy { gap:12px; padding-top:20px; }
+      .exp-privacy p { font-size:1.16rem; }
+
       .tv-related-grid{grid-template-columns:1fr}
       .site-footer{padding:48px 6vw 24px}
       .footer-inner{align-items:flex-start;flex-direction:column;gap:22px}
@@ -645,34 +693,85 @@
     </section>
 
     <!-- 7. REFLECTION / PRACTICE -->
-    <section class="sit-section" id="sit" aria-labelledby="sitTitle">
-      <div class="wrap sit-shell">
-        <div class="sit-head">
+    <section class="exp-section exp-section--paper" id="sit" aria-labelledby="sitTitle">
+      <div class="exp-inner">
+        <div class="exp-heading">
           <span class="eyebrow text-reveal">Sit With This</span>
-          <h2 id="sitTitle" class="text-reveal">Practice It Before You Move On</h2>
-          <p class="text-reveal">There are no correct answers. Write what genuinely feels true.</p>
+          <h2 id="sitTitle" class="text-reveal" style="font-size:clamp(2.2rem,3.8vw,3.8rem);">Practice It Before You Move On</h2>
+          <p class="exp-reflect-intro text-reveal" style="font-size:1.2rem; color:var(--muted); max-width:56ch;">There are no correct answers. Write what genuinely feels true.</p>
         </div>
 
-        <ol class="sit-questions" id="reflectionQuestions">
-          <li class="sit-question text-reveal"><span class="sit-question-num">01</span><p>What thought took over your mind today — and did it actually need your attention?</p></li>
-          <li class="sit-question text-reveal"><span class="sit-question-num">02</span><p>Which thoughts are mice you can simply let pass? Which ones are worth catching and unpacking later?</p></li>
-          <li class="sit-question text-reveal"><span class="sit-question-num">03</span><p>How many "tabs" do you tend to leave open in the background — and what would closing even one change today?</p></li>
+        <ol class="exp-questions" id="reflectionQuestions">
+          <li class="exp-question text-reveal"><span class="exp-question-num">01</span><p>What thought took over your mind today — and did it actually need your attention?</p></li>
+          <li class="exp-question text-reveal"><span class="exp-question-num">02</span><p>Which thoughts are mice you can simply let pass? Which ones are worth catching and unpacking later?</p></li>
+          <li class="exp-question text-reveal"><span class="exp-question-num">03</span><p>How many "tabs" do you tend to leave open in the background — and what would closing even one change today?</p></li>
         </ol>
 
-        <div class="sit-practice text-reveal">
-          <span class="sit-practice-label">Try This</span>
-          <p>For the next ten minutes, notice each thought as it appears. Ask: does this need me right now? If not, let it pass. If yes, capture it in a few words and return to it later. One thought at a time.</p>
+        <div class="exp-reflection-close text-reveal">
+          <p><strong>Try This:</strong> For the next ten minutes, notice each thought as it appears. Ask: does this need me right now? If not, let it pass. If yes, capture it in a few words and return to it later. One thought at a time.</p>
         </div>
 
-        <div class="sit-actions text-reveal">
-          <button type="button" id="skDownloadReflection">Download</button>
-          <span class="sit-actions-sep" aria-hidden="true">·</span>
-          <button type="button" id="skPrintReflection">Print</button>
-          <span class="sit-actions-sep" aria-hidden="true">·</span>
-          <a href="#reflectionQuestions">Use Your Own Journal</a>
+        <div class="exp-reflection-options text-reveal">
+          <button class="exp-option" id="skDownloadReflection" type="button">
+            <div class="exp-option-text">
+              <h3>Download the Reflection</h3>
+              <p>An editable Word document — type your answers directly and save it to your own device.</p>
+            </div>
+            <div class="exp-option-footer">
+              <span class="exp-option-action">
+                <span class="exp-option-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                </span>
+                Download Word Document
+              </span>
+              <span class="exp-option-arrow" aria-hidden="true">→</span>
+            </div>
+          </button>
+          <button class="exp-option" id="skPrintReflection" type="button">
+            <div class="exp-option-text">
+              <h3>Print the Reflection</h3>
+              <p>A printable worksheet with room to write, straight from your browser.</p>
+            </div>
+            <div class="exp-option-footer">
+              <span class="exp-option-action">
+                <span class="exp-option-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 9V3h12v6"/>
+                    <path d="M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2"/>
+                    <path d="M6 14h12v7H6z"/>
+                  </svg>
+                </span>
+                Print Worksheet
+              </span>
+              <span class="exp-option-arrow" aria-hidden="true">→</span>
+            </div>
+          </button>
+          <a class="exp-option" href="#reflectionQuestions">
+            <div class="exp-option-text">
+              <h3>Use Your Own Journal</h3>
+              <p>Keep the questions visible here while you write on paper.</p>
+            </div>
+            <div class="exp-option-footer">
+              <span class="exp-option-action">
+                <span class="exp-option-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                </span>
+                Continue With Your Journal
+              </span>
+              <span class="exp-option-arrow" aria-hidden="true">→</span>
+            </div>
+          </a>
         </div>
 
-        <p class="sit-privacy text-reveal">These questions are private. Nothing here is entered into the website or shared with anyone else.</p>
+        <div class="exp-privacy text-reveal">
+          <span class="exp-privacy-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="11" width="16" height="9" rx="2"/>
+              <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+            </svg>
+          </span>
+          <p>These questions are private. Nothing here is entered into the website or shared with anyone else.</p>
+        </div>
       </div>
     </section>
 
@@ -946,17 +1045,17 @@
     });
 
     // Reflection download
-    const getQuestions=()=>Array.from(document.querySelectorAll('#reflectionQuestions .sit-question p')).map(p=>p.innerText.replace(/\s+/g,' ').trim());
+    const getQuestions=()=>Array.from(document.querySelectorAll('#reflectionQuestions .exp-question p')).map(p=>p.innerText.replace(/\s+/g,' ').trim());
     const rtfEscape=(str)=>str.replace(/\\/g,'\\\\').replace(/\{/g,'\\{').replace(/\}/g,'\\}').replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/\u2014/g,'\\emdash ').replace(/\u2013/g,'\\endash ');
     const downloadReflectionDoc=()=>{
       const questions=getQuestions();
       const intro=[
-        'Before you keep moving, take a few minutes to pause and notice what feels true for you today.',
-        'There are no correct answers. Don\u2019t write what you think you\u2019re supposed to believe. Write what genuinely feels true.',
-        'This document is entirely private \u2014 type your answers directly below each question and save the file to your own device.'
+        "Let's take a moment to look at what you're doing for your mind, body, and spirit right now.",
+        'There are no correct answers. Consider these privately, and write what genuinely feels true.',
+        'This document is entirely private — type your answers directly below each question and save the file to your own device.'
       ];
       let rtf='{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang1033{\\fonttbl{\\f0\\froman Times New Roman;}}{\\colortbl;\\red149\\green102\\blue44;}\\f0\\fs20\\pard\\sa240';
-      rtf+=`\\fs40\\b The Cat and the Mouse Method\\b0\\par`;
+      rtf+=`\\fs40\\b The Pathfinder \\emdash  Where You Are Now\\b0\\par`;
       rtf+=`\\fs22\\i Seek Consciousness\\i0\\par\\sa280`;
       intro.forEach(line=>{rtf+=`\\fs20 ${rtfEscape(line)}\\par`;});
       rtf+=`\\par`;
@@ -969,7 +1068,7 @@
       const url=URL.createObjectURL(blob);
       const a=document.createElement('a');
       a.href=url;
-      a.download='seek-consciousness-cat-and-mouse-reflection.rtf';
+      a.download='seek-consciousness-pathfinder-reflection.rtf';
       document.body.appendChild(a);
       a.click();
       a.remove();
