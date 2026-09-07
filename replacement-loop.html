@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<!--
+  TEACHING / VIDEO PAGE TEMPLATE — v2 (design refresh)
+  ------------------------------------------------------------------
+  This file is a duplicate of the Cat & Mouse teaching-page template.
+  It has been adapted for Mind Tool 02 — The Replacement Loop — while
+  preserving the same layout, brand tokens, interactions, reflection
+  pattern, Blueprint placement, resources, and related-teaching system.
+
+  What changed in this pass (design only — no brand tokens, fonts,
+  header, footer, or Sit-With-This pattern were altered, so this
+  stays consistent with index.html / seeker.html / pathfinder.html):
+    - Added a thin scroll "thread" under the header (read progress)
+    - Hero now bookends with the site's existing ✦ ornament motif
+    - Chapters get a visible "currently selected" state
+    - Transcript now sits beside the video instead of in its own
+      section further down the page, and stays fully visible (no
+      expand toggle). Its timestamp buttons seek the video, same
+      as Chapters.
+    - Chapters and Transcript now highlight together in real time
+      as the video plays, using the YouTube IFrame Player API
+      (falls back to plain click-to-seek if that API can't load)
+    - Main Ideas moved from a flat numbered list to a ledger-style
+      grid with a faint ghost numeral per card
+    - Added visible focus states for keyboard users
+    - Overview uses an Open Book layout; Blueprint uses a clean split layout.
+    - Video section perfectly balanced: Sticky Video (Left), Collapsible Transcript (Right), Full-width Chapters (Bottom).
+    - Transcript 'Read Full' button is static/grounded, not floating.
+    - Chapters layout refined (removed messy borders, improved spacing & hover states).
+    - Related Teachings cards perfectly match the split paper design with YT play buttons, adjusted to 4 cards per row.
+    - Reflection section completely rebuilt to match Pathfinder's premium 3-card option layout.
+
+  Per-video things to replace when duplicating:
+    1. <title> + meta description
+    2. Breadcrumb "current" label, eyebrow, H1, hook line, meta row
+    3. The video ID (video embed + "Watch on YouTube" links) — this page
+       already uses the real ID (0isBXHY7R6I), cross-checked against the
+       "One Connected System" progression on pathfinder.html
+    4. Overview copy
+    5. Main Ideas list
+    6. Transcript text + chapter timestamps — the transcript is an
+       always-visible, scrollable panel beside the video (not a
+       separate section). Three things must all use the SAME
+       seconds and stay in the SAME order: the Chapters buttons'
+       data-seek, each transcript <p class="tv-transcript-line">'s
+       data-seek, and the <button class="tv-transcript-time"> inside
+       it. The sync-highlighting JS reads its segment list straight
+       off the Chapters buttons, so Chapters is the source of truth —
+       update it first, then match the transcript lines to it.
+       Timestamps below are estimated from the transcript's word
+       count — replace with real times once the video is published.
+    7. Reflection questions / practice
+    8. Blueprint placement card (which branch/trunk/root this maps to)
+    9. Related Teachings cards
+    10. Resources list
+  ------------------------------------------------------------------
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Replacement Loop — Seek Consciousness</title>
+  <meta name="description" content="A simple practice for working with negative thought loops: notice the thought, replace it with a stronger emotional state, and train your attention one thought at a time.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper:#eadfcb;
+      --paper-light:#f6efe3;
+      --paper-pale:#fbf7ee;
+      --paper-deep:#dfcfb4;
+      --ink:#241b14;
+      --muted:#726658;
+      --ochre:#95662c;
+      --ochre-soft:#c79859;
+      --ochre-light:#d9a869;
+      --line:rgba(61,43,25,.17);
+      --line-strong:rgba(149,102,44,.42);
+      --header-height:78px;
+      --serif:'Cormorant Garamond', Georgia, serif;
+      --display:'Cinzel', Georgia, serif;
+      --ease:cubic-bezier(.22,.61,.36,1);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{overflow-x:hidden;background:var(--paper-light);color:var(--ink);font-family:var(--serif);font-size:18px;font-weight:500;line-height:1.65;-webkit-font-smoothing:antialiased}
+    body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+      radial-gradient(circle at 12% 8%,rgba(199,152,89,.08),transparent 25%),
+      radial-gradient(circle at 88% 32%,rgba(149,102,44,.05),transparent 30%),
+      linear-gradient(90deg,rgba(80,55,28,.018) 1px,transparent 1px),
+      linear-gradient(rgba(80,55,28,.014) 1px,transparent 1px);background-size:auto,auto,44px 44px,44px 44px}
+    img{display:block;width:100%;height:100%;object-fit:cover}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit;color:inherit;cursor:pointer}
+    h1,h2,h3{font-family:var(--display);font-weight:500;line-height:1.1;letter-spacing:.01em}
+    p+p{margin-top:.55rem}
+    ::selection{background:var(--ochre);color:white}
+    section{scroll-margin-top:calc(var(--header-height) + 20px)}
+    .wrap{width:min(1280px,88vw);margin:0 auto}
+    .eyebrow{display:block;margin-bottom:16px;font-family:var(--display);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ochre)}
+    .section-pad{padding:clamp(88px,10vw,140px) 0;position:relative}
+    .section-title{font-size:clamp(2.3rem,4.2vw,4.2rem);text-wrap:balance}
+    .section-copy{font-size:1.24rem;color:rgba(36,27,20,.8);max-width:52ch}
+    .text-reveal{opacity:0;transform:translateY(20px);transition:opacity .72s var(--ease),transform .72s var(--ease)}
+    .text-reveal.is-visible{opacity:1;transform:none}
+
+    /* Visible keyboard focus everywhere — quality floor */
+    a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--ochre);outline-offset:3px;border-radius:1px}
+
+    /* Reusable ✦ ornament */
+    .ink-divider{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--ochre);font-size:.8rem}
+    .ink-divider::before,.ink-divider::after{content:'';width:56px;height:1px;background:var(--line-strong)}
+
+    /* ===== Header / Footer ===== */
+    .site-header{position:fixed;inset:0 0 auto;z-index:100;height:var(--header-height);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(22px,6vw,92px);color:var(--ink);background:rgba(244,236,222,.9);border-bottom:1px solid var(--line);box-shadow:0 12px 30px rgba(36,27,20,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+    .site-logo{display:block;line-height:0}
+    .site-logo img{width:clamp(122px,11vw,174px);height:auto;object-fit:contain;filter:brightness(.46) saturate(1.3) contrast(1.05);transition:filter .25s ease}
+    .site-logo:hover img{filter:brightness(.36) saturate(1.4) contrast(1.08)}
+    .primary-nav{display:flex;align-items:center;gap:28px}
+    .primary-nav a{position:relative;font-family:var(--display);font-size:.76rem;letter-spacing:.05em;color:rgba(36,27,20,.72);transition:color .25s ease}
+    .primary-nav a::after{content:'';position:absolute;left:0;right:100%;bottom:-6px;height:1px;background:var(--ochre);transition:right .3s var(--ease)}
+    .primary-nav a:hover{color:var(--ink)}
+    .primary-nav a:hover::after{right:0}
+    .nav-toggle{display:none;width:44px;height:44px;border:0;background:transparent;cursor:pointer}
+    .nav-toggle span{display:block;width:24px;height:1px;margin:6px auto;background:var(--ink);transition:.25s ease}
+    .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .nav-toggle.open span:nth-child(2){opacity:0}
+    .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+    /* Reading progress thread */
+    .read-progress{position:fixed;top:var(--header-height);left:0;right:0;height:2px;background:rgba(149,102,44,.14);z-index:99}
+    .read-progress span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--ochre-soft),var(--ochre))}
+
+    .site-footer{position:relative;padding:64px 6vw 30px;background:var(--paper-deep);color:rgba(36,27,20,.7);border-top:1px solid var(--line)}
+    .site-footer::before{content:'';position:absolute;top:-1px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ochre) 50%,transparent)}
+    .footer-inner{width:min(1380px,100%);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:35px;flex-wrap:wrap}
+    .footer-logo img{width:clamp(180px,18vw,290px);height:auto;object-fit:contain;filter:brightness(.46) saturate(1.3) contrast(1.05)}
+    .footer-nav{display:flex;flex-wrap:wrap;gap:22px}
+    .footer-nav a{position:relative;font-family:var(--display);font-size:.67rem;letter-spacing:.08em;color:rgba(36,27,20,.68);transition:color .25s ease}
+    .footer-nav a::after{content:'';position:absolute;left:0;right:100%;bottom:-5px;height:1px;background:var(--ochre);transition:right .3s var(--ease)}
+    .footer-nav a:hover{color:var(--ink)}
+    .footer-nav a:hover::after{right:0}
+    .copyright{margin-top:28px;text-align:center;font-size:.82rem;color:rgba(36,27,20,.45)}
+
+    /* Buttons */
+    .exp-btn{position:relative;display:inline-flex;align-items:center;gap:10px;padding:16px 30px;border:1px solid var(--ink);font-family:var(--display);font-size:.7rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--ink);background:transparent;border-radius:2px;transition:.3s var(--ease)}
+    .exp-btn--primary{border-color:var(--ochre);color:var(--ochre)}
+    .exp-btn:hover{background:var(--ink);color:var(--paper-light)}
+    .exp-btn--primary:hover{background:var(--ochre);color:#fff}
+    .exp-btn-row{display:flex;flex-wrap:wrap;align-items:center;gap:16px 22px}
+    .exp-btn svg{width:15px;height:15px;flex:none}
+
+    /* ===== Teaching hero ===== */
+    .tv-hero{background:var(--paper-light);padding:calc(var(--header-height) + clamp(60px,8vw,110px)) 0 clamp(60px,7vw,80px)}
+    .tv-hero .wrap{max-width:1040px}
+    .tv-hero .ink-divider{justify-content:flex-start;margin-bottom:28px}
+    .tv-hero .ink-divider::before{width:0}
+    .tv-breadcrumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:28px;font-family:var(--display);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+    .tv-breadcrumb a{position:relative;color:var(--muted);transition:color .25s ease}
+    .tv-breadcrumb a:hover{color:var(--ink)}
+    .tv-breadcrumb-sep{color:var(--ochre)}
+    .tv-breadcrumb-current{color:var(--ink)}
+    .tv-hero h1{font-size:clamp(2.6rem,5.5vw,4.8rem);max-width:18ch;margin-bottom:32px;line-height:1.05}
+    .tv-hero-hook{font-size:1.32rem;line-height:1.55;color:rgba(36,27,20,.85);max-width:54ch;padding-left:26px;border-left:2px solid var(--ochre-soft)}
+    .tv-meta-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:36px;font-family:var(--display);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+    .tv-meta-row strong{color:var(--ochre);font-weight:600}
+    .tv-meta-sep{color:rgba(149,102,44,.4)}
+
+    /* ===== NEW BALANCED VIDEO SECTION ===== */
+    .tv-video-section { background: var(--paper-pale); }
+    .tv-video-container { width: min(1420px, 94vw); margin: 0 auto; }
+    
+    /* Top Row: Video (Left) + Transcript (Right) */
+    .tv-video-split {
+        display: grid;
+        grid-template-columns: 1.35fr 1fr;
+        gap: clamp(40px, 5vw, 70px);
+        align-items: start;
+    }
+
+    /* Sticky Video Left Column */
+    .tv-video-col {
+        min-width: 0;
+        position: sticky;
+        top: calc(var(--header-height) + 40px);
+        z-index: 10;
+    }
+    
+    .tv-video-frame{position:relative;background:var(--paper-light);padding:clamp(12px,1.8vw,22px);border:1px solid var(--line-strong);box-shadow:0 1px 0 rgba(255,251,240,.6) inset,0 34px 80px rgba(63,38,17,.15);border-radius:2px}
+    .tv-video-stage{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#050403;box-shadow:0 0 0 1px rgba(149,102,44,.5)}
+    .tv-video-stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+    .tv-corner{position:absolute;width:24px;height:24px;pointer-events:none;z-index:3}
+    .tv-corner.tl{top:6px;left:6px;border-top:2px solid var(--ochre);border-left:2px solid var(--ochre)}
+    .tv-corner.tr{top:6px;right:6px;border-top:2px solid var(--ochre);border-right:2px solid var(--ochre)}
+    .tv-corner.bl{bottom:6px;left:6px;border-bottom:2px solid var(--ochre);border-left:2px solid var(--ochre)}
+    .tv-corner.br{bottom:6px;right:6px;border-bottom:2px solid var(--ochre);border-right:2px solid var(--ochre)}
+    
+    /* Transcript Right Column */
+    .tv-transcript-col { min-width: 0; padding-top: 10px; }
+    .tv-transcript-eyebrow{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;font-family:var(--display);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre)}
+    .tv-transcript-caption{font-size:.85rem;font-style:italic;color:var(--muted);text-transform:none;letter-spacing:0}
+    
+    .tv-transcript-wrapper{border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);background:var(--paper-pale)}
+    
+    /* Height tuned perfectly to visually balance with the video frame */
+    .tv-transcript-scroll{max-height:380px;overflow:hidden;transition:max-height 0.8s var(--ease)}
+    .tv-transcript-wrapper.is-expanded .tv-transcript-scroll{max-height:4000px}
+    
+    /* Solid background toggle wrapper beneath transcript */
+    .tv-transcript-overlay{display:flex;align-items:center;justify-content:center;padding:24px 0;background:var(--paper-pale);border-top:1px solid var(--line)}
+    .tv-transcript-wrapper.is-expanded .tv-transcript-overlay{display:none}
+    
+    .tv-transcript-toggle{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border:1px solid var(--ochre);font-family:var(--display);font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ochre);background:var(--paper-light);border-radius:2px;transition:all .3s var(--ease)}
+    .tv-transcript-toggle:hover{background:var(--ochre);color:#fff}
+
+    .tv-transcript-scroll-inner{padding:28px clamp(12px,1.5vw,20px) 32px;color:rgba(36,27,20,.84);font-size:1.1rem;line-height:1.7}
+    .tv-transcript-line{border-left:2px solid transparent;padding:4px 12px 4px 14px;margin:0 -12px 24px -16px;border-radius:2px;transition:background-color .35s ease,border-color .35s ease,box-shadow .35s ease}
+    .tv-transcript-line:last-child{margin-bottom:0}
+    .tv-transcript-line.is-active{background:rgba(149,102,44,.05);border-left-color:var(--ochre);box-shadow:0 1px 12px rgba(0,0,0,.02)}
+    .tv-transcript-time{display:inline-block;margin-right:12px;min-width:42px;text-align:left;border:0;background:transparent;font-family:var(--display);font-size:.68rem;letter-spacing:.04em;color:var(--ochre);position:relative;padding-bottom:1px}
+    .tv-transcript-time::after{content:'';position:absolute;left:0;right:100%;bottom:-1px;height:1px;background:var(--ochre);transition:right .3s var(--ease)}
+    .tv-transcript-time:hover::after,.tv-transcript-time:focus-visible::after{right:0}
+
+    /* Bottom Row: Clean Full Width Chapters (Unboxed) */
+    .tv-chapters-full {
+        grid-column: 1 / -1; 
+        margin-top: 60px; 
+    }
+    .tv-chapters-title{display:block;margin-bottom:20px;font-family:var(--display);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre)}
+    .tv-chapter-list{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 60px;
+        border-top:1px solid var(--line-strong);
+        padding-top: 24px;
+    }
+    .tv-chapter{display:flex;align-items:center;gap:24px;width:100%;text-align:left;padding:14px 16px 14px 20px;border:none;border-left:2px solid transparent;background:transparent;border-radius:0 4px 4px 0;transition:all .25s ease}
+    .tv-chapter:hover{background:rgba(149,102,44,.04)}
+    .tv-chapter.is-active{background:rgba(149,102,44,.08);border-left-color:var(--ochre)}
+    .tv-chapter-time{flex:none;width:45px;font-family:var(--display);font-size:.75rem;letter-spacing:.03em;color:var(--ochre); opacity: 0.8;}
+    .tv-chapter-label{font-size:1.1rem;color:var(--ink);transition:transform .2s ease;}
+    .tv-chapter.is-active .tv-chapter-label{font-weight:600; transform: translateX(4px);}
+    .tv-chapter:hover .tv-chapter-label{transform: translateX(4px);}
+
+    /* ===== OPEN BOOK LAYOUT (Overview Only) ===== */
+    .open-book {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        background: var(--paper-pale);
+        border-radius: 3px;
+        box-shadow: 
+            0 20px 50px rgba(63,38,17,.1),
+            0 2px 10px rgba(63,38,17,.05), 
+            inset 0 0 0 1px var(--paper-deep); 
+        position: relative;
+    }
+    .open-book::before {
+        content: '';
+        position: absolute;
+        top: 0; bottom: 0; left: 50%;
+        width: 60px;
+        transform: translateX(-50%);
+        background: linear-gradient(90deg, transparent 0%, rgba(63,38,17, 0.02) 45%, rgba(63,38,17, 0.06) 50%, rgba(63,38,17, 0.02) 55%, transparent 100%);
+        pointer-events: none;
+        z-index: 2;
+    }
+    .open-book::after {
+        content: '';
+        position: absolute;
+        top: 6%; bottom: 6%; left: 50%;
+        width: 1px;
+        transform: translateX(-50%);
+        background: linear-gradient(180deg, transparent, rgba(149,102,44,.12), transparent);
+        z-index: 3;
+    }
+
+    .book-page-left, .book-page-right {
+        padding: clamp(50px, 6vw, 100px) clamp(40px, 5vw, 80px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+    }
+    .book-page-left { box-shadow: inset -12px 0 20px -12px rgba(63,38,17,0.04); }
+    .book-page-right { box-shadow: inset 12px 0 20px -12px rgba(63,38,17,0.04); }
+
+    .book-page-left h2 {
+        font-size: clamp(2.6rem, 3.8vw, 4rem);
+        line-height: 1.1;
+        margin-top: 16px;
+    }
+    
+    .tv-overview { background: var(--paper-light); border-bottom: 1px solid var(--line); }
+    .tv-overview .section-copy { margin-top: 0; max-width: none; font-size: 1.2rem; }
+    .tv-overview .section-copy p:first-of-type::first-letter {
+        font-family: var(--display);
+        font-size: 3.6rem;
+        line-height: .72;
+        font-weight: 600;
+        float: left;
+        padding: 6px 12px 0 0;
+        color: var(--ochre);
+    }
+
+    /* ===== CLEAN SPLIT LAYOUT (Blueprint Only) ===== */
+    .clean-split {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: clamp(40px, 8vw, 100px);
+        align-items: center; /* Vertically centered */
+    }
+    .clean-split-left {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .clean-split-right {
+        padding-top: 0;
+    }
+    .clean-split-left h2 {
+        font-size: clamp(2.8rem, 4vw, 4.2rem);
+        line-height: 1.1;
+        margin-top: 16px;
+    }
+
+    .tv-blueprint { background: var(--paper-light); border-bottom: 1px solid var(--line); }
+    .tv-blueprint-list {
+        margin-top: 25px;
+        padding-left: 0;
+        list-style: none;
+        counter-reset: bp-counter;
+    }
+    .tv-blueprint-list li {
+        position: relative;
+        margin-bottom: 24px;
+        padding-left: 32px;
+        color: rgba(36,27,20,.85);
+        font-size: 1.15rem;
+        line-height: 1.6;
+    }
+    .tv-blueprint-list li::before {
+        counter-increment: bp-counter;
+        content: counter(bp-counter) ".";
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-family: var(--display);
+        color: var(--ochre);
+        font-weight: 600;
+        font-size: 1.15rem;
+    }
+
+    /* ===== Main ideas (3-Column Matrix) ===== */
+    .tv-ideas{background:var(--paper-pale)}
+    .tv-ideas .wrap{max-width:1240px}
+    .tv-idea-grid{display:grid;grid-template-columns:repeat(3, 1fr);margin-top:54px;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+    .tv-idea-card{position:relative;overflow:hidden;padding:36px 32px 32px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .tv-idea-ghost{position:absolute;top:-8px;right:16px;font-family:var(--display);font-size:5.2rem;line-height:1;font-weight:600;color:rgba(149,102,44,.05);pointer-events:none;user-select:none}
+    .tv-idea-no{position:relative;display:block;margin-bottom:12px;font-family:var(--display);font-size:.7rem;letter-spacing:.1em;color:var(--ochre)}
+    .tv-idea-card h3{position:relative;font-size:clamp(1.2rem,1.8vw,1.4rem);margin-bottom:12px}
+    .tv-idea-card p{position:relative;color:var(--muted);line-height:1.6}
+
+    /* ===== Reflection-style question list (Imported from Pathfinder) ===== */
+    .exp-section { padding:clamp(88px,10vw,140px) 6vw; }
+    .exp-section--paper { background:var(--paper); }
+    .exp-inner { width:min(1280px,100%); margin:0 auto; }
+    .exp-heading { max-width:820px; margin-bottom:clamp(40px,5vw,64px); }
+    .exp-heading h2 { font-size:clamp(2.3rem,4.2vw,4.2rem); color:var(--ink); margin-bottom:20px; text-wrap:balance; }
+    .exp-heading p { font-size:1.24rem; color:var(--muted); max-width:56ch; }
+    .exp-heading p + p { margin-top:.4rem; }
+    
+    .exp-questions {
+      display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px 48px;
+      margin:14px 0 40px; padding-top:28px; border-top:1px solid var(--line);
+    }
+    .exp-question { display:grid; grid-template-columns:52px minmax(0,1fr); gap:16px; padding:22px 0; }
+    .exp-question-num { font-family:var(--display); font-size:1.7rem; font-weight:500; color:rgba(149,102,44,.55); line-height:1; padding-top:.05rem; }
+    .exp-question p { padding-bottom:20px; font-size:1.14rem; color:var(--ink); line-height:1.48; margin:0; border-bottom:1px solid var(--line); }
+    
+    .exp-reflection-close { max-width:60ch; margin:0 0 34px; font-size:1.16rem; color:rgba(36,27,20,.85); }
+    .exp-reflection-close p + p { margin-top:.5rem; }
+    .exp-reflection-options { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-bottom:34px; }
+    
+    .exp-option {
+      display:flex; flex-direction:column; min-height:100%;
+      background:var(--paper-light); border:1px solid var(--line); text-align:left;
+      transition:background .3s var(--ease), border-color .3s ease, transform .16s ease-out;
+    }
+    @media (hover:hover) and (pointer:fine) {
+      .exp-option:hover { border-color:rgba(149,102,44,.4); }
+      .exp-option:hover .exp-option-arrow { transform:translateX(4px); }
+    }
+    .exp-option:active { transform:scale(.98); }
+    .exp-option-text { padding:26px 24px 20px; }
+    .exp-option-text h3 { font-size:1.18rem; font-weight:500; color:var(--ink); margin-bottom:8px; }
+    .exp-option-text p { font-size:.95rem; color:var(--muted); line-height:1.48; }
+    .exp-option-footer {
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      margin-top:auto; padding:18px 24px;
+      border-top:1px solid var(--line);
+    }
+    .exp-option-action { display:inline-flex; align-items:center; gap:10px; font-family:var(--display); font-size:.66rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+    .exp-option-icon { width:15px; height:15px; flex:0 0 auto; display:grid; place-items:center; color:var(--muted); }
+    .exp-option-icon svg { width:100%; height:100%; }
+    .exp-option-arrow { color:var(--muted); font-size:.92rem; transition:transform .25s ease; }
+    
+    .exp-privacy {
+      display:flex; align-items:flex-start; gap:16px;
+      margin-top:8px; padding-top:28px; border-top:1px solid var(--line);
+    }
+    .exp-privacy p { margin:0; font-size:1rem; color:rgba(36,27,20,.8); font-style:italic; line-height:1.5; }
+    .exp-privacy-icon {
+      flex:0 0 auto; width:34px; height:34px; margin-top:2px;
+      display:grid; place-items:center;
+      border:1px solid rgba(149,102,44,.35); border-radius:50%; color:var(--ochre);
+    }
+    .exp-privacy-icon svg { width:15px; height:15px; }
+
+    /* ===== Related teachings (Split Paper Layout - 4 Per Row) ===== */
+    .tv-related{background:var(--paper-light)}
+    .tv-related-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:54px}
+    
+    .tv-related-card{display:flex;flex-direction:column;background:var(--paper-pale);border:1px solid var(--line);border-radius:2px;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
+    .tv-related-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(36,27,20,.08)}
+    
+    .tv-related-img{position:relative;width:100%;aspect-ratio:16/9;background-size:cover;background-position:center;border-bottom:1px solid var(--line)}
+    
+    /* YouTube Style Play Button */
+    .tv-yt-play{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%) scale(0.8);width:68px;height:48px;transition:transform 0.2s var(--ease)}
+    .tv-related-card:hover .tv-yt-play{transform:translate(-50%, -50%) scale(0.85)}
+    
+    .tv-related-content{padding:24px 20px 20px;display:flex;flex-direction:column;flex-grow:1}
+    
+    .tv-related-tag{font-family:var(--display);font-size:.6rem;letter-spacing:.1em;color:var(--ochre);margin-bottom:12px;text-transform:uppercase;display:block}
+    
+    .tv-related-content h3{font-size:1.2rem;color:var(--ink);margin-bottom:12px;font-family:var(--display);text-transform:uppercase;line-height:1.2;letter-spacing:.02em}
+    
+    .tv-related-content p{font-size:.95rem;color:var(--muted);line-height:1.5;margin-bottom:20px;font-family:var(--serif)}
+    
+    .tv-related-footer{margin-top:auto;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:16px}
+    
+    .tv-related-play{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);font-weight:600}
+    .tv-play-circle{width:24px;height:24px;border:1px solid var(--ochre);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ochre)}
+    .tv-play-circle svg{width:8px;height:8px;margin-left:2px;fill:currentColor}
+    
+    .tv-related-arrow{font-size:1.1rem;color:var(--ochre);font-family:var(--serif)}
+
+    /* ===== Resources ===== */
+    .tv-resources{background:var(--paper-light)}
+    .tv-resources .wrap{max-width:880px}
+    .tv-resource-list{margin-top:44px;border-top:1px solid var(--line)}
+    .tv-resource{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:26px 4px;border-bottom:1px solid var(--line)}
+    .tv-resource-name{font-size:1.15rem;color:var(--ink)}
+    .tv-resource-desc{color:var(--muted);font-size:.98rem;margin-top:6px}
+    .tv-resource-link{flex:none;position:relative;font-family:var(--display);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ochre)}
+    .tv-resource-link::after{content:'';position:absolute;left:0;right:100%;bottom:-4px;height:1px;background:var(--ochre);transition:right .3s var(--ease)}
+    .tv-resource-link:hover::after{right:0}
+
+    /* ===== Closing YouTube CTA ===== */
+    .tv-cta{background:var(--paper-deep);text-align:center}
+    .tv-cta .wrap{max-width:680px}
+    .tv-cta h2{font-size:clamp(2.2rem,4vw,3.4rem);margin-bottom:18px}
+    .tv-cta p{color:rgba(36,27,20,.82);margin-bottom:36px;font-size:1.1rem}
+    .tv-cta .exp-btn-row{justify-content:center}
+
+    /* ===== Responsive Adjustments ===== */
+    @media(max-width:1050px){
+      .open-book{grid-template-columns:1fr;box-shadow:none;border-radius:0;background:transparent;}
+      .open-book::before, .open-book::after{display:none;}
+      .book-page-left, .book-page-right{padding:20px 0;box-shadow:none;}
+      
+      .clean-split{grid-template-columns:1fr;gap:30px;align-items:start;}
+      .clean-split-right{padding-top:1rem}
+
+      .tv-idea-grid{grid-template-columns:repeat(2, 1fr)}
+      
+      /* Mobile override for video section */
+      .tv-video-split{grid-template-columns:1fr;gap:40px}
+      .tv-video-col { position: relative; top: 0; }
+      .tv-transcript-scroll{max-height:500px}
+      .tv-chapter-list { grid-template-columns: 1fr; gap: 0; }
+
+      .tv-related-grid{grid-template-columns:repeat(2, 1fr); gap: 20px;}
+    }
+    @media(max-width:760px){
+      :root{--header-height:64px}
+      body{font-size:17px}
+      .site-header{padding:0 18px}
+      .site-logo img{width:90px}
+      .nav-toggle{display:block}
+      .primary-nav{position:absolute;top:100%;left:0;right:0;display:flex;flex-direction:column;align-items:stretch;gap:0;padding:8px 18px 18px;background:rgba(246,239,227,.98);border-bottom:1px solid var(--line);opacity:0;visibility:hidden;transform:translateY(-8px);transition:.25s ease}
+      .primary-nav.open{opacity:1;visibility:visible;transform:none}
+      .primary-nav a{padding:13px 0;border-top:1px solid var(--line)}
+      .tv-hero h1{font-size:clamp(2.4rem,9vw,3.2rem)}
+      .tv-hero-hook{padding-left:18px;font-size:1.2rem}
+      .tv-idea-grid{grid-template-columns:1fr}
+      
+      .exp-questions { grid-template-columns:1fr; }
+      .exp-reflection-options { grid-template-columns:1fr; gap:10px; }
+      .exp-option-text { padding:20px 18px 16px; }
+      .exp-option-text h3 { font-size:1.05rem; }
+      .exp-option-text p { font-size:.9rem; line-height:1.42; }
+      .exp-option-footer { padding:14px 18px; }
+      .exp-question { grid-template-columns:36px minmax(0,1fr); gap:12px; padding:6px 0; }
+      .exp-question-num { font-size:1.3rem; }
+      .exp-question p { font-size:1.16rem; }
+      .exp-privacy { gap:12px; padding-top:20px; }
+      .exp-privacy p { font-size:1.16rem; }
+
+      .tv-related-grid{grid-template-columns:1fr}
+      .site-footer{padding:48px 6vw 24px}
+      .footer-inner{align-items:flex-start;flex-direction:column;gap:22px}
+      .footer-logo img{width:230px}
+    }
+  </style>
+</head>
+<body>
+  <div class="read-progress" id="readProgress" aria-hidden="true"><span id="readProgressFill"></span></div>
+
+  <header class="site-header" id="siteHeader">
+    <a class="site-logo" href="index.html" aria-label="Seek Consciousness home"><img src="assets/media/seek-consciousness-logo.png" alt="Seek Consciousness"></a>
+    <button class="nav-toggle" type="button" aria-controls="primaryNav" aria-expanded="false" aria-label="Open navigation">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="primary-nav" id="primaryNav" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="index.html#choose-path">Choose Your Path</a>
+      <a href="seeker.html#treeBlueprint">The Blueprint</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 1 & 2. HERO — breadcrumb, eyebrow, title, hook, meta -->
+    <section class="tv-hero">
+      <div class="wrap">
+        <nav class="tv-breadcrumb text-reveal" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="tv-breadcrumb-sep" aria-hidden="true">/</span>
+          <a href="seeker.html#treeBlueprint">Teachings</a>
+          <span class="tv-breadcrumb-sep" aria-hidden="true">/</span>
+          <span class="tv-breadcrumb-current" aria-current="page">The Replacement Loop</span>
+        </nav>
+        <div class="ink-divider text-reveal" aria-hidden="true">✦</div>
+        <span class="eyebrow text-reveal">A Mind Tool From The Trunk — Awareness</span>
+        <h1 class="text-reveal">The Replacement Loop</h1>
+        <p class="tv-hero-hook text-reveal">A simple way to work with negative thought loops without fighting them — notice what is pulling you out of alignment, replace it with something real, and return to the state you actually want to live from.</p>
+        <div class="tv-meta-row text-reveal">
+          <span><strong>Mind Tool 02</strong></span>
+          <span class="tv-meta-sep">·</span>
+          <span>~3 min watch</span>
+          <span class="tv-meta-sep">·</span>
+          <span>Trunk: Awareness</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1, 5 & 6. VIDEO + COLLAPSIBLE TRANSCRIPT + FULL WIDTH CHAPTERS -->
+    <section class="tv-video-section section-pad">
+      <div class="tv-video-container">
+        
+        <!-- Top Split: Video (Sticky) / Transcript -->
+        <div class="tv-video-split">
+          
+          <div class="tv-video-col">
+            <div class="tv-video-frame text-reveal">
+              <div class="tv-video-stage">
+                <!-- Real video ID, confirmed from pathfinder.html's "One Connected System" progression -->
+                <iframe
+                  id="tvVideoFrame"
+                  src="https://www.youtube.com/embed/0isBXHY7R6I?rel=0&enablejsapi=1"
+                  title="The Replacement Loop"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <span class="tv-corner tl"></span><span class="tv-corner tr"></span><span class="tv-corner bl"></span><span class="tv-corner br"></span>
+            </div>
+          </div>
+
+          <div class="tv-transcript-col text-reveal">
+            <div class="tv-transcript-eyebrow">
+              <span>Full Transcript</span>
+              <span class="tv-transcript-caption">Click any line to jump</span>
+            </div>
+            
+            <div class="tv-transcript-wrapper" id="transcriptWrapper">
+              <div class="tv-transcript-scroll">
+                <div class="tv-transcript-scroll-inner">
+                  <p class="tv-transcript-line is-active" data-seek="0"><button type="button" class="tv-transcript-time js-seek" data-seek="0">0:00</button>We often try to stop negative thoughts, but that's actually really difficult. There's a much easier way. You don't remove the thought, you replace it. You ever caught a thought right as it begins to pull you out of where you actually want to be. It's really important. This moment matters a lot. The more you can catch this, the more you can do this because that's where the shift can happen.</p>
+                  <p class="tv-transcript-line" data-seek="26"><button type="button" class="tv-transcript-time js-seek" data-seek="26">0:26</button>A lot of people get caught in lower energy thoughts, lower frequency states, stress, fear, frustration, doubt. And once that loop starts, it can build quickly. One thought becomes five and before you know it, your whole state has changed.</p>
+                  <p class="tv-transcript-line" data-seek="48"><button type="button" class="tv-transcript-time js-seek" data-seek="48">0:48</button>Most people try to fight that or force it to go away. But it's very hard to remove a thought. It's much easier to replace one. That's the practice.</p>
+                  <p class="tv-transcript-line" data-seek="57"><button type="button" class="tv-transcript-time js-seek" data-seek="57">0:57</button>Every time something comes up that pulls you out of alignment, you consciously replace it with something stronger, a higher energy state, gratitude, love, laughter, something real. Come back to that gratitude and love. A special person in your life, your kids, your partner, your pets, a moment that felt magical, something that made you feel alive and connected. The fact that you get to be here right now, something you can actually connect to and feel, not just a thought, an actual shift in your state because higher energy states have more pull and more strength.</p>
+                  <p class="tv-transcript-line" data-seek="101"><button type="button" class="tv-transcript-time js-seek" data-seek="101">1:41</button>So when you introduce them, they begin to override the lower patterns. And this works better and better over time as you continue to practice it. Here's what that looks like.</p>
+                  <p class="tv-transcript-line" data-seek="111"><button type="button" class="tv-transcript-time js-seek" data-seek="111">1:51</button>First you simply notice the thought. No judgment, just awareness. You caught it. Then immediately you replace it with something real. As we talked about gratitude and love, something that shifts your state and you actually feel it. And you do this every time you catch the loop. This is something you can do all day in real time as things come up.</p>
+                  <p class="tv-transcript-line" data-seek="139"><button type="button" class="tv-transcript-time js-seek" data-seek="139">2:19</button>Just replacing them. one at a time. And over time, there's less and less that needs to be replaced. And over time, your baseline begins to shift. You spend less time getting pulled into those loops. So, you're not trying to force it out. You're simply replacing it one thought at a time with that higher energy state.</p>
+                  <p class="tv-transcript-line" data-seek="164"><button type="button" class="tv-transcript-time js-seek" data-seek="164">2:44</button>And over time, you just stop feeding what doesn't serve you. And you start coming back to where you actually want to be. And you begin to remember who you really are beneath those thoughts.</p>
+                </div>
+              </div>
+              <div class="tv-transcript-overlay">
+                <button type="button" class="tv-transcript-toggle" id="transcriptToggle">Read Full Transcript</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Row: Full Width Chapters -->
+        <div class="tv-chapters-full text-reveal">
+          <span class="tv-chapters-title">Chapters</span>
+          <div class="tv-chapter-list" id="tvChapters">
+            <button type="button" class="tv-chapter js-seek is-active" data-seek="0"><span class="tv-chapter-time">0:00</span><span class="tv-chapter-label">You Don't Remove It — You Replace It</span></button>
+            <button type="button" class="tv-chapter js-seek" data-seek="26"><span class="tv-chapter-time">0:26</span><span class="tv-chapter-label">When One Thought Becomes Five</span></button>
+            <button type="button" class="tv-chapter js-seek" data-seek="48"><span class="tv-chapter-time">0:48</span><span class="tv-chapter-label">Stop Fighting the Thought</span></button>
+            <button type="button" class="tv-chapter js-seek" data-seek="57"><span class="tv-chapter-time">0:57</span><span class="tv-chapter-label">Choose a Higher-Energy State</span></button>
+            <button type="button" class="tv-chapter js-seek" data-seek="101"><span class="tv-chapter-time">1:41</span><span class="tv-chapter-label">Override the Lower Pattern</span></button>
+            <button type="button" class="tv-chapter js-seek" data-seek="111"><span class="tv-chapter-time">1:51</span><span class="tv-chapter-label">Notice. Replace. Feel It.</span></button>
+            <button type="button" class="tv-chapter js-seek" data-seek="139"><span class="tv-chapter-time">2:19</span><span class="tv-chapter-label">Shift Your Baseline</span></button>
+            <button type="button" class="tv-chapter js-seek" data-seek="164"><span class="tv-chapter-time">2:44</span><span class="tv-chapter-label">Stop Feeding What Doesn't Serve You</span></button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. SHORT INTRODUCTION / OVERVIEW (Open Book Layout) -->
+    <section class="tv-overview section-pad" aria-labelledby="overviewTitle">
+      <div class="wrap open-book">
+        <div class="book-page-left text-reveal">
+          <span class="eyebrow">Overview</span>
+          <h2 id="overviewTitle" class="section-title">The thought is not the problem. What you keep feeding is.</h2>
+        </div>
+        <div class="book-page-right section-copy text-reveal">
+          <p>A negative thought can appear in an instant. The difficulty begins when we wrestle with it, repeat it, and keep giving it more of our attention.</p>
+          <p>The Replacement Loop offers a simpler response: notice the thought without judgment, then consciously place your attention on something real that changes your state — gratitude, love, laughter, connection, or a memory that brings you back to what matters. The goal is not to pretend the difficult thought never existed. It is to stop feeding it automatically and practice returning to a state that serves you.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. MAIN IDEAS (3-Column Matrix) -->
+    <section class="tv-ideas section-pad" aria-labelledby="ideasTitle">
+      <div class="wrap">
+        <span class="eyebrow text-reveal">Main Ideas</span>
+        <h2 id="ideasTitle" class="section-title text-reveal">What this teaching is actually saying.</h2>
+        <div class="tv-idea-grid">
+          <div class="tv-idea-card text-reveal">
+            <span class="tv-idea-ghost" aria-hidden="true">01</span>
+            <span class="tv-idea-no">01</span>
+            <h3>Catch the moment early</h3>
+            <p>The shift becomes possible when you notice the thought before the loop has gathered momentum. Awareness creates the opening.</p>
+          </div>
+          <div class="tv-idea-card text-reveal">
+            <span class="tv-idea-ghost" aria-hidden="true">02</span>
+            <span class="tv-idea-no">02</span>
+            <h3>Don't fight the thought</h3>
+            <p>Trying to force a thought out can give it even more attention. The practice is not suppression. It is choosing where your attention goes next.</p>
+          </div>
+          <div class="tv-idea-card text-reveal">
+            <span class="tv-idea-ghost" aria-hidden="true">03</span>
+            <span class="tv-idea-no">03</span>
+            <h3>Replace it with something real</h3>
+            <p>Gratitude, love, laughter, connection, a person you care about, a meaningful memory — choose something you can genuinely connect to.</p>
+          </div>
+          <div class="tv-idea-card text-reveal">
+            <span class="tv-idea-ghost" aria-hidden="true">04</span>
+            <span class="tv-idea-no">04</span>
+            <h3>Feel the shift</h3>
+            <p>This is more than positive thinking. The replacement should create an actual change in your emotional state, not just another sentence in your head.</p>
+          </div>
+          <div class="tv-idea-card text-reveal">
+            <span class="tv-idea-ghost" aria-hidden="true">05</span>
+            <span class="tv-idea-no">05</span>
+            <h3>Repetition changes the baseline</h3>
+            <p>Each repetition is small. Over time, those small returns can make the old loops less automatic and the state you want to live from more familiar.</p>
+          </div>
+          <div class="tv-idea-card text-reveal">
+            <span class="tv-idea-ghost" aria-hidden="true">06</span>
+            <span class="tv-idea-no">06</span>
+            <h3>Feed what serves you</h3>
+            <p>You do not need to control every thought. You can learn to stop feeding the ones that pull you away and strengthen the ones that bring you back.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. REFLECTION / PRACTICE -->
+    <section class="exp-section exp-section--paper" id="sit" aria-labelledby="sitTitle">
+      <div class="exp-inner">
+        <div class="exp-heading">
+          <span class="eyebrow text-reveal">Sit With This</span>
+          <h2 id="sitTitle" class="text-reveal" style="font-size:clamp(2.2rem,3.8vw,3.8rem);">Practice the Replacement Loop</h2>
+          <p class="exp-reflect-intro text-reveal" style="font-size:1.2rem; color:var(--muted); max-width:56ch;">There are no correct answers. Write what genuinely feels true.</p>
+        </div>
+
+        <ol class="exp-questions" id="reflectionQuestions">
+          <li class="exp-question text-reveal"><span class="exp-question-num">01</span><p>What thought or emotional loop pulled you away from where you wanted to be today?</p></li>
+          <li class="exp-question text-reveal"><span class="exp-question-num">02</span><p>What usually happens next when that thought gets your attention — does it create more stress, fear, frustration, doubt, or another familiar pattern?</p></li>
+          <li class="exp-question text-reveal"><span class="exp-question-num">03</span><p>How early can you notice the loop beginning? What is the first sign that tells you your state is starting to shift?</p></li>
+          <li class="exp-question text-reveal"><span class="exp-question-num">04</span><p>What is something real you can return to that naturally brings up gratitude, love, laughter, connection, or a sense of being fully alive?</p></li>
+          <li class="exp-question text-reveal"><span class="exp-question-num">05</span><p>When you bring that person, memory, place, or feeling fully into your attention, what changes in your body and emotional state?</p></li>
+          <li class="exp-question text-reveal"><span class="exp-question-num">06</span><p>If you practiced this consistently, one thought at a time, what might begin to change about your normal baseline — the state you return to most often?</p></li>
+        </ol>
+
+        <div class="exp-reflection-close text-reveal">
+          <p><strong>Try This:</strong> For the rest of today, practice catching one loop as early as you can. Don't argue with it. Notice it, then replace it with one real source of gratitude, love, laughter, or connection. Stay with that feeling for a few breaths. Then return to what is in front of you. One thought at a time.</p>
+        </div>
+
+        <div class="exp-reflection-options text-reveal">
+          <button class="exp-option" id="skDownloadReflection" type="button">
+            <div class="exp-option-text">
+              <h3>Download the Reflection</h3>
+              <p>An editable Word document — type your answers directly and save it to your own device.</p>
+            </div>
+            <div class="exp-option-footer">
+              <span class="exp-option-action">
+                <span class="exp-option-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                </span>
+                Download Word Document
+              </span>
+              <span class="exp-option-arrow" aria-hidden="true">→</span>
+            </div>
+          </button>
+          <button class="exp-option" id="skPrintReflection" type="button">
+            <div class="exp-option-text">
+              <h3>Print the Reflection</h3>
+              <p>A printable worksheet with room to write, straight from your browser.</p>
+            </div>
+            <div class="exp-option-footer">
+              <span class="exp-option-action">
+                <span class="exp-option-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 9V3h12v6"/>
+                    <path d="M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2"/>
+                    <path d="M6 14h12v7H6z"/>
+                  </svg>
+                </span>
+                Print Worksheet
+              </span>
+              <span class="exp-option-arrow" aria-hidden="true">→</span>
+            </div>
+          </button>
+          <a class="exp-option" href="#reflectionQuestions">
+            <div class="exp-option-text">
+              <h3>Use Your Own Journal</h3>
+              <p>Keep the questions visible here while you write on paper.</p>
+            </div>
+            <div class="exp-option-footer">
+              <span class="exp-option-action">
+                <span class="exp-option-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                </span>
+                Continue With Your Journal
+              </span>
+              <span class="exp-option-arrow" aria-hidden="true">→</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="exp-privacy text-reveal">
+          <span class="exp-privacy-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="11" width="16" height="9" rx="2"/>
+              <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+            </svg>
+          </span>
+          <p>These questions are private. Nothing here is entered into the website or shared with anyone else.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. BLUEPRINT PLACEMENT (Clean Split Layout) -->
+    <section class="tv-blueprint section-pad" aria-labelledby="blueprintPlacementTitle">
+      <div class="wrap clean-split">
+        <div class="clean-split-left text-reveal">
+          <span class="eyebrow">Where This Fits In The Blueprint</span>
+          <h2 id="blueprintPlacementTitle" class="section-title">Trunk → Awareness → Five Mind Tools</h2>
+          <div class="exp-btn-row" style="margin-top: 35px;">
+            <a class="exp-btn exp-btn--primary" href="seeker.html#treeBlueprint">See It In The Blueprint</a>
+          </div>
+        </div>
+        <div class="clean-split-right text-reveal">
+          <p class="section-copy" style="max-width: 100%;">This teaching is the second of five Mind Tools that live in the Trunk, under Awareness — the practice of noticing what is happening clearly enough to choose a different relationship with it. The Cat & Mouse Method helps you catch the thought. The Replacement Loop gives you something intentional to do next.</p>
+          <ol class="tv-blueprint-list">
+            <li><strong>Cat &amp; Mouse Method</strong> — notice the thought as it appears.</li>
+            <li><strong>Replacement Loop</strong> — consciously replace the unhelpful loop with a state that serves you.</li>
+            <li><strong>Single Point Focus</strong> — train the ability to place and sustain attention deliberately.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. RELATED TEACHINGS (Split Paper Layout) -->
+    <section class="tv-related section-pad" aria-labelledby="relatedTitle">
+      <div class="wrap">
+        <span class="eyebrow text-reveal">Related Teachings</span>
+        <h2 id="relatedTitle" class="section-title text-reveal">The rest of this system, in order.</h2>
+        <p class="section-copy text-reveal" style="margin-top:16px;max-width:70ch;">Replacement Loop is part two of five. These Mind Tools build on one another: first you notice the thought, then you practice choosing what receives your energy, and gradually you strengthen your ability to place attention deliberately.</p>
+        
+        <div class="tv-related-grid">
+          
+          <a class="tv-related-card text-reveal" href="https://www.youtube.com/watch?v=k0TA52HUjbs" target="_blank" rel="noopener">
+            <div class="tv-related-img" style="background-image:url('https://img.youtube.com/vi/k0TA52HUjbs/hqdefault.jpg')">
+               <div class="tv-yt-play">
+                 <svg viewBox="0 0 68 48" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#ff0000"></path>
+                   <path d="M 45,24 27,14 27,34" fill="#fff"></path>
+                 </svg>
+               </div>
+            </div>
+            <div class="tv-related-content">
+               <span class="tv-related-tag">I — Notice the Thought</span>
+               <h3>The Cat and the Mouse Method</h3>
+               <p>Learn to notice thoughts as they appear, decide what actually needs your attention, and let the rest pass without being pulled into the loop.</p>
+               <div class="tv-related-footer">
+                 <span class="tv-related-play"><div class="tv-play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div> WATCH NOW</span>
+                 <span class="tv-related-arrow">→</span>
+               </div>
+            </div>
+          </a>
+          
+          <a class="tv-related-card text-reveal" href="https://www.youtube.com/watch?v=0sZLafQc3xM" target="_blank" rel="noopener">
+            <div class="tv-related-img" style="background-image:url('https://img.youtube.com/vi/0sZLafQc3xM/hqdefault.jpg')">
+               <div class="tv-yt-play">
+                 <svg viewBox="0 0 68 48" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#ff0000"></path>
+                   <path d="M 45,24 27,14 27,34" fill="#fff"></path>
+                 </svg>
+               </div>
+            </div>
+            <div class="tv-related-content">
+               <span class="tv-related-tag">III — Undivided Attention</span>
+               <h3>Undivided Attention</h3>
+               <p>A simple technique for bringing all of your attention to the one thing in front of you — and noticing how much clearer everything gets.</p>
+               <div class="tv-related-footer">
+                 <span class="tv-related-play"><div class="tv-play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div> WATCH NOW</span>
+                 <span class="tv-related-arrow">→</span>
+               </div>
+            </div>
+          </a>
+          
+          <a class="tv-related-card text-reveal" href="https://www.youtube.com/watch?v=LUgaGi08B8E" target="_blank" rel="noopener">
+            <div class="tv-related-img" style="background-image:url('https://img.youtube.com/vi/LUgaGi08B8E/hqdefault.jpg')">
+               <div class="tv-yt-play">
+                 <svg viewBox="0 0 68 48" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#ff0000"></path>
+                   <path d="M 45,24 27,14 27,34" fill="#fff"></path>
+                 </svg>
+               </div>
+            </div>
+            <div class="tv-related-content">
+               <span class="tv-related-tag">IV — Effortless, Not Forced</span>
+               <h3>Effortless, Not Forced</h3>
+               <p>Learn what flow state really is, and why it's available in far more ordinary moments than you'd think.</p>
+               <div class="tv-related-footer">
+                 <span class="tv-related-play"><div class="tv-play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div> WATCH NOW</span>
+                 <span class="tv-related-arrow">→</span>
+               </div>
+            </div>
+          </a>
+          
+          <a class="tv-related-card text-reveal" href="https://www.youtube.com/watch?v=iYIyFlRidfI" target="_blank" rel="noopener">
+            <div class="tv-related-img" style="background-image:url('https://img.youtube.com/vi/iYIyFlRidfI/hqdefault.jpg')">
+               <div class="tv-yt-play">
+                 <svg viewBox="0 0 68 48" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#ff0000"></path>
+                   <path d="M 45,24 27,14 27,34" fill="#fff"></path>
+                 </svg>
+               </div>
+            </div>
+            <div class="tv-related-content">
+               <span class="tv-related-tag">V — The Moment It Breaks</span>
+               <h3>The Moment It Breaks</h3>
+               <p>Learn why flow breaks so easily, and the simple reset that brings it back faster than you'd expect.</p>
+               <div class="tv-related-footer">
+                 <span class="tv-related-play"><div class="tv-play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div> WATCH NOW</span>
+                 <span class="tv-related-arrow">→</span>
+               </div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. RELEVANT RESOURCES -->
+    <section class="tv-resources section-pad" aria-labelledby="resourcesTitle">
+      <div class="wrap">
+        <span class="eyebrow text-reveal">Relevant Resources</span>
+        <h2 id="resourcesTitle" class="section-title text-reveal">Go deeper from here.</h2>
+        <div class="tv-resource-list">
+          <div class="tv-resource text-reveal">
+            <div><div class="tv-resource-name">The Blueprint — Trunk: Awareness</div><div class="tv-resource-desc">See how the Replacement Loop and all five Mind Tools connect to the rest of the practice.</div></div>
+            <a class="tv-resource-link" href="seeker.html#treeBlueprint">Explore →</a>
+          </div>
+          <div class="tv-resource text-reveal">
+            <div><div class="tv-resource-name">The Seeker Path</div><div class="tv-resource-desc">Explore how attention, direct experience, and daily practice fit into the larger inner journey.</div></div>
+            <a class="tv-resource-link" href="seeker.html">Explore →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. CONNECTION BACK TO YOUTUBE -->
+    <section class="tv-cta section-pad">
+      <div class="wrap">
+        <h2 class="text-reveal">Catch it. Replace it. Practice it.</h2>
+        <p class="text-reveal">The full teaching is on YouTube. Practice it in ordinary moments, one thought at a time, and return whenever you need the reminder.</p>
+        <div class="exp-btn-row text-reveal">
+          <a class="exp-btn exp-btn--primary" href="https://www.youtube.com/watch?v=0isBXHY7R6I" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 8.3l6 3.7-6 3.7z"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+            Watch On YouTube
+          </a>
+          <a class="exp-btn" href="https://www.youtube.com/@seek_consciousness" target="_blank" rel="noopener">Subscribe For More</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <a class="footer-logo" href="index.html" aria-label="Return to the homepage"><img src="assets/media/seek-consciousness-logo.png" alt="Seek Consciousness"></a>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="index.html#intro">Recognition</a>
+        <a href="index.html#mission">Seek Consciousness</a>
+        <a href="index.html#choose-path">Choose Your Path</a>
+        <a href="seeker.html">The Seeker</a>
+      </nav>
+    </div>
+    <p class="copyright">&copy; <span id="year"></span> Seek Consciousness. All rights reserved.</p>
+  </footer>
+
+  <script>
+  (()=>{
+    'use strict';
+    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const toggle=document.querySelector('.nav-toggle'); const nav=document.getElementById('primaryNav');
+    toggle?.addEventListener('click',()=>{const open=!nav.classList.contains('open');nav.classList.toggle('open',open);toggle.setAttribute('aria-expanded',String(open));});
+    nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+
+    const items=[...document.querySelectorAll('.text-reveal')];
+    if(reduced||!('IntersectionObserver'in window)) items.forEach(x=>x.classList.add('is-visible')); else {
+      const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -4%'});
+      items.forEach(x=>io.observe(x));
+    }
+
+    // Reading progress thread
+    const progressFill=document.getElementById('readProgressFill');
+    const updateProgress=()=>{
+      const doc=document.documentElement;
+      const scrollable=doc.scrollHeight-doc.clientHeight;
+      const pct=scrollable>0?Math.min(100,Math.max(0,(window.scrollY/scrollable)*100)):0;
+      if(progressFill) progressFill.style.width=pct+'%';
+    };
+    window.addEventListener('scroll',updateProgress,{passive:true});
+    window.addEventListener('resize',updateProgress);
+    updateProgress();
+
+    // Collapsible Transcript Toggle
+    const transcriptWrapper = document.getElementById('transcriptWrapper');
+    const transcriptToggle = document.getElementById('transcriptToggle');
+    if(transcriptToggle && transcriptWrapper) {
+      transcriptToggle.addEventListener('click', () => {
+        transcriptWrapper.classList.add('is-expanded');
+      });
+    }
+
+    // Chapters + transcript
+    const videoFrame=document.getElementById('tvVideoFrame');
+    const chapterButtons=[...document.querySelectorAll('.tv-chapter')];
+    const transcriptLines=[...document.querySelectorAll('.tv-transcript-line')];
+    const SEGMENTS=chapterButtons.map(btn=>Number(btn.dataset.seek||0));
+
+    if(videoFrame && window.location.protocol!=='file:'){
+      try{
+        const src=new URL(videoFrame.src, window.location.href);
+        if(!src.searchParams.has('origin')){
+          src.searchParams.set('origin', window.location.origin);
+          videoFrame.src=src.toString();
+        }
+      }catch(e){}
+    }
+
+    const setActiveIndex=(index,{scrollTranscript=false}={})=>{
+      chapterButtons.forEach((btn,i)=>btn.classList.toggle('is-active',i===index));
+      transcriptLines.forEach((line,i)=>line.classList.toggle('is-active',i===index));
+      if(scrollTranscript && transcriptWrapper && transcriptWrapper.classList.contains('is-expanded')){
+        transcriptLines[index]?.scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'nearest'});
+      }
+    };
+
+    const indexForSeconds=(seconds)=>{
+      const exact=SEGMENTS.indexOf(seconds);
+      return exact===-1?0:exact;
+    };
+    const indexForTime=(t)=>{
+      let idx=0;
+      for(let i=0;i<SEGMENTS.length;i++){ if(t>=SEGMENTS[i]) idx=i; else break; }
+      return idx;
+    };
+
+    let ytPlayer=null, syncTimer=null;
+    const seekTo=(seconds)=>{
+      if(ytPlayer && typeof ytPlayer.seekTo==='function'){
+        ytPlayer.seekTo(seconds,true);
+        ytPlayer.playVideo();
+      } else if(videoFrame?.contentWindow){
+        videoFrame.contentWindow.postMessage(JSON.stringify({event:'command',func:'seekTo',args:[seconds,true]}),'*');
+        videoFrame.contentWindow.postMessage(JSON.stringify({event:'command',func:'playVideo',args:[]}),'*');
+      }
+    };
+    const startSync=()=>{
+      if(syncTimer) return;
+      syncTimer=setInterval(()=>{
+        if(!ytPlayer||typeof ytPlayer.getCurrentTime!=='function') return;
+        setActiveIndex(indexForTime(ytPlayer.getCurrentTime()),{scrollTranscript:true});
+      },500);
+    };
+    const stopSync=()=>{ if(syncTimer){ clearInterval(syncTimer); syncTimer=null; } };
+    window.onYouTubeIframeAPIReady=()=>{
+      ytPlayer=new YT.Player('tvVideoFrame',{
+        events:{
+          onStateChange:(e)=>{
+            if(e.data===YT.PlayerState.PLAYING) startSync();
+            else stopSync();
+          }
+        }
+      });
+    };
+
+    document.querySelectorAll('.js-seek').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const seconds=Number(btn.dataset.seek||0);
+        seekTo(seconds);
+        setActiveIndex(indexForSeconds(seconds));
+        document.querySelector('.tv-video-frame')?.scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'center'});
+      });
+    });
+
+    // Reflection download
+    const getQuestions=()=>Array.from(document.querySelectorAll('#reflectionQuestions .exp-question p')).map(p=>p.innerText.replace(/\s+/g,' ').trim());
+    const rtfEscape=(str)=>str.replace(/\\/g,'\\\\').replace(/\{/g,'\\{').replace(/\}/g,'\\}').replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/\u2014/g,'\\emdash ').replace(/\u2013/g,'\\endash ');
+    const downloadReflectionDoc=()=>{
+      const questions=getQuestions();
+      const intro=[
+        "Before you move on, take a moment to notice one thought loop you can work with using the Replacement Loop.",
+        'There are no correct answers. Consider these privately, and write what genuinely feels true.',
+        'This document is entirely private — type your answers directly below each question and save the file to your own device.'
+      ];
+      let rtf='{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang1033{\\fonttbl{\\f0\\froman Times New Roman;}}{\\colortbl;\\red149\\green102\\blue44;}\\f0\\fs20\\pard\\sa240';
+      rtf+=`\\fs40\\b The Pathfinder \\emdash  Where You Are Now\\b0\\par`;
+      rtf+=`\\fs22\\i Seek Consciousness\\i0\\par\\sa280`;
+      intro.forEach(line=>{rtf+=`\\fs20 ${rtfEscape(line)}\\par`;});
+      rtf+=`\\par`;
+      questions.forEach((q,i)=>{
+        rtf+=`\\sa60\\fs24\\b\\cf1 ${i+1}.\\cf0\\b0  \\b ${rtfEscape(q)}\\b0\\par`;
+        rtf+=`\\sa280\\fs22 \\line\\line\\line\\line\\par`;
+      });
+      rtf+='}';
+      const blob=new Blob([rtf],{type:'application/rtf'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url;
+      a.download='seek-consciousness-replacement-loop-reflection.rtf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    };
+    document.getElementById('skDownloadReflection')?.addEventListener('click',downloadReflectionDoc);
+    document.getElementById('skPrintReflection')?.addEventListener('click',()=>window.print());
+
+    document.getElementById('year').textContent=new Date().getFullYear();
+  })();
+  </script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
