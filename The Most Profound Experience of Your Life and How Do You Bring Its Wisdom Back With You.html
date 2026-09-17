@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+
+<!--
+  TEACHING / VIDEO PAGE TEMPLATE — v2 (design refresh)
+  ------------------------------------------------------------------
+  This file is a duplicate of the Cat & Mouse teaching-page template.
+  It has been adapted for the Psychedelics, Catalysts & Expanded States branch — while
+  preserving the same layout, brand tokens, interactions, reflection
+  pattern, Blueprint placement, resources, and related-teaching system.
+
+  What changed in this pass (design only — no brand tokens, fonts,
+  header, footer, or Sit-With-This pattern were altered, so this
+  stays consistent with index.html / seeker.html / pathfinder.html):
+    - Added a thin scroll "thread" under the header (read progress)
+    - Hero now bookends with the site's existing ✦ ornament motif
+    - Chapters get a visible "currently selected" state
+    - Transcript now sits beside the video instead of in its own
+      section further down the page, and stays fully visible (no
+      expand toggle). Its timestamp buttons seek the video, same
+      as Chapters.
+    - Chapters and Transcript now highlight together in real time
+      as the video plays, using the YouTube IFrame Player API
+      (falls back to plain click-to-seek if that API can't load)
+    - Main Ideas moved from a flat numbered list to a ledger-style
+      grid with a faint ghost numeral per card
+    - Added visible focus states for keyboard users
+    - Overview uses an Open Book layout; Blueprint uses a clean split layout.
+    - Video section perfectly balanced: Sticky Video (Left), Collapsible Transcript (Right), Full-width Chapters (Bottom).
+    - Transcript 'Read Full' button is static/grounded, not floating.
+    - Chapters layout refined (removed messy borders, improved spacing & hover states).
+    - Related Teachings cards perfectly match the split paper design with YT play buttons, adjusted to 4 cards per row.
+    - Reflection section completely rebuilt to match Pathfinder's premium 3-card option layout.
+
+  Per-video things to replace when duplicating:
+    1. <title> + meta description
+    2. Breadcrumb "current" label, eyebrow, H1, hook line, meta row
+    3. The video ID (video embed + "Watch on YouTube" links) — this page uses EdjM1-BzdwY
+       already uses the real ID (0sZLafQc3xM), cross-checked against the
+       "One Connected System" progression on pathfinder.html
+    4. Overview copy
+    5. Main Ideas list
+    6. Transcript text + chapter timestamps — the transcript is an
+       always-visible, scrollable panel beside the video (not a
+       separate section). Three things must all use the SAME
+       seconds and stay in the SAME order: the Chapters buttons'
+       data-seek, each transcript <p class="tv-transcript-line">'s
+       data-seek, and the <button class="tv-transcript-time"> inside
+       it. The sync-highlighting JS reads its segment list straight
+       off the Chapters buttons, so Chapters is the source of truth —
+       update it first, then match the transcript lines to it.
+       Timestamps below are estimated from the transcript's word
+       count — replace with real times once the video is published.
+    7. Reflection questions / practice
+    8. Blueprint placement card (which branch/trunk/root this maps to)
+    9. Related Teachings cards
+    10. Resources list
+  ------------------------------------------------------------------
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>The Most Profound Experience of Your Life—How Do You Bring Its Wisdom Back With You? — Seek Consciousness</title>
+<meta content="Kurt reflects on what happens after a profound 5-MeO-DMT experience — how to capture what felt real, make small conscious changes, and use breath, stillness, meditation, and awareness to bring the experience back into everyday life." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;display=swap" rel="stylesheet"/>
+<style>
+    :root {
+      --paper:#eadfcb;
+      --paper-light:#f6efe3;
+      --paper-pale:#fbf7ee;
+      --paper-deep:#dfcfb4;
+      --ink:#241b14;
+      --muted:#726658;
+      --ochre:#95662c;
+      --ochre-soft:#c79859;
+      --ochre-light:#d9a869;
+      --line:rgba(61,43,25,.17);
+      --line-strong:rgba(149,102,44,.42);
+      --header-height:78px;
+      --serif:'Cormorant Garamond', Georgia, serif;
+      --display:'Cinzel', Georgia, serif;
+      --ease:cubic-bezier(.22,.61,.36,1);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{overflow-x:hidden;background:var(--paper-light);color:var(--ink);font-family:var(--serif);font-size:18px;font-weight:500;line-height:1.65;-webkit-font-smoothing:antialiased}
+    body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+      radial-gradient(circle at 12% 8%,rgba(199,152,89,.08),transparent 25%),
+      radial-gradient(circle at 88% 32%,rgba(149,102,44,.05),transparent 30%),
+      linear-gradient(90deg,rgba(80,55,28,.018) 1px,transparent 1px),
+      linear-gradient(rgba(80,55,28,.014) 1px,transparent 1px);background-size:auto,auto,44px 44px,44px 44px}
+    img{display:block;width:100%;height:100%;object-fit:cover}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit;color:inherit;cursor:pointer}
+    h1,h2,h3{font-family:var(--display);font-weight:500;line-height:1.1;letter-spacing:.01em}
+    p+p{margin-top:.55rem}
+    ::selection{background:var(--ochre);color:white}
+    section{scroll-margin-top:calc(var(--header-height) + 20px)}
+    .wrap{width:min(1280px,88vw);margin:0 auto}
+    .eyebrow{display:block;margin-bottom:16px;font-family:var(--display);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ochre)}
+    .section-pad{padding:clamp(88px,10vw,140px) 0;position:relative}
+    .section-title{font-size:clamp(2.3rem,4.2vw,4.2rem);text-wrap:balance}
+    .section-copy{font-size:1.24rem;color:rgba(36,27,20,.8);max-width:52ch}
+    .text-reveal{opacity:0;transform:translateY(20px);transition:opacity .72s var(--ease),transform .72s var(--ease)}
+    .text-reveal.is-visible{opacity:1;transform:none}
+
+    /* Visible keyboard focus everywhere — quality floor */
+    a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--ochre);outline-offset:3px;border-radius:1px}
+
+    /* Reusable ✦ ornament */
+    .ink-divider{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--ochre);font-size:.8rem}
+    .ink-divider::before,.ink-divider::after{content:'';width:56px;height:1px;background:var(--line-strong)}
+
+    /* ===== Header / Footer ===== */
+    .site-header{position:fixed;inset:0 0 auto;z-index:100;height:var(--header-height);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(22px,6vw,92px);color:var(--ink);background:rgba(244,236,222,.9);border-bottom:1px solid var(--line);box-shadow:0 12px 30px rgba(36,27,20,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+    .site-logo{display:block;line-height:0}
+    .site-logo img{width:clamp(122px,11vw,174px);height:auto;object-fit:contain;filter:brightness(.46) saturate(1.3) contrast(1.05);transition:filter .25s ease}
+    .site-logo:hover img{filter:brightness(.36) saturate(1.4) contrast(1.08)}
+    .primary-nav{display:flex;align-items:center;gap:28px}
+    .primary-nav a{position:relative;font-family:var(--display);font-size:.76rem;letter-spacing:.05em;color:rgba(36,27,20,.72);transition:color .25s ease}
+    .primary-nav a::after{content:'';position:absolute;left:0;right:100%;bottom:-6px;height:1px;background:var(--ochre);transition:right .3s var(--ease)}
+    .primary-nav a:hover{color:var(--ink)}
+    .primary-nav a:hover::after{right:0}
+    .nav-toggle{display:none;width:44px;height:44px;border:0;background:transparent;cursor:pointer}
+    .nav-toggle span{display:block;width:24px;height:1px;margin:6px auto;background:var(--ink);transition:.25s ease}
+    .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .nav-toggle.open span:nth-child(2){opacity:0}
+    .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+    /* Reading progress thread */
+    .read-progress{position:fixed;top:var(--header-height);left:0;right:0;height:2px;background:rgba(149,102,44,.14);z-index:99}
+    .read-progress span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--ochre-soft),var(--ochre))}
+
+    .site-footer{position:relative;padding:64px 6vw 30px;background:var(--paper-deep);color:rgba(36,27,20,.7);border-top:1px solid var(--line)}
+    .site-footer::before{content:'';position:absolute;top:-1px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ochre) 50%,transparent)}
+    .footer-inner{width:min(1380px,100%);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:35px;flex-wrap:wrap}
+    .footer-logo img{width:clamp(180px,18vw,290px);height:auto;object-fit:contain;filter:brightness(.46) saturate(1.3) contrast(1.05)}
+    .footer-nav{display:flex;flex-wrap:wrap;gap:22px}
+    .footer-nav a{position:relative;font-family:var(--display);font-size:.67rem;letter-spacing:.08em;color:rgba(36,27,20,.68);transition:color .25s ease}
+    .footer-nav a::after{content:'';position:absolute;left:0;right:100%;bottom:-5px;height:1px;background:var(--ochre);transition:right .3s var(--ease)}
+    .footer-nav a:hover{color:var(--ink)}
+    .footer-nav a:hover::after{right:0}
+    .copyright{margin-top:28px;text-align:center;font-size:.82rem;color:rgba(36,27,20,.45)}
+
+    /* Buttons */
+    .exp-btn{position:relative;display:inline-flex;align-items:center;gap:10px;padding:16px 30px;border:1px solid var(--ink);font-family:var(--display);font-size:.7rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--ink);background:transparent;border-radius:2px;transition:.3s var(--ease)}
+    .exp-btn--primary{border-color:var(--ochre);color:var(--ochre)}
+    .exp-btn:hover{background:var(--ink);color:var(--paper-light)}
+    .exp-btn--primary:hover{background:var(--ochre);color:#fff}
+    .exp-btn-row{display:flex;flex-wrap:wrap;align-items:center;gap:16px 22px}
+    .exp-btn svg{width:15px;height:15px;flex:none}
+
+    /* ===== Teaching hero ===== */
+    .tv-hero{background:var(--paper-light);padding:calc(var(--header-height) + clamp(60px,8vw,110px)) 0 clamp(60px,7vw,80px)}
+    .tv-hero .wrap{max-width:1040px}
+    .tv-hero .ink-divider{justify-content:flex-start;margin-bottom:28px}
+    .tv-hero .ink-divider::before{width:0}
+    .tv-breadcrumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:28px;font-family:var(--display);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+    .tv-breadcrumb a{position:relative;color:var(--muted);transition:color .25s ease}
+    .tv-breadcrumb a:hover{color:var(--ink)}
+    .tv-breadcrumb-sep{color:var(--ochre)}
+    .tv-breadcrumb-current{color:var(--ink)}
+    .tv-hero h1{font-size:clamp(2.6rem,5.5vw,4.8rem);max-width:18ch;margin-bottom:32px;line-height:1.05}
+    .tv-hero-hook{font-size:1.32rem;line-height:1.55;color:rgba(36,27,20,.85);max-width:54ch;padding-left:26px;border-left:2px solid var(--ochre-soft)}
+    .tv-meta-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:36px;font-family:var(--display);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+    .tv-meta-row strong{color:var(--ochre);font-weight:600}
+    .tv-meta-sep{color:rgba(149,102,44,.4)}
+
+    /* ===== NEW BALANCED VIDEO SECTION ===== */
+    .tv-video-section { background: var(--paper-pale); }
+    .tv-video-container { width: min(1420px, 94vw); margin: 0 auto; }
+    
+    /* Top Row: Video (Left) + Transcript (Right) */
+    .tv-video-split {
+        display: grid;
+        grid-template-columns: 1.35fr 1fr;
+        gap: clamp(40px, 5vw, 70px);
+        align-items: start;
+    }
+
+    /* Sticky Video Left Column */
+    .tv-video-col {
+        min-width: 0;
+        position: sticky;
+        top: calc(var(--header-height) + 40px);
+        z-index: 10;
+    }
+    
+    .tv-video-frame{position:relative;background:var(--paper-light);padding:clamp(12px,1.8vw,22px);border:1px solid var(--line-strong);box-shadow:0 1px 0 rgba(255,251,240,.6) inset,0 34px 80px rgba(63,38,17,.15);border-radius:2px}
+    .tv-video-stage{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#050403;box-shadow:0 0 0 1px rgba(149,102,44,.5)}
+    .tv-video-stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+    .tv-video-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:clamp(28px,5vw,58px);background:radial-gradient(circle at 50% 18%,rgba(199,152,89,.14),transparent 38%),linear-gradient(135deg,#17110c,#060504);color:var(--paper-light)}
+    .tv-video-placeholder .eyebrow{margin-bottom:14px;color:var(--ochre-light)}
+    .tv-video-placeholder h3{font-size:clamp(1.35rem,2.1vw,2rem);max-width:20ch;margin-bottom:12px;color:var(--paper-light)}
+    .tv-video-placeholder p{max-width:42ch;color:rgba(246,239,227,.72);font-size:1rem;margin-bottom:22px}
+    .tv-video-placeholder a{font-family:var(--display);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ochre-light);border-bottom:1px solid rgba(217,168,105,.55);padding-bottom:4px}
+    .tv-corner{position:absolute;width:24px;height:24px;pointer-events:none;z-index:3}
+    .tv-corner.tl{top:6px;left:6px;border-top:2px solid var(--ochre);border-left:2px solid var(--ochre)}
+    .tv-corner.tr{top:6px;right:6px;border-top:2px solid var(--ochre);border-right:2px solid var(--ochre)}
+    .tv-corner.bl{bottom:6px;left:6px;border-bottom:2px solid var(--ochre);border-left:2px solid var(--ochre)}
+    .tv-corner.br{bottom:6px;right:6px;border-bottom:2px solid var(--ochre);border-right:2px solid var(--ochre)}
+    
+    /* Transcript Right Column */
+    .tv-transcript-col { min-width: 0; padding-top: 10px; }
+    .tv-transcript-eyebrow{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;font-family:var(--display);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre)}
+    .tv-transcript-caption{font-size:.85rem;font-style:italic;color:var(--muted);text-transform:none;letter-spacing:0}
+    
+    .tv-transcript-wrapper{border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);background:var(--paper-pale)}
+    
+    /* Height tuned perfectly to visually balance with the video frame */
+    .tv-transcript-scroll{max-height:380px;overflow:hidden;transition:max-height 0.8s var(--ease)}
+    .tv-transcript-wrapper.is-expanded .tv-transcript-scroll{max-height:4000px}
+    
+    /* Solid background toggle wrapper beneath transcript */
+    .tv-transcript-overlay{display:flex;align-items:center;justify-content:center;padding:24px 0;background:var(--paper-pale);border-top:1px solid var(--line)}
+    .tv-transcript-wrapper.is-expanded .tv-transcript-overlay{display:none}
+    
+    .tv-transcript-toggle{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border:1px solid var(--ochre);font-family:var(--display);font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ochre);background:var(--paper-light);border-radius:2px;transition:all .3s var(--ease)}
+    .tv-transcript-toggle:hover{background:var(--ochre);color:#fff}
+
+    .tv-transcript-scroll-inner{padding:28px clamp(12px,1.5vw,20px) 32px;color:rgba(36,27,20,.84);font-size:1.1rem;line-height:1.7}
+    .tv-transcript-line{border-left:2px solid transparent;padding:4px 12px 4px 14px;margin:0 -12px 24px -16px;border-radius:2px;transition:background-color .35s ease,border-color .35s ease,box-shadow .35s ease}
+    .tv-transcript-line:last-child{margin-bottom:0}
+    .tv-transcript-line.is-active{background:rgba(149,102,44,.05);border-left-color:var(--ochre);box-shadow:0 1px 12px rgba(0,0,0,.02)}
+    .tv-transcript-time{display:inline-block;margin-right:12px;min-width:42px;text-align:left;border:0;background:transparent;font-family:var(--display);font-size:.68rem;letter-spacing:.04em;color:var(--ochre);position:relative;padding-bottom:1px}
+    .tv-transcript-time::after{content:'';position:absolute;left:0;right:100%;bottom:-1px;height:1px;background:var(--ochre);transition:right .3s var(--ease)}
+    .tv-transcript-time:hover::after,.tv-transcript-time:focus-visible::after{right:0}
+
+    /* Bottom Row: Clean Full Width Chapters (Unboxed) */
+    .tv-chapters-full {
+        grid-column: 1 / -1; 
+        margin-top: 60px; 
+    }
+    .tv-chapters-title{display:block;margin-bottom:20px;font-family:var(--display);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre)}
+    .tv-chapter-list{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 60px;
+        border-top:1px solid var(--line-strong);
+        padding-top: 24px;
+    }
+    .tv-chapter{display:flex;align-items:center;gap:24px;width:100%;text-align:left;padding:14px 16px 14px 20px;border:none;border-left:2px solid transparent;background:transparent;border-radius:0 4px 4px 0;transition:all .25s ease}
+    .tv-chapter:hover{background:rgba(149,102,44,.04)}
+    .tv-chapter.is-active{background:rgba(149,102,44,.08);border-left-color:var(--ochre)}
+    .tv-chapter-time{flex:none;width:45px;font-family:var(--display);font-size:.75rem;letter-spacing:.03em;color:var(--ochre); opacity: 0.8;}
+    .tv-chapter-label{font-size:1.1rem;color:var(--ink);transition:transform .2s ease;}
+    .tv-chapter.is-active .tv-chapter-label{font-weight:600; transform: translateX(4px);}
+    .tv-chapter:hover .tv-chapter-label{transform: translateX(4px);}
+
+    /* ===== OPEN BOOK LAYOUT (Overview Only) ===== */
+    .open-book {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        background: var(--paper-pale);
+        border-radius: 3px;
+        box-shadow: 
+            0 20px 50px rgba(63,38,17,.1),
+            0 2px 10px rgba(63,38,17,.05), 
+            inset 0 0 0 1px var(--paper-deep); 
+        position: relative;
+    }
+    .open-book::before {
+        content: '';
+        position: absolute;
+        top: 0; bottom: 0; left: 50%;
+        width: 60px;
+        transform: translateX(-50%);
+        background: linear-gradient(90deg, transparent 0%, rgba(63,38,17, 0.02) 45%, rgba(63,38,17, 0.06) 50%, rgba(63,38,17, 0.02) 55%, transparent 100%);
+        pointer-events: none;
+        z-index: 2;
+    }
+    .open-book::after {
+        content: '';
+        position: absolute;
+        top: 6%; bottom: 6%; left: 50%;
+        width: 1px;
+        transform: translateX(-50%);
+        background: linear-gradient(180deg, transparent, rgba(149,102,44,.12), transparent);
+        z-index: 3;
+    }
+
+    .book-page-left, .book-page-right {
+        padding: clamp(50px, 6vw, 100px) clamp(40px, 5vw, 80px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+    }
+    .book-page-left { box-shadow: inset -12px 0 20px -12px rgba(63,38,17,0.04); }
+    .book-page-right { box-shadow: inset 12px 0 20px -12px rgba(63,38,17,0.04); }
+
+    .book-page-left h2 {
+        font-size: clamp(2.6rem, 3.8vw, 4rem);
+        line-height: 1.1;
+        margin-top: 16px;
+    }
+    
+    .tv-overview { background: var(--paper-light); border-bottom: 1px solid var(--line); }
+    .tv-overview .section-copy { margin-top: 0; max-width: none; font-size: 1.2rem; }
+    .tv-overview .section-copy p:first-of-type::first-letter {
+        font-family: var(--display);
+        font-size: 3.6rem;
+        line-height: .72;
+        font-weight: 600;
+        float: left;
+        padding: 6px 12px 0 0;
+        color: var(--ochre);
+    }
+
+    /* ===== CLEAN SPLIT LAYOUT (Blueprint Only) ===== */
+    .clean-split {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: clamp(40px, 8vw, 100px);
+        align-items: center; /* Vertically centered */
+    }
+    .clean-split-left {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .clean-split-right {
+        padding-top: 0;
+    }
+    .clean-split-left h2 {
+        font-size: clamp(2.8rem, 4vw, 4.2rem);
+        line-height: 1.1;
+        margin-top: 16px;
+    }
+
+    .tv-blueprint { background: var(--paper-light); border-bottom: 1px solid var(--line); }
+    .tv-blueprint-list {
+        margin-top: 25px;
+        padding-left: 0;
+        list-style: none;
+        counter-reset: bp-counter;
+    }
+    .tv-blueprint-list li {
+        position: relative;
+        margin-bottom: 24px;
+        padding-left: 32px;
+        color: rgba(36,27,20,.85);
+        font-size: 1.15rem;
+        line-height: 1.6;
+    }
+    .tv-blueprint-list li::before {
+        counter-increment: bp-counter;
+        content: counter(bp-counter) ".";
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-family: var(--display);
+        color: var(--ochre);
+        font-weight: 600;
+        font-size: 1.15rem;
+    }
+
+    /* ===== Main ideas (3-Column Matrix) ===== */
+    .tv-ideas{background:var(--paper-pale)}
+    .tv-ideas .wrap{max-width:1240px}
+    .tv-idea-grid{display:grid;grid-template-columns:repeat(3, 1fr);margin-top:54px;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+    .tv-idea-card{position:relative;overflow:hidden;padding:36px 32px 32px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .tv-idea-ghost{position:absolute;top:-8px;right:16px;font-family:var(--display);font-size:5.2rem;line-height:1;font-weight:600;color:rgba(149,102,44,.05);pointer-events:none;user-select:none}
+    .tv-idea-no{position:relative;display:block;margin-bottom:12px;font-family:var(--display);font-size:.7rem;letter-spacing:.1em;color:var(--ochre)}
+    .tv-idea-card h3{position:relative;font-size:clamp(1.2rem,1.8vw,1.4rem);margin-bottom:12px}
+    .tv-idea-card p{position:relative;color:var(--muted);line-height:1.6}
+
+    /* ===== Reflection-style question list (Imported from Pathfinder) ===== */
+    .exp-section { padding:clamp(88px,10vw,140px) 6vw; }
+    .exp-section--paper { background:var(--paper); }
+    .exp-inner { width:min(1280px,100%); margin:0 auto; }
+    .exp-heading { max-width:820px; margin-bottom:clamp(40px,5vw,64px); }
+    .exp-heading h2 { font-size:clamp(2.3rem,4.2vw,4.2rem); color:var(--ink); margin-bottom:20px; text-wrap:balance; }
+    .exp-heading p { font-size:1.24rem; color:var(--muted); max-width:56ch; }
+    .exp-heading p + p { margin-top:.4rem; }
+    
+    .exp-questions {
+      display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px 48px;
+      margin:14px 0 40px; padding-top:28px; border-top:1px solid var(--line);
+    }
+    .exp-question { display:grid; grid-template-columns:52px minmax(0,1fr); gap:16px; padding:22px 0; }
+    .exp-question-num { font-family:var(--display); font-size:1.7rem; font-weight:500; color:rgba(149,102,44,.55); line-height:1; padding-top:.05rem; }
+    .exp-question p { padding-bottom:20px; font-size:1.14rem; color:var(--ink); line-height:1.48; margin:0; border-bottom:1px solid var(--line); }
+    
+    .exp-reflection-close { max-width:60ch; margin:0 0 34px; font-size:1.16rem; color:rgba(36,27,20,.85); }
+    .exp-reflection-close p + p { margin-top:.5rem; }
+    .exp-reflection-options { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-bottom:34px; }
+    
+    .exp-option {
+      display:flex; flex-direction:column; min-height:100%;
+      background:var(--paper-light); border:1px solid var(--line); text-align:left;
+      transition:background .3s var(--ease), border-color .3s ease, transform .16s ease-out;
+    }
+    @media (hover:hover) and (pointer:fine) {
+      .exp-option:hover { border-color:rgba(149,102,44,.4); }
+      .exp-option:hover .exp-option-arrow { transform:translateX(4px); }
+    }
+    .exp-option:active { transform:scale(.98); }
+    .exp-option-text { padding:26px 24px 20px; }
+    .exp-option-text h3 { font-size:1.18rem; font-weight:500; color:var(--ink); margin-bottom:8px; }
+    .exp-option-text p { font-size:.95rem; color:var(--muted); line-height:1.48; }
+    .exp-option-footer {
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      margin-top:auto; padding:18px 24px;
+      border-top:1px solid var(--line);
+    }
+    .exp-option-action { display:inline-flex; align-items:center; gap:10px; font-family:var(--display); font-size:.66rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+    .exp-option-icon { width:15px; height:15px; flex:0 0 auto; display:grid; place-items:center; color:var(--muted); }
+    .exp-option-icon svg { width:100%; height:100%; }
+    .exp-option-arrow { color:var(--muted); font-size:.92rem; transition:transform .25s ease; }
+    
+    .exp-privacy {
+      display:flex; align-items:flex-start; gap:16px;
+      margin-top:8px; padding-top:28px; border-top:1px solid var(--line);
+    }
+    .exp-privacy p { margin:0; font-size:1rem; color:rgba(36,27,20,.8); font-style:italic; line-height:1.5; }
+    .exp-privacy-icon {
+      flex:0 0 auto; width:34px; height:34px; margin-top:2px;
+      display:grid; place-items:center;
+      border:1px solid rgba(149,102,44,.35); border-radius:50%; color:var(--ochre);
+    }
+    .exp-privacy-icon svg { width:15px; height:15px; }
+
+    /* ===== Related teachings (Split Paper Layout - 4 Per Row) ===== */
+    .tv-related{background:var(--paper-light)}
+    .tv-related-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:54px}
+    
+    .tv-related-card{display:flex;flex-direction:column;background:var(--paper-pale);border:1px solid var(--line);border-radius:2px;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
+    .tv-related-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(36,27,20,.08)}
+    
+    .tv-related-img{position:relative;width:100%;aspect-ratio:16/9;background-size:cover;background-position:center;border-bottom:1px solid var(--line)}
+    
+    /* YouTube Style Play Button */
+    .tv-yt-play{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%) scale(0.8);width:68px;height:48px;transition:transform 0.2s var(--ease)}
+    .tv-related-card:hover .tv-yt-play{transform:translate(-50%, -50%) scale(0.85)}
+    
+    .tv-related-content{padding:24px 20px 20px;display:flex;flex-direction:column;flex-grow:1}
+    
+    .tv-related-tag{font-family:var(--display);font-size:.6rem;letter-spacing:.1em;color:var(--ochre);margin-bottom:12px;text-transform:uppercase;display:block}
+    
+    .tv-related-content h3{font-size:1.2rem;color:var(--ink);margin-bottom:12px;font-family:var(--display);text-transform:uppercase;line-height:1.2;letter-spacing:.02em}
+    
+    .tv-related-content p{font-size:.95rem;color:var(--muted);line-height:1.5;margin-bottom:20px;font-family:var(--serif)}
+    
+    .tv-related-footer{margin-top:auto;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:16px}
+    
+    .tv-related-play{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);font-weight:600}
+    .tv-play-circle{width:24px;height:24px;border:1px solid var(--ochre);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ochre)}
+    .tv-play-circle svg{width:8px;height:8px;margin-left:2px;fill:currentColor}
+    
+    .tv-related-arrow{font-size:1.1rem;color:var(--ochre);font-family:var(--serif)}
+
+    /* ===== Resources ===== */
+    .tv-resources{background:var(--paper-light)}
+    .tv-resources .wrap{max-width:880px}
+    .tv-resource-list{margin-top:44px;border-top:1px solid var(--line)}
+    .tv-resource{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:26px 4px;border-bottom:1px solid var(--line)}
+    .tv-resource-name{font-size:1.15rem;color:var(--ink)}
+    .tv-resource-desc{color:var(--muted);font-size:.98rem;margin-top:6px}
+    .tv-resource-link{flex:none;position:relative;font-family:var(--display);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ochre)}
+    .tv-resource-link::after{content:'';position:absolute;left:0;right:100%;bottom:-4px;height:1px;background:var(--ochre);transition:right .3s var(--ease)}
+    .tv-resource-link:hover::after{right:0}
+
+    /* ===== Closing YouTube CTA ===== */
+    .tv-cta{background:var(--paper-deep);text-align:center}
+    .tv-cta .wrap{max-width:680px}
+    .tv-cta h2{font-size:clamp(2.2rem,4vw,3.4rem);margin-bottom:18px}
+    .tv-cta p{color:rgba(36,27,20,.82);margin-bottom:36px;font-size:1.1rem}
+    .tv-cta .exp-btn-row{justify-content:center}
+
+    /* ===== Responsive Adjustments ===== */
+    @media(max-width:1050px){
+      .open-book{grid-template-columns:1fr;box-shadow:none;border-radius:0;background:transparent;}
+      .open-book::before, .open-book::after{display:none;}
+      .book-page-left, .book-page-right{padding:20px 0;box-shadow:none;}
+      
+      .clean-split{grid-template-columns:1fr;gap:30px;align-items:start;}
+      .clean-split-right{padding-top:1rem}
+
+      .tv-idea-grid{grid-template-columns:repeat(2, 1fr)}
+      
+      /* Mobile override for video section */
+      .tv-video-split{grid-template-columns:1fr;gap:40px}
+      .tv-video-col { position: relative; top: 0; }
+      .tv-transcript-scroll{max-height:500px}
+      .tv-chapter-list { grid-template-columns: 1fr; gap: 0; }
+
+      .tv-related-grid{grid-template-columns:repeat(2, 1fr); gap: 20px;}
+    }
+    @media(max-width:760px){
+      :root{--header-height:64px}
+      body{font-size:17px}
+      .site-header{padding:0 18px}
+      .site-logo img{width:90px}
+      .nav-toggle{display:block}
+      .primary-nav{position:absolute;top:100%;left:0;right:0;display:flex;flex-direction:column;align-items:stretch;gap:0;padding:8px 18px 18px;background:rgba(246,239,227,.98);border-bottom:1px solid var(--line);opacity:0;visibility:hidden;transform:translateY(-8px);transition:.25s ease}
+      .primary-nav.open{opacity:1;visibility:visible;transform:none}
+      .primary-nav a{padding:13px 0;border-top:1px solid var(--line)}
+      .tv-hero h1{font-size:clamp(2.4rem,9vw,3.2rem)}
+      .tv-hero-hook{padding-left:18px;font-size:1.2rem}
+      .tv-idea-grid{grid-template-columns:1fr}
+      
+      .exp-questions { grid-template-columns:1fr; }
+      .exp-reflection-options { grid-template-columns:1fr; gap:10px; }
+      .exp-option-text { padding:20px 18px 16px; }
+      .exp-option-text h3 { font-size:1.05rem; }
+      .exp-option-text p { font-size:.9rem; line-height:1.42; }
+      .exp-option-footer { padding:14px 18px; }
+      .exp-question { grid-template-columns:36px minmax(0,1fr); gap:12px; padding:6px 0; }
+      .exp-question-num { font-size:1.3rem; }
+      .exp-question p { font-size:1.16rem; }
+      .exp-privacy { gap:12px; padding-top:20px; }
+      .exp-privacy p { font-size:1.16rem; }
+
+      .tv-related-grid{grid-template-columns:1fr}
+      .site-footer{padding:48px 6vw 24px}
+      .footer-inner{align-items:flex-start;flex-direction:column;gap:22px}
+      .footer-logo img{width:230px}
+    }
+  </style>
+</head>
+<body>
+<div aria-hidden="true" class="read-progress" id="readProgress"><span id="readProgressFill"></span></div>
+<header class="site-header" id="siteHeader">
+<a aria-label="Seek Consciousness home" class="site-logo" href="index.html"><img alt="Seek Consciousness" src="assets/media/seek-consciousness-logo.png"/></a>
+<button aria-controls="primaryNav" aria-expanded="false" aria-label="Open navigation" class="nav-toggle" type="button">
+<span aria-hidden="true"></span>
+<span aria-hidden="true"></span>
+<span aria-hidden="true"></span>
+</button>
+<nav aria-label="Primary navigation" class="primary-nav" id="primaryNav">
+<a href="index.html">Home</a>
+<a href="index.html#choose-path">Choose Your Path</a>
+<a href="seeker.html#treeBlueprint">The Blueprint</a>
+</nav>
+</header>
+<main>
+<!-- HERO -->
+<section class="tv-hero">
+<div class="wrap">
+<nav aria-label="Breadcrumb" class="tv-breadcrumb text-reveal">
+<a href="index.html">Home</a>
+<span aria-hidden="true" class="tv-breadcrumb-sep">/</span>
+<a href="seeker.html#treeBlueprint">Teachings</a>
+<span aria-hidden="true" class="tv-breadcrumb-sep">/</span>
+<span aria-current="page" class="tv-breadcrumb-current">The Most Profound Experience of Your Life—How Do You Bring Its Wisdom Back With You?</span>
+</nav>
+<div aria-hidden="true" class="ink-divider text-reveal">✦</div>
+<span class="eyebrow text-reveal">A Teaching From The Branches — Psychedelics, Catalysts &amp; Expanded States</span>
+<h1 class="text-reveal">The Most Profound Experience of Your Life—How Do You Bring Its Wisdom Back With You?</h1>
+<p class="tv-hero-hook text-reveal">You can have an experience that changes the way you see everything. But eventually you come home, wake up the next morning, and normal life starts moving again. The question is not only what happened. It is how you bring any of that wisdom back with you.</p>
+<div class="tv-meta-row text-reveal">
+<span><strong>Integration After 5-MeO-DMT</strong></span>
+<span class="tv-meta-sep">·</span>
+<span>~3 min watch</span>
+<span class="tv-meta-sep">·</span>
+<span>Branches</span>
+</div>
+</div>
+</section>
+<!-- VIDEO + TRANSCRIPT + CHAPTERS -->
+<section class="tv-video-section section-pad">
+<div class="tv-video-container">
+<div class="tv-video-split">
+<div class="tv-video-col">
+<div class="tv-video-frame text-reveal">
+<div class="tv-video-stage">
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" id="tvVideoFrame" loading="lazy" src="https://www.youtube.com/embed/KATCVllTmmk?rel=0&amp;enablejsapi=1" title="The Most Profound Experience of Your Life—How Do You Bring Its Wisdom Back With You?"></iframe>
+</div>
+<span class="tv-corner tl"></span><span class="tv-corner tr"></span><span class="tv-corner bl"></span><span class="tv-corner br"></span>
+</div>
+</div>
+<div class="tv-transcript-col text-reveal">
+<div class="tv-transcript-eyebrow">
+<span>Transcript Highlights</span>
+<span class="tv-transcript-caption">Click any moment to jump</span>
+</div>
+<div class="tv-transcript-wrapper" id="transcriptWrapper">
+<div class="tv-transcript-scroll">
+<div class="tv-transcript-scroll-inner"><p class="tv-transcript-line is-active" data-seek="1"><button class="tv-transcript-time js-seek" data-seek="1" type="button">0:01</button>How do you integrate a direct experience of pure consciousness, source, love, or whatever language feels right to you into normal life afterward?</p><p class="tv-transcript-line" data-seek="12"><button class="tv-transcript-time js-seek" data-seek="12" type="button">0:12</button>That is part of why people can feel such a pull to return to the experience. Something opened, and normal life can suddenly feel very different by comparison.</p><p class="tv-transcript-line" data-seek="26"><button class="tv-transcript-time js-seek" data-seek="26" type="button">0:26</button>Integration is about finding your way back to what felt real and beginning to understand what the experience means in the way you actually live.</p><p class="tv-transcript-line" data-seek="42"><button class="tv-transcript-time js-seek" data-seek="42" type="button">0:42</button>One of the simplest things you can do is write down what stood out before the details begin fading.</p><p class="tv-transcript-line" data-seek="59"><button class="tv-transcript-time js-seek" data-seek="59" type="button">0:59</button>The experience can fade quickly. It is almost like a window opened, fresh air came in, and for a moment you saw everything from a completely different place.</p><p class="tv-transcript-line" data-seek="68"><button class="tv-transcript-time js-seek" data-seek="68" type="button">1:08</button>The period after a profound experience can feel unusually open and impressionable. That makes what you put back into your life worth paying attention to.</p><p class="tv-transcript-line" data-seek="83"><button class="tv-transcript-time js-seek" data-seek="83" type="button">1:23</button>Look at the inputs around you. What are you watching, listening to, reading, and surrounding yourself with while the experience is still fresh?</p><p class="tv-transcript-line" data-seek="100"><button class="tv-transcript-time js-seek" data-seek="100" type="button">1:40</button>Be honest about your life. What feels aligned? What does not? What have you outgrown? What is asking to change?</p><p class="tv-transcript-line" data-seek="116"><button class="tv-transcript-time js-seek" data-seek="116" type="button">1:56</button>You do not have to change everything at once. Small conscious shifts can be enough to start bringing the insight into real life.</p><p class="tv-transcript-line" data-seek="124"><button class="tv-transcript-time js-seek" data-seek="124" type="button">2:04</button>Even the difficult parts can become meaningful when you stop treating the experience as something separate from the rest of your life.</p><p class="tv-transcript-line" data-seek="137"><button class="tv-transcript-time js-seek" data-seek="137" type="button">2:17</button>The point is not only to remember what you thought. It is to remember what you felt.</p><p class="tv-transcript-line" data-seek="142"><button class="tv-transcript-time js-seek" data-seek="142" type="button">2:22</button>Presence, beauty, connection, love, and awareness do not have to stay inside the ceremony or the medicine. They can begin showing up in normal moments too.</p><p class="tv-transcript-line" data-seek="157"><button class="tv-transcript-time js-seek" data-seek="157" type="button">2:37</button>Over time, the goal is not always more medicine. Breath, stillness, meditation, and awareness can become ways of finding your way back.</p><p class="tv-transcript-line" data-seek="179"><button class="tv-transcript-time js-seek" data-seek="179" type="button">2:59</button>The medicine shows what is possible. Daily practice is how you return.</p><p class="tv-transcript-line" data-seek="189"><button class="tv-transcript-time js-seek" data-seek="189" type="button">3:09</button>Eventually, the experience can stop feeling like something outside of you. The practice becomes remembering that the connection was never completely separate from you in the first place.</p></div>
+</div>
+<div class="tv-transcript-overlay">
+<button class="tv-transcript-toggle" id="transcriptToggle" type="button">Read Full Transcript</button>
+</div>
+</div>
+</div>
+</div>
+<div class="tv-chapters-full text-reveal">
+<span class="tv-chapters-title">Chapters</span>
+<div class="tv-chapter-list" id="tvChapters"><button class="tv-chapter js-seek is-active" data-seek="1" type="button"><span class="tv-chapter-time">0:01</span><span class="tv-chapter-label">Coming Back From the Experience</span></button><button class="tv-chapter js-seek" data-seek="26" type="button"><span class="tv-chapter-time">0:26</span><span class="tv-chapter-label">What Integration Means</span></button><button class="tv-chapter js-seek" data-seek="42" type="button"><span class="tv-chapter-time">0:42</span><span class="tv-chapter-label">Capture What Felt Real</span></button><button class="tv-chapter js-seek" data-seek="83" type="button"><span class="tv-chapter-time">1:23</span><span class="tv-chapter-label">Watch What You Bring Back In</span></button><button class="tv-chapter js-seek" data-seek="100" type="button"><span class="tv-chapter-time">1:40</span><span class="tv-chapter-label">Look Honestly at Your Life</span></button><button class="tv-chapter js-seek" data-seek="116" type="button"><span class="tv-chapter-time">1:56</span><span class="tv-chapter-label">Make Small Conscious Shifts</span></button><button class="tv-chapter js-seek" data-seek="157" type="button"><span class="tv-chapter-time">2:37</span><span class="tv-chapter-label">Find Your Way Back Without Chasing</span></button><button class="tv-chapter js-seek" data-seek="179" type="button"><span class="tv-chapter-time">2:59</span><span class="tv-chapter-label">Daily Practice Is the Return</span></button></div>
+</div>
+</div>
+</section>
+<!-- OVERVIEW -->
+<section aria-labelledby="overviewTitle" class="tv-overview section-pad">
+<div class="wrap open-book">
+<div class="book-page-left text-reveal">
+<span class="eyebrow">Start With What Comes After</span>
+<h2 class="section-title" id="overviewTitle">The experience may open the door. Your life is where you learn to walk through it.</h2>
+</div>
+<div class="book-page-right section-copy text-reveal">
+<p>A profound experience can make everything feel obvious for a moment. You can feel connected, clear, open, and completely certain that you will never forget what you just understood.</p><p>Then normal life starts coming back. That does not mean the experience failed. It means the work has changed. Write down what stood out. Notice what feels aligned and what no longer does. Make one small conscious change. And build practices that help you reconnect without needing to recreate the original moment.</p></div>
+</div>
+</section>
+<!-- MAIN IDEAS -->
+<section aria-labelledby="ideasTitle" class="tv-ideas section-pad">
+<div class="wrap">
+<span class="eyebrow text-reveal">How You Bring It Back</span>
+<h2 class="section-title text-reveal" id="ideasTitle">The wisdom has to meet your real life.</h2>
+<div class="tv-idea-grid">
+<div class="tv-idea-card text-reveal"><span aria-hidden="true" class="tv-idea-ghost">01</span><span class="tv-idea-no">01</span><h3>Write before it fades</h3><p>The details can move quickly. Write down the images, feelings, realizations, questions, and anything that felt undeniably real while it is still close.</p></div>
+<div class="tv-idea-card text-reveal"><span aria-hidden="true" class="tv-idea-ghost">02</span><span class="tv-idea-no">02</span><h3>Protect the space afterward</h3><p>You do not have to rush straight back into noise and input. Give yourself enough space to notice what is still moving through you.</p></div>
+<div class="tv-idea-card text-reveal"><span aria-hidden="true" class="tv-idea-ghost">03</span><span class="tv-idea-no">03</span><h3>Look honestly at your life</h3><p>What feels aligned now? What feels heavy? What relationships, habits, environments, or choices suddenly look different from where you are standing?</p></div>
+<div class="tv-idea-card text-reveal"><span aria-hidden="true" class="tv-idea-ghost">04</span><span class="tv-idea-no">04</span><h3>Make one real shift</h3><p>Integration does not require reinventing your entire life overnight. One conscious change that reflects what you saw can matter more than a hundred ideas you never act on.</p></div>
+<div class="tv-idea-card text-reveal"><span aria-hidden="true" class="tv-idea-ghost">05</span><span class="tv-idea-no">05</span><h3>Return through practice</h3><p>Breath, meditation, stillness, awareness, writing, and presence can become ways of reconnecting with the qualities the experience opened.</p></div>
+<div class="tv-idea-card text-reveal"><span aria-hidden="true" class="tv-idea-ghost">06</span><span class="tv-idea-no">06</span><h3>Do not confuse the doorway with the destination</h3><p>The experience may show you what is possible. The deeper work is learning how to recognize more of that presence and connection without needing the same doorway every time.</p></div>
+</div>
+</div>
+</section>
+<!-- REFLECTION -->
+<section aria-labelledby="sitTitle" class="exp-section exp-section--paper" id="sit">
+<div class="exp-inner">
+<div class="exp-heading">
+<span class="eyebrow text-reveal">Sit With This</span>
+<h2 class="text-reveal" id="sitTitle" style="font-size:clamp(2.2rem,3.8vw,3.8rem);">What From the Experience Is Asking to Become Real?</h2>
+<p class="exp-reflect-intro text-reveal" style="font-size:1.2rem; color:var(--muted); max-width:56ch;">Do not try to preserve every detail. Notice what keeps returning because it actually matters.</p>
+</div>
+<ol class="exp-questions" id="reflectionQuestions"><li class="exp-question text-reveal"><span class="exp-question-num">01</span><p>What is the clearest feeling, realization, or moment you would not want to lose from a profound experience?</p></li><li class="exp-question text-reveal"><span class="exp-question-num">02</span><p>What looked different about your life immediately afterward?</p></li><li class="exp-question text-reveal"><span class="exp-question-num">03</span><p>Is there anything you knew you wanted to change but slowly stopped paying attention to once normal life returned?</p></li><li class="exp-question text-reveal"><span class="exp-question-num">04</span><p>What is one small conscious shift that would make the insight visible in the way you actually live?</p></li><li class="exp-question text-reveal"><span class="exp-question-num">05</span><p>What daily practice helps you reconnect with presence, love, clarity, or connection without trying to recreate the original experience?</p></li><li class="exp-question text-reveal"><span class="exp-question-num">06</span><p>If the experience was only a doorway, what do you think the path on the other side is asking you to practice now?</p></li></ol>
+<div class="exp-reflection-close text-reveal">
+<p><strong>Try This:</strong> Pick one thing the experience made clear. Write one sentence about it. Then choose one small action you can take today that actually reflects it. Do not wait for another profound moment to begin living what you already saw.</p>
+</div>
+<div class="exp-reflection-options text-reveal">
+<button class="exp-option" id="skDownloadReflection" type="button">
+<div class="exp-option-text"><h3>Download the Reflection</h3><p>An editable Word document — type your answers directly and save it to your own device.</p></div>
+<div class="exp-option-footer"><span class="exp-option-action"><span aria-hidden="true" class="exp-option-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg></span>Download Word Document</span><span aria-hidden="true" class="exp-option-arrow">→</span></div>
+</button>
+<button class="exp-option" id="skPrintReflection" type="button">
+<div class="exp-option-text"><h3>Print the Reflection</h3><p>A printable worksheet with room to write, straight from your browser.</p></div>
+<div class="exp-option-footer"><span class="exp-option-action"><span aria-hidden="true" class="exp-option-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 24 24"><path d="M6 9V3h12v6"></path><path d="M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2"></path><path d="M6 14h12v7H6z"></path></svg></span>Print Worksheet</span><span aria-hidden="true" class="exp-option-arrow">→</span></div>
+</button>
+<a class="exp-option" href="#reflectionQuestions">
+<div class="exp-option-text"><h3>Use Your Own Journal</h3><p>Keep the questions visible here while you write on paper.</p></div>
+<div class="exp-option-footer"><span class="exp-option-action"><span aria-hidden="true" class="exp-option-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg></span>Continue With Your Journal</span><span aria-hidden="true" class="exp-option-arrow">→</span></div>
+</a>
+</div>
+<div class="exp-privacy text-reveal">
+<span aria-hidden="true" class="exp-privacy-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 24 24"><rect height="9" rx="2" width="16" x="4" y="11"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg></span>
+<p>These questions are private. Nothing here is entered into the website or shared with anyone else.</p>
+</div>
+</div>
+</section>
+<!-- BLUEPRINT PLACEMENT -->
+<section aria-labelledby="blueprintPlacementTitle" class="tv-blueprint section-pad">
+<div class="wrap clean-split">
+<div class="clean-split-left text-reveal">
+<span class="eyebrow">Where This Fits In The Blueprint</span>
+<h2 class="section-title" id="blueprintPlacementTitle">Branches → Psychedelics, Catalysts &amp; Expanded States</h2>
+<p class="section-copy" style="max-width:100%;margin-top:24px;">This branch explores psychedelics, entheogens, and other catalysts that can open deeper states of consciousness, reveal hidden patterns, and reconnect you with parts of yourself that are harder to access in everyday life. But the experience is only the beginning. What matters is what you do with what is revealed.</p>
+<div class="exp-btn-row" style="margin-top: 35px;"><a class="exp-btn exp-btn--primary" href="seeker.html#treeBlueprint">See It In The Blueprint</a></div>
+</div>
+<div class="clean-split-right text-reveal">
+<ol class="tv-blueprint-list">
+<li><strong>Different medicines, different ways in</strong> — each catalyst has its own effects, its own intelligence, and its own way of working with you.</li>
+<li><strong>See what is normally hidden</strong> — these experiences can bring patterns, emotions, and parts of yourself to the surface that may have been sitting underneath everything else.</li>
+<li><strong>Reconnect with something deeper</strong> — some expanded states can bring you closer to what feels underneath the ego, conditioning, and the identity you have built.</li>
+<li><strong>The experience can open the door</strong> — but you are still the one who has to walk through it. What is revealed only matters if you work with it afterward.</li>
+<li><strong>Integration is what makes the difference</strong> — bring what you saw back into your actual life. These tools can support your path, but they do not define it.</li>
+</ol>
+<p style="margin-top:24px;color:rgba(36,27,20,.82);font-size:1.08rem;line-height:1.65;">These are powerful tools, and they deserve respect. They are not for everyone. Take your time. Learn. Feel into it. Start slowly. And decide what actually feels right for you.</p>
+</div>
+</div>
+</section>
+<!-- RELATED / PLAYLIST -->
+<section aria-labelledby="relatedTitle" class="tv-related section-pad">
+<div class="wrap">
+<span class="eyebrow text-reveal">Related Teachings</span>
+<h2 class="section-title text-reveal" id="relatedTitle">Keep going if this is helping.</h2>
+<p class="section-copy text-reveal" style="margin-top:16px;max-width:70ch;">If you want to keep going, these teachings explore the original 5-MeO-DMT experience, why insights can fade, what reactivations can feel like afterward, and the larger role a catalyst can play in interrupting old patterns.</p>
+<div class="tv-related-grid"><a class="tv-related-card text-reveal" href="https://www.youtube.com/watch?v=LAvisu4OUDA&amp;list=PLZaG8o1QW6UI&amp;index=8" rel="noopener" target="_blank"><div class="tv-related-img" style="background-image:url('https://img.youtube.com/vi/LAvisu4OUDA/hqdefault.jpg')"><div class="tv-yt-play"><svg version="1.1" viewbox="0 0 68 48" xmlns="http://www.w3.org/2000/svg"><path d="M66.52,7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55C3.97,2.33,2.27,4.81,1.48,7.74C.06,13.05,0,24,0,24s.06,10.95,1.48,16.26c.78,2.93,2.49,5.41,5.42,6.19C12.21,47.87,34,48,34,48s21.79-.13,27.1-1.55c2.93-.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24s-.06-10.95-1.48-16.26z" fill="#f00"></path><path d="M45,24 27,14v20" fill="#fff"></path></svg></div></div><div class="tv-related-content"><span class="tv-related-tag">5-MeO-DMT</span><h3>5-MeO-DMT: What It Taught Me. Is It Right for You?</h3><p>Go back to the experience itself — surrender, ego, connection, and the moment that changed the way I understood what was possible.</p><div class="tv-related-footer"><span class="tv-related-play"><span class="tv-play-circle"><svg viewbox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span> WATCH TEACHING</span><span class="tv-related-arrow">→</span></div></div></a><a class="tv-related-card text-reveal" href="https://www.youtube.com/watch?v=KXQ_DpxAz8g&amp;list=PLZaG8o1QW6UI&amp;index=3" rel="noopener" target="_blank"><div class="tv-related-img" style="background-image:url('https://img.youtube.com/vi/KXQ_DpxAz8g/hqdefault.jpg')"><div class="tv-yt-play"><svg version="1.1" viewbox="0 0 68 48" xmlns="http://www.w3.org/2000/svg"><path d="M66.52,7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55C3.97,2.33,2.27,4.81,1.48,7.74C.06,13.05,0,24,0,24s.06,10.95,1.48,16.26c.78,2.93,2.49,5.41,5.42,6.19C12.21,47.87,34,48,34,48s21.79-.13,27.1-1.55c2.93-.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24s-.06-10.95-1.48-16.26z" fill="#f00"></path><path d="M45,24 27,14v20" fill="#fff"></path></svg></div></div><div class="tv-related-content"><span class="tv-related-tag">Integration</span><h3>Why Most Psychedelic Experiences Never Become Lasting Transformation</h3><p>A profound moment can still fade. This teaching looks at why insight alone is not the change and what helps it become part of how you actually live.</p><div class="tv-related-footer"><span class="tv-related-play"><span class="tv-play-circle"><svg viewbox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span> WATCH TEACHING</span><span class="tv-related-arrow">→</span></div></div></a><a class="tv-related-card text-reveal" href="https://www.youtube.com/watch?v=QW28c9C86FM&amp;list=PLZaG8o1QW6UI&amp;index=6" rel="noopener" target="_blank"><div class="tv-related-img" style="background-image:url('https://img.youtube.com/vi/QW28c9C86FM/hqdefault.jpg')"><div class="tv-yt-play"><svg version="1.1" viewbox="0 0 68 48" xmlns="http://www.w3.org/2000/svg"><path d="M66.52,7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55C3.97,2.33,2.27,4.81,1.48,7.74C.06,13.05,0,24,0,24s.06,10.95,1.48,16.26c.78,2.93,2.49,5.41,5.42,6.19C12.21,47.87,34,48,34,48s21.79-.13,27.1-1.55c2.93-.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24s-.06-10.95-1.48-16.26z" fill="#f00"></path><path d="M45,24 27,14v20" fill="#fff"></path></svg></div></div><div class="tv-related-content"><span class="tv-related-tag">Reactivations</span><h3>What's Actually Happening and How You Can Use Reactivations to Connect More Deeply With Source</h3><p>Sometimes part of an expanded state seems to return later. This teaching looks at breath, presence, fear, grounding, and how I learned to meet those moments.</p><div class="tv-related-footer"><span class="tv-related-play"><span class="tv-play-circle"><svg viewbox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span> WATCH TEACHING</span><span class="tv-related-arrow">→</span></div></div></a><a class="tv-related-card text-reveal" href="https://www.youtube.com/watch?v=EdjM1-BzdwY&amp;list=PLZaG8o1QW6UI&amp;index=1" rel="noopener" target="_blank"><div class="tv-related-img" style="background-image:url('https://img.youtube.com/vi/EdjM1-BzdwY/hqdefault.jpg')"><div class="tv-yt-play"><svg version="1.1" viewbox="0 0 68 48" xmlns="http://www.w3.org/2000/svg"><path d="M66.52,7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55C3.97,2.33,2.27,4.81,1.48,7.74C.06,13.05,0,24,0,24s.06,10.95,1.48,16.26c.78,2.93,2.49,5.41,5.42,6.19C12.21,47.87,34,48,34,48s21.79-.13,27.1-1.55c2.93-.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24s-.06-10.95-1.48-16.26z" fill="#f00"></path><path d="M45,24 27,14v20" fill="#fff"></path></svg></div></div><div class="tv-related-content"><span class="tv-related-tag">Catalysts</span><h3>The Moment You Realize You Don’t Have to Keep Being the Same Person</h3><p>Zoom out to the larger role of a catalyst — interrupting the familiar groove so you can see your patterns and your life from somewhere new.</p><div class="tv-related-footer"><span class="tv-related-play"><span class="tv-play-circle"><svg viewbox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span> WATCH TEACHING</span><span class="tv-related-arrow">→</span></div></div></a></div>
+</div>
+</section>
+<!-- RESOURCES -->
+<section aria-labelledby="resourcesTitle" class="tv-resources section-pad">
+<div class="wrap">
+<span class="eyebrow text-reveal">Keep Exploring</span>
+<h2 class="section-title text-reveal" id="resourcesTitle">Follow what helps you go deeper.</h2>
+<div class="tv-resource-list">
+<div class="tv-resource text-reveal"><div><div class="tv-resource-name">Psychedelics, Catalysts &amp; Expanded States</div><div class="tv-resource-desc">Explore the full Psychedelics, Catalysts &amp; Expanded States playlist and continue with the connected teachings.</div></div><a class="tv-resource-link" href="https://www.youtube.com/playlist?list=PLZaG8o1QW6UI" rel="noopener" target="_blank">Watch →</a></div>
+<div class="tv-resource text-reveal"><div><div class="tv-resource-name">The Blueprint — Branches</div><div class="tv-resource-desc">See where catalysts and expanded states sit inside the larger Seek Consciousness map.</div></div><a class="tv-resource-link" href="seeker.html#treeBlueprint">Explore →</a></div>
+</div>
+</div>
+</section>
+<!-- CTA -->
+<section class="tv-cta section-pad">
+<div class="wrap">
+<h2 class="text-reveal">The medicine may show you what is possible. Daily practice is how you return.</h2>
+<p class="text-reveal">Write down what felt real. Look honestly at your life. Make one conscious shift. Then keep returning through breath, stillness, awareness, and the way you choose to live.</p>
+<div class="exp-btn-row text-reveal">
+<a class="exp-btn exp-btn--primary" href="https://www.youtube.com/watch?v=KATCVllTmmk&amp;list=PLZaG8o1QW6UI&amp;index=7" rel="noopener" target="_blank"><svg fill="currentColor" viewbox="0 0 24 24"><path d="M10 8.3l6 3.7-6 3.7z"></path><circle cx="12" cy="12" fill="none" r="10" stroke="currentColor" stroke-width="1.4"></circle></svg>Watch On YouTube</a>
+<a class="exp-btn" href="https://www.youtube.com/playlist?list=PLZaG8o1QW6UI" rel="noopener" target="_blank">Explore The Playlist</a>
+</div>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="footer-inner">
+<a aria-label="Return to the homepage" class="footer-logo" href="index.html"><img alt="Seek Consciousness" src="assets/media/seek-consciousness-logo.png"/></a>
+<nav aria-label="Footer navigation" class="footer-nav">
+<a href="index.html#intro">Recognition</a>
+<a href="index.html#mission">Seek Consciousness</a>
+<a href="index.html#choose-path">Choose Your Path</a>
+<a href="seeker.html">The Seeker</a>
+</nav>
+</div>
+<p class="copyright">© <span id="year"></span> Seek Consciousness. All rights reserved.</p>
+</footer>
+<script>
+  (()=>{
+    'use strict';
+    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const toggle=document.querySelector('.nav-toggle'); const nav=document.getElementById('primaryNav');
+    toggle?.addEventListener('click',()=>{const open=!nav.classList.contains('open');nav.classList.toggle('open',open);toggle.setAttribute('aria-expanded',String(open));});
+    nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+
+    const items=[...document.querySelectorAll('.text-reveal')];
+    if(reduced||!('IntersectionObserver'in window)) items.forEach(x=>x.classList.add('is-visible')); else {
+      const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -4%'});
+      items.forEach(x=>io.observe(x));
+    }
+
+    // Reading progress thread
+    const progressFill=document.getElementById('readProgressFill');
+    const updateProgress=()=>{
+      const doc=document.documentElement;
+      const scrollable=doc.scrollHeight-doc.clientHeight;
+      const pct=scrollable>0?Math.min(100,Math.max(0,(window.scrollY/scrollable)*100)):0;
+      if(progressFill) progressFill.style.width=pct+'%';
+    };
+    window.addEventListener('scroll',updateProgress,{passive:true});
+    window.addEventListener('resize',updateProgress);
+    updateProgress();
+
+    // Collapsible Transcript Toggle
+    const transcriptWrapper = document.getElementById('transcriptWrapper');
+    const transcriptToggle = document.getElementById('transcriptToggle');
+    if(transcriptToggle && transcriptWrapper) {
+      transcriptToggle.addEventListener('click', () => {
+        transcriptWrapper.classList.add('is-expanded');
+      });
+    }
+
+    // Chapters + transcript
+    // Chapters are intentionally broader than transcript lines.
+    const videoFrame=document.getElementById('tvVideoFrame');
+    const chapterButtons=[...document.querySelectorAll('.tv-chapter')];
+    const transcriptLines=[...document.querySelectorAll('.tv-transcript-line')];
+    const CHAPTER_SEGMENTS=chapterButtons.map(btn=>Number(btn.dataset.seek||0));
+    const TRANSCRIPT_SEGMENTS=transcriptLines.map(line=>Number(line.dataset.seek||0));
+
+    if(videoFrame && window.location.protocol!=='file:'){
+      try{
+        const src=new URL(videoFrame.src, window.location.href);
+        if(!src.searchParams.has('origin')){
+          src.searchParams.set('origin', window.location.origin);
+          videoFrame.src=src.toString();
+        }
+      }catch(e){}
+    }
+
+    const indexForTime=(segments,t)=>{
+      let idx=0;
+      for(let i=0;i<segments.length;i++){ if(t>=segments[i]) idx=i; else break; }
+      return idx;
+    };
+
+    const setActiveForTime=(t,{scrollTranscript=false}={})=>{
+      const chapterIndex=indexForTime(CHAPTER_SEGMENTS,t);
+      const transcriptIndex=indexForTime(TRANSCRIPT_SEGMENTS,t);
+
+      chapterButtons.forEach((btn,i)=>btn.classList.toggle('is-active',i===chapterIndex));
+      transcriptLines.forEach((line,i)=>line.classList.toggle('is-active',i===transcriptIndex));
+
+      if(scrollTranscript && transcriptWrapper && transcriptWrapper.classList.contains('is-expanded')){
+        transcriptLines[transcriptIndex]?.scrollIntoView({
+          behavior: reduced ? 'auto' : 'smooth',
+          block:'nearest'
+        });
+      }
+    };
+
+    let ytPlayer=null, syncTimer=null;
+    const seekTo=(seconds)=>{
+      if(ytPlayer && typeof ytPlayer.seekTo==='function'){
+        ytPlayer.seekTo(seconds,true);
+        ytPlayer.playVideo();
+      } else if(videoFrame?.contentWindow){
+        videoFrame.contentWindow.postMessage(JSON.stringify({event:'command',func:'seekTo',args:[seconds,true]}),'*');
+        videoFrame.contentWindow.postMessage(JSON.stringify({event:'command',func:'playVideo',args:[]}),'*');
+      }
+    };
+    const startSync=()=>{
+      if(syncTimer) return;
+      syncTimer=setInterval(()=>{
+        if(!ytPlayer||typeof ytPlayer.getCurrentTime!=='function') return;
+        setActiveForTime(ytPlayer.getCurrentTime(),{scrollTranscript:true});
+      },500);
+    };
+    const stopSync=()=>{ if(syncTimer){ clearInterval(syncTimer); syncTimer=null; } };
+    window.onYouTubeIframeAPIReady=()=>{
+      if(!videoFrame) return;
+      ytPlayer=new YT.Player('tvVideoFrame',{
+        events:{
+          onStateChange:(e)=>{
+            if(e.data===YT.PlayerState.PLAYING) startSync();
+            else stopSync();
+          }
+        }
+      });
+    };
+
+    document.querySelectorAll('.js-seek').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const seconds=Number(btn.dataset.seek||0);
+        seekTo(seconds);
+        setActiveForTime(seconds);
+        document.querySelector('.tv-video-frame')?.scrollIntoView({
+          behavior: reduced ? 'auto' : 'smooth',
+          block:'center'
+        });
+      });
+    });
+
+    // Reflection download
+    const getQuestions=()=>Array.from(document.querySelectorAll('#reflectionQuestions .exp-question p')).map(p=>p.innerText.replace(/\s+/g,' ').trim());
+    const rtfEscape=(str)=>str.replace(/\\/g,'\\\\').replace(/\{/g,'\\{').replace(/\}/g,'\\}').replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/\u2014/g,'\\emdash ').replace(/\u2013/g,'\\endash ');
+    const downloadReflectionDoc=()=>{
+      const questions=getQuestions();
+      const intro=[
+        "Take a moment to notice what from a profound experience still feels real and how you can begin bringing that wisdom into the way you actually live.",
+        'There are no correct answers. Use these questions to notice what is actually true in your own experience.',
+        'This document is entirely private — type your answers directly below each question and save the file to your own device.'
+      ];
+      let rtf='{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang1033{\\fonttbl{\\f0\\froman Times New Roman;}}{\\colortbl;\\red149\\green102\\blue44;}\\f0\\fs20\\pard\\sa240';
+      rtf+=`\\fs40\\b The Most Profound Experience of Your Life—How Do You Bring Its Wisdom Back With You? \\emdash  Sit With This\\b0\\par`;
+      rtf+=`\\fs22\\i Seek Consciousness\\i0\\par\\sa280`;
+      intro.forEach(line=>{rtf+=`\\fs20 ${rtfEscape(line)}\\par`;});
+      rtf+=`\\par`;
+      questions.forEach((q,i)=>{
+        rtf+=`\\sa60\\fs24\\b\\cf1 ${i+1}.\\cf0\\b0  \\b ${rtfEscape(q)}\\b0\\par`;
+        rtf+=`\\sa280\\fs22 \\line\\line\\line\\line\\par`;
+      });
+      rtf+='}';
+      const blob=new Blob([rtf],{type:'application/rtf'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url;
+      a.download='seek-consciousness-profound-experience-integration-reflection.rtf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    };
+    document.getElementById('skDownloadReflection')?.addEventListener('click',downloadReflectionDoc);
+    document.getElementById('skPrintReflection')?.addEventListener('click',()=>window.print());
+
+    document.getElementById('year').textContent=new Date().getFullYear();
+  })();
+  </script>
+<script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
