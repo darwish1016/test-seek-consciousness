@@ -378,7 +378,7 @@
     }
     .recognition-sequence {
       max-width:25ch;
-      font-size:clamp(1.18rem,1.55vw,1.46rem);
+      font-size:23px;
       color:rgba(36,27,20,.92);
       line-height:1.52;
     }
@@ -389,7 +389,7 @@
       margin-top:30px;
       padding-top:26px;
       border-top:1px solid rgba(61,43,25,.16);
-      font-size:clamp(1.18rem,1.55vw,1.44rem);
+      font-size:23px;
       color:rgba(36,27,20,.92);
       line-height:1.5;
     }
@@ -443,7 +443,7 @@
     .practical-text {
       max-width:31ch;
       color:var(--ink);
-      font-size:clamp(1.2rem,1.45vw,1.48rem);
+      font-size:23px;
       line-height:1.52;
     }
     .practical-text p + p { margin-top:.62rem; }
@@ -518,6 +518,7 @@
     }
     .intro-feature-copy h2 { max-width:14ch; margin-bottom:20px; font-size:clamp(2.4rem,4.2vw,4.6rem); color:var(--ink); line-height:1.08; text-wrap:balance; }
     .intro-feature-copy p { font-size:clamp(1.16rem,1.42vw,1.38rem); color:rgba(36,27,20,.85); line-height:1.56; }
+    @media (min-width:1051px) { .intro-feature-copy p { font-size:23px; } }
     .intro-feature-copy p + p { margin-top:.6rem; }
     .intro-questions { margin:.9rem 0; padding:.2rem 0 .2rem 20px; border-left:2px solid rgba(149,102,44,.35); }
     .intro-questions p { font-style:italic; color:var(--ink); }
@@ -1324,7 +1325,7 @@
       max-width:43ch;
       margin:0;
       color:rgba(36,27,20,.86);
-      font-size:clamp(1.16rem,1.42vw,1.38rem);
+      font-size:23px;
       line-height:1.6;
     }
     .journey-copy p + p { margin-top:15px; }
@@ -1429,6 +1430,18 @@
       }
     }
 
+
+    /* Desktop content typography — keep all main paragraph copy at 23px, including cards. */
+    @media (min-width:1051px) {
+      main .recognition p,
+      main .practical p,
+      main .intro-feature p,
+      main .paths p,
+      main .teachings p {
+        font-size:23px;
+      }
+    }
+
 </style>
   <link rel="preload" href="assets/media/hero-background.mp4" as="video" type="video/mp4" fetchpriority="high">
 </head>
@@ -1444,6 +1457,7 @@
       <a href="#top" aria-current="page">Home</a>
       <a href="about.html">About</a>
       <a href="#choose-path">Choose Your Path</a>
+      <a href="teachings.html">Teachings</a>
     </nav>
   </header>
 
@@ -1660,8 +1674,8 @@
           <article class="teaching-card">
             <div class="teaching-player">
               <iframe
-                src="https://www.youtube-nocookie.com/embed/87FSEkIX99I?rel=0"
-                title="What Presence Actually Feels Like"
+                src="https://www.youtube-nocookie.com/embed/RbqcHMQ_Y6g?rel=0"
+                title="Manifestation Is More Than Positive Thinking"
                 loading="lazy"
                 referrerpolicy="strict-origin-when-cross-origin"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -1670,9 +1684,9 @@
             </div>
             <div class="teaching-body">
               <span class="teaching-number">01</span>
-              <h3>What Presence Actually Feels Like</h3>
-              <p>A simple shift in how you pay attention that gradually brings more clarity, less anxiety, and a stronger sense of which direction is actually yours.</p>
-              <a class="teaching-watch" href="https://www.youtube.com/watch?v=87FSEkIX99I" target="_blank" rel="noopener noreferrer">
+              <h3>Manifestation Is More Than Positive Thinking</h3>
+              <p>How belief, self-love, visualization, gratitude, action, and surrender work together to bring a vision into your life.</p>
+              <a class="teaching-watch" href="https://www.youtube.com/watch?v=RbqcHMQ_Y6g" target="_blank" rel="noopener noreferrer">
                 <span class="teaching-watch-label"><span class="teaching-watch-icon" aria-hidden="true"></span>Watch Now</span>
                 <span class="teaching-watch-arrow" aria-hidden="true">→</span>
               </a>
@@ -1681,8 +1695,8 @@
           <article class="teaching-card">
             <div class="teaching-player">
               <iframe
-                src="https://www.youtube-nocookie.com/embed/tOCFbcy5IUk?rel=0"
-                title="Put a Piece of Yourself Into the World"
+                src="https://www.youtube-nocookie.com/embed/GeRtHkGRNJM?rel=0"
+                title="Using AI to Think Deeper, Not Less"
                 loading="lazy"
                 referrerpolicy="strict-origin-when-cross-origin"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -1691,9 +1705,9 @@
             </div>
             <div class="teaching-body">
               <span class="teaching-number">02</span>
-              <h3>Put a Piece of Yourself Into the World</h3>
-              <p>Learn why making something, however small, can pull you out of a flat mood faster than almost anything else.</p>
-              <a class="teaching-watch" href="https://www.youtube.com/watch?v=tOCFbcy5IUk" target="_blank" rel="noopener noreferrer">
+              <h3>Using AI to Think Deeper, Not Less</h3>
+              <p>Start with your own ideas and voice, then use AI to question, challenge, and sharpen what you already know.</p>
+              <a class="teaching-watch" href="https://www.youtube.com/watch?v=GeRtHkGRNJM" target="_blank" rel="noopener noreferrer">
                 <span class="teaching-watch-label"><span class="teaching-watch-icon" aria-hidden="true"></span>Watch Now</span>
                 <span class="teaching-watch-arrow" aria-hidden="true">→</span>
               </a>
@@ -1702,8 +1716,8 @@
           <article class="teaching-card">
             <div class="teaching-player">
               <iframe
-                src="https://www.youtube-nocookie.com/embed/rL4LhiwCFws?rel=0"
-                title="What Your Body Knows First"
+                src="https://www.youtube-nocookie.com/embed/gWGHPQlfWh4?rel=0"
+                title="Vision Writing: Hear Yourself More Clearly"
                 loading="lazy"
                 referrerpolicy="strict-origin-when-cross-origin"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -1712,9 +1726,9 @@
             </div>
             <div class="teaching-body">
               <span class="teaching-number">03</span>
-              <h3>What Your Body Knows First</h3>
-              <p>Why the choice that feels right in your body is often more trustworthy than the one that makes the most sense on paper.</p>
-              <a class="teaching-watch" href="https://www.youtube.com/watch?v=rL4LhiwCFws" target="_blank" rel="noopener noreferrer">
+              <h3>Vision Writing: Hear Yourself More Clearly</h3>
+              <p>A simple practice for clearing your mind, finding direction, and shaping the future you want, with AI as a thinking partner.</p>
+              <a class="teaching-watch" href="https://www.youtube.com/watch?v=gWGHPQlfWh4" target="_blank" rel="noopener noreferrer">
                 <span class="teaching-watch-label"><span class="teaching-watch-icon" aria-hidden="true"></span>Watch Now</span>
                 <span class="teaching-watch-arrow" aria-hidden="true">→</span>
               </a>
@@ -1723,8 +1737,8 @@
           <article class="teaching-card">
             <div class="teaching-player">
               <iframe
-                src="https://www.youtube-nocookie.com/embed/k0TA52HUjbs?rel=0"
-                title="Closing the Mental Tabs"
+                src="https://www.youtube-nocookie.com/embed/8vH_R7HwtcI?rel=0"
+                title="See, Hear, Feel"
                 loading="lazy"
                 referrerpolicy="strict-origin-when-cross-origin"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -1733,9 +1747,9 @@
             </div>
             <div class="teaching-body">
               <span class="teaching-number">04</span>
-              <h3>Closing the Mental Tabs</h3>
-              <p>One small shift, repeated daily, that gradually clears mental noise and sharpens focus.</p>
-              <a class="teaching-watch" href="https://www.youtube.com/watch?v=k0TA52HUjbs" target="_blank" rel="noopener noreferrer">
+              <h3>See, Hear, Feel</h3>
+              <p>A mindfulness practice that uses your senses as a doorway into presence, with a short guided experience to try it yourself.</p>
+              <a class="teaching-watch" href="https://www.youtube.com/watch?v=8vH_R7HwtcI" target="_blank" rel="noopener noreferrer">
                 <span class="teaching-watch-label"><span class="teaching-watch-icon" aria-hidden="true"></span>Watch Now</span>
                 <span class="teaching-watch-arrow" aria-hidden="true">→</span>
               </a>
@@ -1757,7 +1771,7 @@
         <a href="#intro">Recognition</a>
         <a href="#mission">Seek Consciousness</a>
         <a href="#choose-path">Choose Your Path</a>
-        <a href="#latest-videos">Teachings</a>
+        <a href="teachings.html">Teachings</a>
       </nav>
     </div>
     <p class="copyright">© <span id="year"></span> Seek Consciousness. All rights reserved.</p>

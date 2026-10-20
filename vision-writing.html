@@ -176,9 +176,8 @@
     }
     .pf-parallax > .exp-inner { position:relative; z-index:1; }
 
-    #vw-hero { min-height:100svh; display:flex; align-items:center; }
+    #vw-hero { min-height:100svh; display:flex; align-items:center; background-position:center 30%; }
     @media (max-width:760px) { #vw-hero { background-position:70% center; } }
-    #vw-hero .exp-inner { width:100%; }
 
     /* Numbered steps */
     .vw-steps { display:grid; grid-template-columns:1fr; border-top:1px solid var(--line); align-items:stretch; }
@@ -205,6 +204,45 @@
     @media (max-width:900px) {
       .vw-photo-layout { grid-template-columns:1fr; }
     }
+
+    /* Video embed (click-to-play thumbnail) */
+    .vw-video-frame {
+      position:relative; aspect-ratio:16/9;
+      background:#050403; overflow:hidden;
+      box-shadow:0 30px 60px rgba(36,27,20,.2), 0 0 0 1px rgba(61,43,25,.24);
+    }
+    .vw-video-play { position:absolute; inset:0; width:100%; height:100%; border:0; padding:0; background:none; cursor:pointer; }
+    .vw-video-thumb { width:100%; height:100%; object-fit:cover; display:block; filter:saturate(.94) contrast(1.02); transition:transform .4s ease, filter .4s ease; }
+    .vw-video-play:hover .vw-video-thumb { transform:scale(1.02); filter:saturate(1) contrast(1.05) brightness(.9); }
+    .vw-play-circle {
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      width:76px; height:76px; border-radius:50%;
+      background:rgba(36,27,20,.55); border:1px solid rgba(255,255,255,.7);
+      display:grid; place-items:center; color:#fff;
+      transition:transform .25s ease, background .25s ease;
+    }
+    .vw-play-circle svg { width:26px; height:26px; margin-left:3px; }
+    .vw-video-play:hover .vw-play-circle { transform:translate(-50%,-50%) scale(1.08); background:var(--ochre); }
+    .vw-video-frame iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .vw-video-corner { position:absolute; width:26px; height:26px; pointer-events:none; z-index:3; }
+    .vw-video-corner.tl { top:8px; left:8px; border-top:2px solid var(--ochre); border-left:2px solid var(--ochre); }
+    .vw-video-corner.tr { top:8px; right:8px; border-top:2px solid var(--ochre); border-right:2px solid var(--ochre); }
+    .vw-video-corner.bl { bottom:8px; left:8px; border-bottom:2px solid var(--ochre); border-left:2px solid var(--ochre); }
+    .vw-video-corner.br { bottom:8px; right:8px; border-bottom:2px solid var(--ochre); border-right:2px solid var(--ochre); }
+
+    /* Lightweight collapsible sections */
+    .vw-collapsible { border-top:1px solid var(--line); }
+    .vw-collapsible-summary { display:flex; align-items:center; justify-content:space-between; gap:20px; list-style:none; cursor:pointer; padding:26px 0; }
+    .vw-collapsible-summary::-webkit-details-marker { display:none; }
+    .vw-collapsible-summary::marker { content:''; }
+    .vw-collapsible-title { font-size:clamp(1.9rem,3.4vw,2.8rem); color:var(--ink); margin:0; }
+    .vw-collapsible-icon {
+      flex:0 0 auto; width:36px; height:36px; border-radius:50%; border:1px solid rgba(149,102,44,.4);
+      display:grid; place-items:center; color:var(--ochre); transition:transform .3s var(--ease);
+    }
+    .vw-collapsible-icon svg { width:15px; height:15px; }
+    .vw-collapsible[open] .vw-collapsible-icon { transform:rotate(180deg); }
+    .vw-collapsible-body { padding-bottom:12px; }
 
     .vw-questions { margin-top:26px; display:grid; grid-template-columns:1fr; border-top:1px solid var(--line); }
     @media (min-width:560px) { .vw-questions { grid-template-columns:1fr 1fr; column-gap:28px; } }
@@ -603,12 +641,13 @@
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="index.html#choose-path">Choose Your Path</a>
+      <a href="teachings.html">Teachings</a>
     </nav>
   </header>
 
   <main>
     <!-- 1. HERO -->
-    <section class="exp-section pf-parallax" id="vw-hero" aria-labelledby="vwHeroTitle" style="background-image:url('assets/media/vision-hero.png'); background-position:center 30%;">
+    <section class="exp-section pf-parallax" id="vw-hero" aria-labelledby="vwHeroTitle" style="background-image:url('https://seekconsciousness.com/wp-content/uploads/2026/09/vision-hero.webp');">
       <div class="pf-parallax-scrim" aria-hidden="true"></div>
       <div class="exp-inner">
         <nav class="exp-breadcrumb text-reveal" aria-label="Breadcrumb">
@@ -626,6 +665,35 @@
         <div class="exp-btn-row text-reveal" style="margin-top:30px;">
           <a class="exp-btn exp-btn--primary" href="#master-prompt">Get the Master Prompt</a>
           <a class="exp-btn" href="#getting-started">How to Use the Practice</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1B. WATCH THE VIDEO -->
+    <section class="exp-section exp-section--light" id="watch-video" aria-labelledby="watchVideoTitle">
+      <div class="exp-inner vw-photo-layout">
+        <div>
+          <div class="exp-heading" style="margin-bottom:24px;">
+            <span class="eyebrow text-reveal">Watch the Full Walkthrough</span>
+            <h2 id="watchVideoTitle" class="text-reveal">How to See Your Future and Co-Create It with AI</h2>
+          </div>
+          <div class="exp-body">
+            <p class="text-reveal">For most of my life, I had ideas, questions, plans, and visions scattered everywhere. Notes, journals, documents, pieces of thoughts I carried around in my head.</p>
+            <p class="text-reveal">In this video, I walk through exactly how I use AI as part of this practice: opening a dedicated thread, turning on voice-to-text, and just talking.</p>
+            <p class="text-reveal">Then I let AI reflect it back. Not as an authority. Not as a yes-man. As a thinking partner that challenges me, connects dots, and notices patterns I'm too close to see myself.</p>
+          </div>
+        </div>
+        <div class="vw-video-frame text-reveal" data-video-id="gWGHPQlfWh4">
+          <button class="vw-video-play" type="button" aria-label="Play video: How to See Your Future and Co-Create It with AI">
+            <img class="vw-video-thumb" src="https://img.youtube.com/vi/gWGHPQlfWh4/maxresdefault.jpg" alt="">
+            <span class="vw-play-circle" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </button>
+          <span class="vw-video-corner tl" aria-hidden="true"></span>
+          <span class="vw-video-corner tr" aria-hidden="true"></span>
+          <span class="vw-video-corner bl" aria-hidden="true"></span>
+          <span class="vw-video-corner br" aria-hidden="true"></span>
         </div>
       </div>
     </section>
@@ -1218,22 +1286,27 @@
     <!-- 8. SOMETIMES YOU DON'T NEED A REPLY -->
     <section class="exp-section exp-section--paper" id="no-reply-needed" aria-labelledby="noReplyTitle">
       <div class="exp-inner vw-article">
-        <div class="exp-heading">
-          <h2 id="noReplyTitle" class="text-reveal">Sometimes You Don't Need a Reply</h2>
-        </div>
-        <div class="exp-body">
-          <p class="text-reveal">There may be times when you simply need somewhere to put something.</p>
-          <p class="text-reveal">You can say:</p>
-          
-          <div class="vw-silence-chips text-reveal">
-            <div class="vw-silence-chip">"No reply."</div>
-            <div class="vw-silence-chip">"Just saving this."</div>
-            <div class="vw-silence-chip">"I only need to get this out."</div>
-          </div>
+        <details class="vw-collapsible text-reveal">
+          <summary class="vw-collapsible-summary">
+            <h2 id="noReplyTitle" class="vw-collapsible-title">Sometimes You Don't Need a Reply</h2>
+            <span class="vw-collapsible-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </span>
+          </summary>
+          <div class="vw-collapsible-body exp-body">
+            <p>There may be times when you simply need somewhere to put something.</p>
+            <p>You can say:</p>
 
-          <p class="text-reveal">Your Vision Writing space doesn't always need to solve something.</p>
-          <p class="text-reveal">Sometimes getting it out is enough.</p>
-        </div>
+            <div class="vw-silence-chips">
+              <div class="vw-silence-chip">"No reply."</div>
+              <div class="vw-silence-chip">"Just saving this."</div>
+              <div class="vw-silence-chip">"I only need to get this out."</div>
+            </div>
+
+            <p>Your Vision Writing space doesn't always need to solve something.</p>
+            <p>Sometimes getting it out is enough.</p>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -1255,7 +1328,7 @@
           </div>
         </div>
         <div class="vw-photo-frame text-reveal">
-          <img src="assets/media/vision-Envision%20Your%20Future.png" alt="A person walking a mountain trail toward a distant sunrise, looking out over a valley">
+          <img src="https://seekconsciousness.com/wp-content/uploads/2026/09/vision-Envision-Your-Future.webp" alt="A person walking a mountain trail toward a distant sunrise, looking out over a valley">
         </div>
       </div>
     </section>
@@ -1284,7 +1357,7 @@
         </div>
         <div class="vw-photo-col">
           <div class="vw-photo-frame text-reveal">
-            <img src="assets/media/vision-patterns-over-time.png" alt="A hand laying out handwritten journal pages and old photographs across a wooden table">
+            <img src="https://seekconsciousness.com/wp-content/uploads/2026/09/vision-patterns-over-time.webp" alt="A hand laying out handwritten journal pages and old photographs across a wooden table">
           </div>
           <div class="exp-body" style="margin-top:22px;">
             <p class="text-reveal">The Master Prompt also creates larger reflections over time so you can step back periodically and see patterns you may have missed while you were living through them.</p>
@@ -1297,71 +1370,77 @@
     <!-- 11. STARTING A NEW VISION WRITING THREAD -->
     <section class="exp-section exp-section--light" id="new-thread" aria-labelledby="newThreadTitle">
       <div class="exp-inner vw-article">
-        <div class="exp-heading">
-          <h2 id="newThreadTitle" class="text-reveal">Starting a New Vision Writing Thread</h2>
-        </div>
+        <details class="vw-collapsible text-reveal">
+          <summary class="vw-collapsible-summary">
+            <h2 id="newThreadTitle" class="vw-collapsible-title">Starting a New Vision Writing Thread</h2>
+            <span class="vw-collapsible-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </span>
+          </summary>
+          <div class="vw-collapsible-body">
+            <div class="vw-thread-split">
+              <!-- Left: Narrative Flow -->
+              <div class="vw-thread-narrative">
+                <p>You won't necessarily use the same thread forever.</p>
+                <p>Depending on which AI you use and how heavily you use Vision Writing, I recommend starting a fresh thread roughly every six months to a year.</p>
+                <p>Then create a new Vision Writing thread.</p>
+                <p>Paste in the Vision Writing Master Prompt, followed by the handoff summary from your previous thread.</p>
+                <p>Now the new conversation has both the instructions for how to work with you and the important context from everything that came before.</p>
+                <p style="font-style:italic; color:var(--ochre); margin-top:1.4rem;">Then keep going.</p>
+              </div>
 
-        <div class="vw-thread-split">
-          <!-- Left: Narrative Flow -->
-          <div class="vw-thread-narrative text-reveal">
-            <p>You won't necessarily use the same thread forever.</p>
-            <p>Depending on which AI you use and how heavily you use Vision Writing, I recommend starting a fresh thread roughly every six months to a year.</p>
-            <p>Then create a new Vision Writing thread.</p>
-            <p>Paste in the Vision Writing Master Prompt, followed by the handoff summary from your previous thread.</p>
-            <p>Now the new conversation has both the instructions for how to work with you and the important context from everything that came before.</p>
-            <p style="font-style:italic; color:var(--ochre); margin-top:1.4rem;">Then keep going.</p>
-          </div>
+              <!-- Right: The Handoff Blueprint Card -->
+              <div class="vw-blueprint-memo">
+                <p class="vw-blueprint-prompt-lead">Before leaving the old thread, ask your AI to create a complete handoff summary for your next Vision Writing thread.</p>
+                <p style="font-size:1.05rem; color:var(--muted); margin-bottom:14px;">Have it include the important things the new thread should know, such as:</p>
 
-          <!-- Right: The Handoff Blueprint Card -->
-          <div class="vw-blueprint-memo text-reveal">
-            <p class="vw-blueprint-prompt-lead">Before leaving the old thread, ask your AI to create a complete handoff summary for your next Vision Writing thread.</p>
-            <p style="font-size:1.05rem; color:var(--muted); margin-bottom:14px;">Have it include the important things the new thread should know, such as:</p>
-            
-            <ul class="vw-blueprint-list">
-              <li>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>major themes and recurring patterns</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>important life changes</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>current relationships or situations that matter</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>things you've been working through</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>major realizations</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>visions and directions you're moving toward</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>unresolved questions</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>meaningful changes in your thinking</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>anything else that would help preserve continuity</span>
-              </li>
-            </ul>
+                <ul class="vw-blueprint-list">
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>major themes and recurring patterns</span>
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>important life changes</span>
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>current relationships or situations that matter</span>
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>things you've been working through</span>
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>major realizations</span>
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>visions and directions you're moving toward</span>
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>unresolved questions</span>
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>meaningful changes in your thinking</span>
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>anything else that would help preserve continuity</span>
+                  </li>
+                </ul>
 
-            <div class="vw-blueprint-footer">
-              <p>Archive the old thread rather than deleting it.</p>
-              <p>You can always return to it if you want to revisit an earlier period of your life or recover something that didn't make it into the summary.</p>
+                <div class="vw-blueprint-footer">
+                  <p>Archive the old thread rather than deleting it.</p>
+                  <p>You can always return to it if you want to revisit an earlier period of your life or recover something that didn't make it into the summary.</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </details>
       </div>
     </section>
 
@@ -1453,6 +1532,15 @@
         }, { threshold:0.05, rootMargin:'0px 0px 8% 0px' });
         revealItems.forEach(el => observer.observe(el));
       }
+
+      /* Click-to-play video (loads the YouTube iframe only after a click) */
+      document.querySelectorAll('.vw-video-frame').forEach(frame => {
+        const playBtn = frame.querySelector('.vw-video-play');
+        playBtn?.addEventListener('click', () => {
+          const id = frame.dataset.videoId;
+          frame.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        }, { once:true });
+      });
 
       /* Copy the Master Prompt */
       const copyBtn = document.getElementById('copyPromptBtn');

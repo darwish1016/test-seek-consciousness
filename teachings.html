@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<!--
+  TEACHINGS — the channel page where people discover every teaching
+  ------------------------------------------------------------------
+  A hand-built page in the same family as seeker.html / pathfinder.html
+  (same tokens, fonts, header, footer, hero build and type scale).
+  The individual teaching pages stay templated; this page is not.
+
+  Sections
+    1. Hero (tree.jpeg) — built like .exp-hero on seeker/pathfinder
+    2. "Not sure where to begin?" — start from what you're feeling
+    3. Library — search + Tree-part buttons, organised by the Blueprint:
+         Begin Here → Roots → Trunk → Branches (.tl-group)
+       Each YouTube playlist is one collection placed where it lives on
+       the Tree. Collections with pages use .tl-collection + cards;
+       playlists without pages yet use a .tl-soon "coming soon" card.
+    4. Where these fit — clickable Tree; panels list each playlist
+    5. Closing invitation (plain paper, no image)
+
+  When a playlist's first teaching page is ready
+    - Turn its .tl-soon card into a .tl-collection (copy #microdosing),
+      keep the same id, and add the cards. Cards link to the teaching
+      page only — the video is embedded there, not on this page.
+    - Never write a total count of teachings anywhere — the library
+      keeps growing.
+
+  Adding a new part of the Tree (e.g. Canopy) — copy a .tl-group with a
+  new id, data-group and data-label; its button appears automatically.
+
+  Teaching summaries are Kurt's own words from each page. The hero,
+  section intros and Tree panels are editorial drafts in his voice —
+  confirm with Kurt before publishing. Teaching pages link here with
+  teachings.html#mind-tools and #catalysts — keep those ids.
+  ------------------------------------------------------------------
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teachings — Seek Consciousness</title>
+  <meta name="description" content="Explore the Seek Consciousness teachings — simple tools for working with your attention, deeper teachings on catalysts and expanded states, and how each one fits into the Blueprint.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper:#eadfcb;
+      --paper-light:#f6efe3;
+      --paper-pale:#fbf7ee;
+      --paper-deep:#dfcfb4;
+      --ink:#241b14;
+      --muted:#726658;
+      --ochre:#95662c;
+      --ochre-soft:#c79859;
+      --ochre-light:#d9a869;
+      --line:rgba(61,43,25,.17);
+      --line-strong:rgba(149,102,44,.42);
+      --header-height:78px;
+      --serif:'Cormorant Garamond', Georgia, serif;
+      --display:'Cinzel', Georgia, serif;
+      --ease:cubic-bezier(.22,.61,.36,1);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{overflow-x:hidden;background:var(--paper-light);color:var(--ink);font-family:var(--serif);font-size:18px;font-weight:500;line-height:1.65;-webkit-font-smoothing:antialiased}
+    body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+      radial-gradient(circle at 12% 8%,rgba(199,152,89,.08),transparent 25%),
+      radial-gradient(circle at 88% 32%,rgba(149,102,44,.05),transparent 30%),
+      linear-gradient(90deg,rgba(80,55,28,.018) 1px,transparent 1px),
+      linear-gradient(rgba(80,55,28,.014) 1px,transparent 1px);background-size:auto,auto,44px 44px,44px 44px}
+    img{display:block;width:100%;height:100%;object-fit:cover}
+    a{color:inherit;text-decoration:none}
+    button,input{font:inherit;color:inherit}
+    button{cursor:pointer;background:none;border:0}
+    h1,h2,h3{font-family:var(--display);font-weight:500;line-height:1.1;letter-spacing:.01em}
+    p+p{margin-top:.55rem}
+    ::selection{background:var(--ochre);color:white}
+    section{scroll-margin-top:var(--header-height)}
+    [hidden]{display:none !important}
+    .wrap{width:min(1280px,88vw);margin:0 auto}
+    .eyebrow{display:block;margin-bottom:16px;font-family:var(--display);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ochre)}
+    .section-pad{padding:clamp(88px,10vw,140px) 0;position:relative}
+    .section-title{font-size:clamp(2.3rem,4.2vw,4.2rem);text-wrap:balance}
+    .section-copy{font-size:23px;color:rgba(36,27,20,.8);max-width:52ch}
+    .text-reveal{opacity:0;transform:translateY(20px);transition:opacity .72s var(--ease),transform .72s var(--ease)}
+    .text-reveal.is-visible{opacity:1;transform:none}
+    a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--ochre);outline-offset:3px;border-radius:1px}
+    .ink-divider{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--ochre);font-size:.8rem}
+    .ink-divider::before,.ink-divider::after{content:'';width:56px;height:1px;background:var(--line-strong)}
+
+    /* ===== Header / Footer (shared) ===== */
+    .site-header{position:fixed;inset:0 0 auto;z-index:100;height:var(--header-height);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(22px,6vw,92px);color:var(--ink);background:rgba(244,236,222,.9);border-bottom:1px solid var(--line);box-shadow:0 12px 30px rgba(36,27,20,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+    .site-logo{display:block;line-height:0}
+    .site-logo img{width:clamp(122px,11vw,174px);height:auto;object-fit:contain;filter:brightness(.46) saturate(1.3) contrast(1.05);transition:filter .25s ease}
+    .site-logo:hover img{filter:brightness(.36) saturate(1.4) contrast(1.08)}
+    .primary-nav{display:flex;align-items:center;gap:28px}
+    .primary-nav a{position:relative;font-family:var(--display);font-size:.76rem;letter-spacing:.05em;color:rgba(36,27,20,.72);transition:color .25s ease}
+    .primary-nav a::after{content:'';position:absolute;left:0;right:100%;bottom:-6px;height:1px;background:var(--ochre);transition:right .3s var(--ease)}
+    .primary-nav a:hover,.primary-nav a[aria-current="page"]{color:var(--ink)}
+    .primary-nav a:hover::after,.primary-nav a[aria-current="page"]::after{right:0}
+    .nav-toggle{display:none;width:44px;height:44px;border:0;background:transparent;cursor:pointer}
+    .nav-toggle span{display:block;width:24px;height:1px;margin:6px auto;background:var(--ink);transition:.25s ease}
+    .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .nav-toggle.open span:nth-child(2){opacity:0}
+    .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .read-progress{position:fixed;top:var(--header-height);left:0;right:0;height:2px;background:rgba(149,102,44,.14);z-index:99}
+    .read-progress span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--ochre-soft),var(--ochre))}
+
+    .site-footer{position:relative;padding:64px 6vw 30px;background:var(--paper-deep);color:rgba(36,27,20,.7);border-top:1px solid var(--line)}
+    .site-footer::before{content:'';position:absolute;top:-1px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ochre) 50%,transparent)}
+    .footer-inner{width:min(1380px,100%);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:35px;flex-wrap:wrap}
+    .footer-logo img{width:clamp(180px,18vw,290px);height:auto;object-fit:contain;filter:brightness(.46) saturate(1.3) contrast(1.05)}
+    .footer-nav{display:flex;flex-wrap:wrap;gap:22px}
+    .footer-nav a{position:relative;font-family:var(--display);font-size:.67rem;letter-spacing:.08em;color:rgba(36,27,20,.68);transition:color .25s ease}
+    .footer-nav a::after{content:'';position:absolute;left:0;right:100%;bottom:-5px;height:1px;background:var(--ochre);transition:right .3s var(--ease)}
+    .footer-nav a:hover{color:var(--ink)}
+    .footer-nav a:hover::after{right:0}
+    .copyright{margin-top:28px;text-align:center;font-size:.82rem;color:rgba(36,27,20,.45)}
+
+    /* Buttons */
+    .exp-btn{position:relative;display:inline-flex;align-items:center;gap:10px;padding:16px 30px;border:1px solid var(--ink);font-family:var(--display);font-size:.7rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--ink);background:transparent;border-radius:2px;transition:.3s var(--ease)}
+    .exp-btn--primary{border-color:var(--ochre);color:var(--ochre)}
+    .exp-btn:hover{background:var(--ink);color:var(--paper-light)}
+    .exp-btn--primary:hover{background:var(--ochre);color:#fff}
+    .exp-btn--light{border-color:rgba(255,247,231,.62);color:#fff}
+    .exp-btn--light:hover{background:var(--ochre);border-color:var(--ochre);color:#fff}
+    .exp-btn-row{display:flex;flex-wrap:wrap;align-items:center;gap:16px 22px}
+    .exp-btn svg{width:15px;height:15px;flex:none}
+    .arrow{display:inline-block;font-family:var(--serif);line-height:1;transition:transform .25s var(--ease)}
+
+    /* =========================================================
+       1. HERO — same build as .exp-hero on seeker / pathfinder
+       ========================================================= */
+    .exp-hero{position:relative;height:100svh;min-height:660px;display:flex;align-items:center;overflow:hidden;isolation:isolate;background:#040301}
+    .exp-hero-media{position:absolute;inset:-3%;z-index:1;background:url('assets/media/tree.jpeg') center 40%/cover no-repeat;filter:saturate(.9) contrast(1.03) brightness(.78);animation:heroDrift 30s ease-in-out infinite alternate;pointer-events:none}
+    @keyframes heroDrift{from{transform:scale(1)}to{transform:scale(1.06) translate3d(-1%,-.6%,0)}}
+    .exp-hero-scrim{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg,rgba(4,3,1,0) 0%,rgba(4,3,1,.3) 42%,rgba(4,3,1,.88) 100%),linear-gradient(90deg,rgba(4,3,1,.72) 0%,rgba(4,3,1,.32) 38%,rgba(4,3,1,0) 68%)}
+    .exp-hero-content{position:relative;z-index:3;width:100%;padding:0 clamp(22px,6vw,92px)}
+    .exp-hero-copy{position:relative;max-width:min(640px,88vw)}
+    .exp-breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-family:var(--display);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,247,231,.68)}
+    .exp-breadcrumb a{position:relative;color:rgba(255,247,231,.68);transition:color .25s ease}
+    .exp-breadcrumb a::after{content:'';position:absolute;left:0;right:100%;bottom:-3px;height:1px;background:var(--ochre-light);transition:right .3s var(--ease)}
+    .exp-breadcrumb a:hover{color:#fff}
+    .exp-breadcrumb a:hover::after{right:0}
+    .exp-breadcrumb-sep{color:var(--ochre-light)}
+    .exp-breadcrumb-current{color:rgba(255,247,231,.92)}
+    .exp-hero-eyebrow{color:var(--ochre-light);letter-spacing:.13em;text-shadow:0 2px 16px rgba(0,0,0,.5)}
+    .exp-hero h1{font-size:clamp(2.3rem,5.2vw,3.9rem);color:#fff;text-transform:uppercase;letter-spacing:.005em;margin-bottom:22px;text-wrap:balance;text-shadow:0 4px 26px rgba(0,0,0,.55)}
+    .exp-hero-text{max-width:52ch;font-size:clamp(1.18rem,1.6vw,1.42rem);color:rgba(255,247,231,.92);line-height:1.55;text-shadow:0 2px 18px rgba(0,0,0,.5)}
+    .exp-hero-close{display:block;margin-top:1.2rem;padding-top:1.1rem;border-top:1px solid rgba(255,247,231,.28);color:var(--ochre-light);font-style:italic}
+    .exp-hero .exp-btn-row{margin-top:34px}
+    .exp-hero-scroll{position:absolute;bottom:28px;right:clamp(22px,6vw,92px);z-index:3;display:flex;align-items:center;gap:10px;padding:10px 16px;font-family:var(--display);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,247,231,.7)}
+    .exp-hero-scroll::after{content:'';width:1px;height:18px;background:var(--ochre-light);animation:scrollPulse 2.4s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+    /* Shared section heading (two columns, like index .teachings-heading) */
+    .tl-heading{margin-bottom:clamp(40px,5vw,60px)}
+    .tl-heading .section-copy{margin-top:24px;max-width:52ch}
+
+    /* =========================================================
+       2. NOT SURE WHERE TO BEGIN?
+       ========================================================= */
+    .tl-start{background:var(--paper);overflow:hidden}
+    .tl-start::before{content:'';position:absolute;width:760px;height:760px;border:1px solid rgba(149,102,44,.09);border-radius:50%;right:-310px;top:-170px;box-shadow:0 0 0 75px rgba(149,102,44,.025),0 0 0 145px rgba(149,102,44,.016);pointer-events:none}
+    .tl-start .wrap{position:relative}
+    .tl-prompts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+    .tl-prompt{display:flex;flex-direction:column;gap:18px;min-height:100%;padding:28px 26px 22px;background:rgba(251,247,238,.72);border:1px solid var(--line);transition:transform .4s var(--ease),box-shadow .4s var(--ease),border-color .4s ease}
+    .tl-prompt-feel{font-size:1.32rem;line-height:1.35;font-style:italic;color:#5c4632}
+    .tl-prompt-feel::before{content:'“';display:block;font-family:var(--display);font-style:normal;font-size:2rem;line-height:.6;color:var(--ochre-soft);margin-bottom:10px}
+    .tl-prompt-go{margin-top:auto;padding-top:16px;border-top:1px solid var(--line)}
+    .tl-prompt-go small{display:block;font-family:var(--display);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre);margin-bottom:6px}
+    .tl-prompt-go span{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:1.06rem;color:var(--ink)}
+    .tl-prompt-go .arrow{color:var(--ochre)}
+    @media (hover:hover) and (pointer:fine){
+      .tl-prompt:hover{transform:translateY(-6px);box-shadow:0 24px 44px rgba(36,27,20,.1);border-color:rgba(149,102,44,.4)}
+      .tl-prompt:hover .arrow{transform:translateX(4px)}
+    }
+
+    /* =========================================================
+       3. LIBRARY — search + topics
+       ========================================================= */
+    .tl-library{background:var(--paper-light)}
+    .tl-tools{position:sticky;top:calc(var(--header-height) + 2px);z-index:40;background:rgba(246,239,227,.95);border-bottom:1px solid var(--line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+    .tl-tools .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;padding:16px 0}
+    .tl-search{position:relative;flex:1 1 300px;max-width:440px}
+    .tl-search svg{position:absolute;left:16px;top:50%;width:16px;height:16px;margin-top:-8px;color:var(--ochre);pointer-events:none}
+    .tl-search input{width:100%;padding:12px 40px 12px 44px;background:var(--paper-pale);border:1px solid var(--line-strong);border-radius:2px;font-size:1.06rem;color:var(--ink)}
+    .tl-search input::placeholder{color:rgba(114,102,88,.85);font-style:italic}
+    .tl-search input::-webkit-search-cancel-button{display:none}
+    .tl-search-clear{position:absolute;right:8px;top:50%;width:28px;height:28px;margin-top:-14px;border-radius:50%;color:var(--muted);font-size:1.2rem;line-height:1}
+    .tl-search-clear:hover{color:var(--ink);background:rgba(149,102,44,.1)}
+    .tl-topics{display:flex;flex-wrap:wrap;gap:10px}
+    .tl-topic-btn{padding:10px 16px;border:1px solid var(--line-strong);border-radius:999px;font-family:var(--display);font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:background .25s ease,color .25s ease,border-color .25s ease}
+    .tl-topic-btn:hover{color:var(--ink);border-color:var(--ochre)}
+    .tl-topic-btn[aria-pressed="true"]{background:var(--ochre);border-color:var(--ochre);color:#fff}
+    .tl-empty{padding:90px 0 100px;text-align:center}
+    .tl-empty p{font-size:1.3rem;font-style:italic;color:#5c4632;margin-bottom:22px}
+
+    .tl-group{padding:clamp(80px,9vw,120px) 0;border-bottom:1px solid var(--line)}
+    .tl-group--alt{background:var(--paper-pale)}
+
+    /* A collection = one YouTube playlist, placed on the Tree */
+    .tl-collection + .tl-collection{margin-top:clamp(64px,7vw,96px)}
+    .tl-coll-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px 40px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+    .tl-coll-head h3{font-size:clamp(1.5rem,2.4vw,2.1rem);margin:10px 0 10px}
+    .tl-coll-head p{font-size:1.12rem;color:var(--muted);max-width:64ch;line-height:1.55}
+    .tl-place{display:block;font-family:var(--display);font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre)}
+
+    /* Playlists whose teaching pages are on their way */
+    .tl-soon-label{display:block;margin:clamp(64px,7vw,96px) 0 30px;padding-bottom:16px;border-bottom:1px solid var(--line);font-family:var(--display);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+    .tl-soon-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px 24px;padding-top:12px}
+    .tl-soon{position:relative;display:flex;flex-direction:column;min-height:100%;padding:28px 26px 22px;background:var(--paper);border:1px solid var(--line)}
+    .tl-group--alt .tl-soon{background:var(--paper-light)}
+    .tl-soon::before,.tl-soon::after{content:'';position:absolute;left:14px;right:14px;top:-7px;height:7px;background:var(--paper-deep);border:1px solid var(--line);border-bottom:0;border-radius:3px 3px 0 0}
+    .tl-soon::after{left:30px;right:30px;top:-12px;height:5px;opacity:.55}
+    .tl-soon h3{margin:10px 0;font-size:clamp(1.25rem,1.6vw,1.5rem);line-height:1.2}
+    .tl-soon p{margin-bottom:20px;font-size:1.04rem;line-height:1.48;color:var(--muted)}
+    .tl-soon-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;padding-top:16px;border-top:1px solid var(--line)}
+    .tl-soon-badge{display:inline-flex;align-items:center;gap:9px;font-family:var(--display);font-size:.58rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+    .tl-soon-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--ochre-soft);box-shadow:0 0 0 3px rgba(199,152,89,.2)}
+    .tl-note{margin-top:20px;padding-left:18px;border-left:2px solid var(--ochre-soft);font-size:1.16rem;font-style:italic;color:#5c4632;max-width:46ch}
+
+    /* Teaching card — same language as index .teaching-card */
+    .tl-card{position:relative;display:flex;flex-direction:column;min-width:0;background:var(--paper);border:1px solid var(--line);overflow:hidden;transition:transform .4s var(--ease),box-shadow .4s var(--ease),border-color .4s ease}
+    .tl-card-media{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;background:#0b0805}
+    .tl-card-media img{transition:transform 1s var(--ease)}
+    .tl-card-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,9,5,0) 60%,rgba(13,9,5,.18));pointer-events:none}
+    .tl-card-body{display:flex;flex:1;flex-direction:column;padding:24px 24px 22px}
+    .tl-badge{display:inline-flex;align-items:center;width:fit-content;padding:5px 12px;margin-bottom:14px;border:1px solid var(--line);border-radius:999px;font-family:var(--display);font-size:.58rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+    .tl-card h3{margin-bottom:12px;font-size:clamp(1.2rem,1.4vw,1.42rem);line-height:1.2;color:var(--ink)}
+    .tl-card h3 a::after{content:'';position:absolute;inset:0;z-index:1}
+    .tl-card p{color:var(--muted);font-size:1.04rem;line-height:1.48;margin-bottom:20px}
+    .tl-watch{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:auto;padding-top:18px;border-top:1px solid var(--line);font-family:var(--display);font-size:.64rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+    .tl-watch{flex-wrap:wrap;row-gap:6px}
+    .tl-watch-label,.tl-watch-time{white-space:nowrap}
+    .tl-watch-label{display:inline-flex;align-items:center;gap:10px}
+    .tl-watch-label .arrow{font-size:1.05rem;color:var(--ochre)}
+    .tl-watch-time{font-weight:500;color:var(--muted)}
+    @media (hover:hover) and (pointer:fine){
+      .tl-card:hover{transform:translateY(-6px);box-shadow:0 24px 44px rgba(36,27,20,.1);border-color:rgba(149,102,44,.4)}
+      .tl-card:hover .tl-card-media img{transform:scale(1.04)}
+      .tl-card:hover .tl-watch-label .arrow{transform:translateX(4px)}
+    }
+    .tl-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+    .tl-grid--4{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+    /* The Five Mind Tools — a connected series */
+    .tl-series{list-style:none;position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px;padding-top:62px}
+    .tl-series::before{content:'';position:absolute;left:10%;right:10%;top:19px;height:1px;background:linear-gradient(90deg,var(--ochre-soft),var(--line-strong))}
+    .tl-series > li{position:relative;display:flex}
+    .tl-series .tl-card{flex:1}
+    .tl-step{position:absolute;left:50%;top:-62px;transform:translateX(-50%);display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--paper-light);border:1px solid var(--ochre-soft);font-family:var(--display);font-size:.78rem;color:var(--ochre)}
+    .tl-series > li:first-child .tl-step{background:var(--ochre);border-color:var(--ochre);color:#fff}
+    .tl-series .tl-card-body{padding:20px 20px 18px}
+    .tl-series .tl-card h3{font-size:clamp(1.08rem,1.15vw,1.24rem)}
+    .tl-series .tl-card p{font-size:1rem}
+
+    /* =========================================================
+       4. WHERE THESE FIT — the Tree
+       ========================================================= */
+    .th-tree{background:var(--paper);padding:clamp(88px,10vw,130px) 0 0}
+    .th-tree-stage{position:relative;width:100%;max-width:1680px;margin:0 auto;aspect-ratio:1672/941;overflow:hidden}
+    .th-tree-img{position:absolute;inset:0}
+    .th-tree-stage::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(234,223,203,.55) 0%,rgba(234,223,203,.12) 34%,rgba(234,223,203,0) 46%),linear-gradient(180deg,rgba(234,223,203,.65) 0%,rgba(234,223,203,0) 10%)}
+    .th-spot{position:absolute;z-index:3;transform:translate(-50%,-50%);display:flex;align-items:center;gap:10px;padding:6px}
+    .th-spot-dot{position:relative;flex:none;width:16px;height:16px;border-radius:50%;background:var(--ochre-light);box-shadow:0 0 0 4px rgba(255,247,231,.55),0 0 20px rgba(217,168,105,.9);transition:transform .3s var(--ease),background .3s ease}
+    .th-spot-dot::after{content:'';position:absolute;inset:-10px;border-radius:50%;border:1px solid rgba(255,247,231,.85);animation:spotPulse 2.6s ease-out infinite}
+    @keyframes spotPulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.7);opacity:0}}
+    .th-spot-label{font-family:var(--display);font-size:.62rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#fff;padding:6px 11px;background:rgba(13,9,5,.55);border:1px solid rgba(255,247,231,.25);border-radius:2px;white-space:nowrap;transition:background .3s ease,border-color .3s ease}
+    .th-spot:hover .th-spot-dot,.th-spot[aria-pressed="true"] .th-spot-dot{transform:scale(1.25);background:#fff}
+    .th-spot[aria-pressed="true"] .th-spot-label{background:var(--ochre);border-color:var(--ochre)}
+    .th-spot--left{flex-direction:row-reverse}
+    .th-panel-wrap{position:absolute;z-index:4;left:clamp(22px,6vw,92px);top:50%;transform:translateY(-50%);width:min(390px,33%);max-height:94%;overflow-y:auto;scrollbar-width:thin}
+    .th-panel{background:rgba(251,247,238,.95);border:1px solid var(--line-strong);padding:clamp(22px,2.4vw,32px);box-shadow:0 24px 60px rgba(36,27,20,.16);animation:panelIn .45s var(--ease)}
+    @keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .th-panel .eyebrow{margin-bottom:10px}
+    .th-panel h3{font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:10px}
+    .th-panel > p{font-size:1.08rem;color:rgba(36,27,20,.8);line-height:1.5}
+    .th-panel-list{list-style:none;margin:16px 0 20px;border-top:1px solid var(--line)}
+    .th-panel-list li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:1.04rem;color:rgba(36,27,20,.5)}
+    .th-panel-list li.has{color:var(--ink)}
+    .th-panel-list li.has{flex-direction:column;align-items:flex-start;gap:2px}
+    .th-links{display:flex;flex-wrap:wrap;gap:2px 18px}
+    .th-panel-list a{display:inline-flex;align-items:baseline;gap:6px;font-size:.96rem;font-style:italic;color:var(--ochre)}
+    .th-panel-list a .arrow{color:var(--ochre)}
+    .th-panel-list a:hover .arrow{transform:translateX(4px)}
+    .th-panel-list:last-child{margin-bottom:0}
+    .th-panel-link{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-size:.64rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ochre)}
+    .th-panel-link:hover .arrow{transform:translateX(4px)}
+
+    /* =========================================================
+       5. CLOSING
+       ========================================================= */
+    .th-close{position:relative;overflow:hidden;padding:clamp(88px,10vw,140px) 0;text-align:center;background:var(--paper-deep);border-top:1px solid var(--line)}
+    .th-close::before{content:'';position:absolute;left:50%;top:50%;width:min(900px,110vw);height:min(900px,110vw);transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(217,168,105,.16) 0%,rgba(217,168,105,.05) 40%,transparent 70%);pointer-events:none}
+    .th-close .wrap{position:relative;max-width:720px}
+    .th-close .ink-divider{margin-bottom:28px}
+    .th-close h2{font-size:clamp(2.3rem,4.2vw,4.2rem);text-wrap:balance}
+    .th-close p{margin:22px auto 38px;max-width:44ch;font-size:23px;color:rgba(36,27,20,.8)}
+    .th-close .exp-btn-row{justify-content:center}
+
+    /* ===== Responsive ===== */
+    @media(max-width:1180px){
+      .tl-series{grid-template-columns:1fr;gap:18px;padding-top:0;padding-left:64px}
+      .tl-series::before{left:19px;right:auto;top:20px;bottom:20px;width:1px;height:auto;background:linear-gradient(180deg,var(--ochre-soft),var(--line-strong))}
+      .tl-step{left:-64px;top:20px;transform:none}
+      .tl-series .tl-card{flex-direction:row}
+      .tl-series .tl-card-media{flex:0 0 min(300px,38%);aspect-ratio:auto;min-height:170px}
+      .tl-series .tl-card h3{font-size:1.3rem}
+      .tl-series .tl-card p{font-size:1.04rem}
+      .tl-prompts{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .tl-grid--4{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media(max-width:1050px){
+      .tl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .tl-soon-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .th-tree-stage{aspect-ratio:auto;overflow:visible}
+      .th-tree-img{position:relative;aspect-ratio:1672/941;overflow:hidden}
+      .th-tree-stage::after{display:none}
+      .th-panel-wrap{position:relative;left:auto;top:auto;transform:none;width:min(1280px,88vw);max-height:none;overflow:visible;margin:-30px auto 0}
+      .th-tree{padding-bottom:clamp(60px,8vw,90px)}
+    }
+    @media(max-width:760px){
+      :root{--header-height:64px}
+      body{font-size:17px}
+      .site-header{padding:0 18px}
+      .site-logo img{width:90px}
+      .nav-toggle{display:block}
+      .primary-nav{position:absolute;top:100%;left:0;right:0;display:flex;flex-direction:column;align-items:stretch;gap:0;padding:8px 18px 18px;background:rgba(246,239,227,.98);border-bottom:1px solid var(--line);opacity:0;visibility:hidden;transform:translateY(-8px);transition:.25s ease}
+      .primary-nav.open{opacity:1;visibility:visible;transform:none}
+      .primary-nav a{padding:13px 0;border-top:1px solid var(--line)}
+      .primary-nav a::after{display:none}
+      .exp-hero{min-height:620px}
+      .exp-hero-content{padding:0 20px}
+      .exp-hero h1{font-size:clamp(2.1rem,9vw,3.15rem)}
+      .exp-hero-text{font-size:1.16rem}
+      .exp-hero-scroll{display:none}
+      .section-title{font-size:clamp(2.1rem,9vw,3.15rem)}
+      .section-copy{font-size:1.16rem}
+      .th-close p{font-size:1.16rem}
+      .tl-prompts{grid-template-columns:1fr;gap:14px}
+      .tl-prompt{padding:22px 20px 18px}
+      .tl-prompt-feel{font-size:1.22rem}
+      .tl-tools{position:relative;top:auto}
+      .tl-tools .wrap{gap:12px;padding:14px 0}
+      .tl-search input{font-size:1rem}
+      .tl-search{flex-basis:100%;max-width:none}
+      .tl-topics{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;width:100%;padding-bottom:2px}
+      .tl-topics::-webkit-scrollbar{display:none}
+      .tl-topic-btn{flex:none}
+      .tl-grid{grid-template-columns:1fr;gap:18px}
+      .tl-soon-grid{grid-template-columns:1fr;gap:30px}
+      .tl-coll-head{flex-direction:column;align-items:flex-start}
+      .tl-coll-head p{font-size:1.04rem}
+      .tl-series{padding-left:0}
+      .tl-series::before{display:none}
+      .tl-step{left:14px;top:14px;z-index:2;width:34px;height:34px;font-size:.7rem}
+      .tl-series .tl-card{flex-direction:column}
+      .tl-series .tl-card-media{flex:none;aspect-ratio:16/9;min-height:0}
+      .tl-card-body,.tl-series .tl-card-body{padding:20px}
+      .th-spot-label{font-size:.52rem;padding:4px 7px;letter-spacing:.1em}
+      .th-spot-dot{width:13px;height:13px}
+      .site-footer{padding:48px 6vw 24px}
+      .footer-inner{align-items:flex-start;flex-direction:column;gap:22px}
+      .footer-logo img{width:230px}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto}
+      .exp-hero-media,.th-spot-dot::after,.exp-hero-scroll::after{animation:none}
+      .th-panel{animation:none}
+      .tl-card,.tl-prompt,.tl-card-media img{transition:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="read-progress" id="readProgress" aria-hidden="true"><span id="readProgressFill"></span></div>
+
+  <header class="site-header" id="siteHeader">
+    <a class="site-logo" href="index.html" aria-label="Seek Consciousness home"><img src="assets/media/seek-consciousness-logo.png" alt="Seek Consciousness"></a>
+    <button class="nav-toggle" type="button" aria-controls="primaryNav" aria-expanded="false" aria-label="Open navigation">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="primary-nav" id="primaryNav" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="index.html#choose-path">Choose Your Path</a>
+      <a href="teachings.html" aria-current="page">Teachings</a>
+      <a href="seeker.html#treeBlueprint">The Blueprint</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 1. HERO -->
+    <section class="exp-hero" aria-labelledby="teachingsTitle">
+      <div class="exp-hero-media" aria-hidden="true"></div>
+      <div class="exp-hero-scrim" aria-hidden="true"></div>
+      <div class="exp-hero-content">
+        <div class="exp-hero-copy">
+          <nav class="exp-breadcrumb text-reveal" aria-label="Breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="exp-breadcrumb-sep" aria-hidden="true">/</span>
+            <span class="exp-breadcrumb-current" aria-current="page">Teachings</span>
+          </nav>
+          <span class="eyebrow exp-hero-eyebrow text-reveal">Follow What Speaks To You</span>
+          <h1 id="teachingsTitle" class="text-reveal">The Teachings</h1>
+          <div class="exp-hero-text text-reveal">
+            <p>Everything here comes from something I’ve practiced, explored, or experienced for myself.</p>
+            <p>Some are simple tools you can use today. Others go deeper.</p>
+            <p class="exp-hero-close">There’s no required order. Start with whatever feels meaningful right now. You can always come back and choose again.</p>
+          </div>
+          <div class="exp-btn-row text-reveal">
+            <a class="exp-btn exp-btn--light" href="#library">Browse The Teachings</a>
+          </div>
+        </div>
+      </div>
+      <div class="exp-hero-scroll" aria-hidden="true">Begin Exploring</div>
+    </section>
+
+    <!-- 2. NOT SURE WHERE TO BEGIN? -->
+    <section class="tl-start section-pad" id="start" aria-labelledby="startTitle">
+      <div class="wrap">
+        <div class="tl-heading">
+          <div>
+            <span class="eyebrow text-reveal">Not Sure Where To Begin?</span>
+            <h2 id="startTitle" class="section-title text-reveal">Start with what feels true today.</h2>
+          </div>
+          <p class="section-copy text-reveal">You don’t need to understand the whole Blueprint first. Choose the one that sounds most like where you are right now.</p>
+          <p class="tl-note text-reveal">There’s no wrong place to start. Whatever you choose today, you can always return and choose again.</p>
+        </div>
+        <div class="tl-prompts">
+          <a class="tl-prompt text-reveal" href="teaching-cat-and-mouse.html">
+            <span class="tl-prompt-feel">My mind won’t stop running in the background.</span>
+            <span class="tl-prompt-go"><small>Try</small><span>The Cat and the Mouse Method <span class="arrow" aria-hidden="true">→</span></span></span>
+          </a>
+          <a class="tl-prompt text-reveal" href="replacement-loop.html">
+            <span class="tl-prompt-feel">I keep getting pulled into the same thoughts.</span>
+            <span class="tl-prompt-go"><small>Try</small><span>The Replacement Loop <span class="arrow" aria-hidden="true">→</span></span></span>
+          </a>
+          <a class="tl-prompt text-reveal" href="flow-state.html">
+            <span class="tl-prompt-feel">I want to feel fully present in what I’m doing.</span>
+            <span class="tl-prompt-go"><small>Try</small><span>How to Enter Flow State <span class="arrow" aria-hidden="true">→</span></span></span>
+          </a>
+          <a class="tl-prompt text-reveal" href="Why%20Most%20Psychedelic%20Experiences%20Never%20Become%20Lasting%20Transformation.html">
+            <span class="tl-prompt-feel">Something opened up in me, and I don’t want to lose it.</span>
+            <span class="tl-prompt-go"><small>Try</small><span>Why Most Psychedelic Experiences Never Become Lasting Transformation <span class="arrow" aria-hidden="true">→</span></span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. LIBRARY — organised by the Blueprint: Begin Here → Roots → Trunk → Branches.
+         Each topic is one collection, placed where it lives on the Tree.
+         Collections with pages show cards; the rest show a "coming soon" card until
+         their teaching pages exist. Videos live on each teaching page, never here. -->
+    <div class="tl-library" id="library">
+      <div class="tl-tools">
+        <div class="wrap">
+          <label class="tl-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            <input type="search" id="tlSearch" placeholder="Search — try flow, love, or integration" autocomplete="off" aria-label="Search the teachings">
+            <button class="tl-search-clear" type="button" id="tlClear" aria-label="Clear search" hidden>×</button>
+          </label>
+          <div class="tl-topics" id="tlTopics" role="group" aria-label="Choose part of the Tree"></div>
+        </div>
+      </div>
+
+      <!-- ===================== BEGIN HERE ===================== -->
+      <section class="tl-group" id="begin" data-group="begin" data-label="Begin Here" aria-labelledby="beginTitle">
+        <div class="wrap">
+          <div class="tl-heading">
+            <span class="eyebrow text-reveal">Begin Here</span>
+            <h2 id="beginTitle" class="section-title text-reveal">New to Seek Consciousness?</h2>
+            <p class="section-copy text-reveal">Start with the short introductions. They’ll give you a feel for what this is, why I created it, and how the pieces connect.</p>
+            <p class="tl-note text-reveal">There’s no wrong path. Choose the one that feels right today.</p>
+          </div>
+          <!-- Begin Here → Start Here -->
+          <div class="tl-collection" id="c-start-here" aria-labelledby="startHereTitle">
+            <div class="tl-coll-head text-reveal">
+              <div>
+                <span class="tl-place">Begin Here</span>
+                <h3 id="startHereTitle">Start Here</h3>
+                <p>Why I created Seek Consciousness, what the Blueprint is, and how you can begin exploring it.</p>
+              </div>
+            </div>
+            <div class="tl-grid tl-grid--4">
+              <article class="tl-card text-reveal" data-keywords="why seek consciousness gnosis intuition spirit direct experience beginner introduction">
+                <a class="tl-card-media" href="awakening-is-a-path.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/oq2fiGKnp5k/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Start Here 01</span>
+                  <h3><a href="awakening-is-a-path.html">Awakening Is a Path You Have to Discover for Yourself</a></h3>
+                  <p>What becoming more conscious actually means — and why the answers you’ve been chasing are already within you.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~5 min</span></div>
+                </div>
+              </article>
+              <article class="tl-card text-reveal" data-keywords="blueprint framework ancient wisdom modern science catalysts ai mirror introduction">
+                <a class="tl-card-media" href="path-in-your-hands.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/17spdVgtWjw/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Start Here 02</span>
+                  <h3><a href="path-in-your-hands.html">How This Project Can Reimagine Your Entire Life While Leaving the Path in Your Hands</a></h3>
+                  <p>A practical path for inner change. Not a belief to adopt, but a framework you explore through direct experience.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~5 min</span></div>
+                </div>
+              </article>
+              <article class="tl-card text-reveal" data-keywords="tree roots trunk branches canopy blueprint map breath awareness vision body introduction">
+                <a class="tl-card-media" href="complete-map-living-tree.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/vFnXQ0wqT1U/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Start Here 03</span>
+                  <h3><a href="complete-map-living-tree.html">The Complete Map of Inner Transformation, Explained Through the Metaphor of a Tree</a></h3>
+                  <p>Roots, trunk, branches, and canopy — how every part of the Blueprint connects and grows together.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~28 min</span></div>
+                </div>
+              </article>
+              <article class="tl-card text-reveal" data-keywords="kurt story search 5-meo-dmt ego dissolution nonduality purpose introduction">
+                <a class="tl-card-media" href="what-i-was-searching-for.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/KzyxaK0nHMw/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Start Here 04</span>
+                  <h3><a href="what-i-was-searching-for.html">How I Found What I’d Been Searching for My Entire Life—and What It Could Mean for You</a></h3>
+                  <p>The search that led me to create Seek Consciousness, and what it could mean for you.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~8.5 min</span></div>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <!-- Begin Here → Seek in 60 (each card's badge is where it sits on the Tree) -->
+          <div class="tl-collection" id="c-seek-in-60" aria-labelledby="seek60Title">
+            <div class="tl-coll-head text-reveal">
+              <div>
+                <span class="tl-place">Across The Whole Tree</span>
+                <h3 id="seek60Title">Seek in 60</h3>
+                <p>One idea from the Blueprint, in about a minute. A simple way to find what speaks to you.</p>
+              </div>
+            </div>
+            <div class="tl-grid">
+              <article class="tl-card text-reveal" data-keywords="ego identity mask fear awareness eternal self short">
+                <a class="tl-card-media" href="seek-in-60-ego.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/mmC1_YoGF2I/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Identity &amp; Purpose</span>
+                  <h3><a href="seek-in-60-ego.html">You Are Not Your Ego. So Who Are You?</a></h3>
+                  <p>The ego is a mask you learned to wear. You’re the awareness underneath it.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~1 min</span></div>
+                </div>
+              </article>
+              <article class="tl-card text-reveal" data-keywords="beliefs conditioning programming spirituality question truth short">
+                <a class="tl-card-media" href="seek-in-60-beliefs.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/NaNxs8tvP3E/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Inner Authority</span>
+                  <h3><a href="seek-in-60-beliefs.html">How Much of What You Believe Is Actually Yours?</a></h3>
+                  <p>Question what you were given. Keep what holds up, and leave behind what doesn’t.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~1 min</span></div>
+                </div>
+              </article>
+              <article class="tl-card text-reveal" data-keywords="thought overthinking loop cat mouse mindfulness short">
+                <a class="tl-card-media" href="seek-in-60-one-thought.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/tbp3hC2a4Dk/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Awareness</span>
+                  <h3><a href="seek-in-60-one-thought.html">One Thought Can Hijack Your Mind. Here’s How to Let It Go.</a></h3>
+                  <p>The Cat and the Mouse Method in a minute — choose which thoughts stay and which go.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~1 min</span></div>
+                </div>
+              </article>
+              <article class="tl-card text-reveal" data-keywords="flow focus attention presence short">
+                <a class="tl-card-media" href="seek-in-60-flow-state.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/bOUkDmVxuXs/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Awareness</span>
+                  <h3><a href="seek-in-60-flow-state.html">The Secret to Finding Your Flow State</a></h3>
+                  <p>Flow isn’t something you create. It’s something you return to.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~1 min</span></div>
+                </div>
+              </article>
+              <article class="tl-card text-reveal" data-keywords="practice knowledge bridge action living the practice short">
+                <a class="tl-card-media" href="seek-in-60-build-your-bridge.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/5w9n0TXzYqo/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Living the Practice</span>
+                  <h3><a href="seek-in-60-build-your-bridge.html">Turn What You Know Into Something You Can Use</a></h3>
+                  <p>Knowledge gives you the materials. Practice actually builds the bridge.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~1 min</span></div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== ROOTS ===================== -->
+      <section class="tl-group tl-group--alt" id="roots" data-group="roots" data-label="The Roots" aria-labelledby="rootsTitle">
+        <div class="wrap">
+          <div class="tl-heading">
+            <span class="eyebrow text-reveal">The Roots — Foundational Principles</span>
+            <h2 id="rootsTitle" class="section-title text-reveal">What everything grows from.</h2>
+            <p class="section-copy text-reveal">Trusting your own experience. Learning through it directly. Practicing consistently. Staying aligned with love and truth. These sit underneath every practice and teaching.</p>
+            <p class="tl-note text-reveal">When the path starts to feel confusing or overwhelming, come back to the roots.</p>
+          </div>
+          <div class="tl-soon-grid">
+            <article class="tl-soon text-reveal" id="c-spirituality">
+              <span class="tl-place">Roots → Inner Authority</span>
+              <h3>Spirituality</h3>
+              <p>Your path. Your truth. Finding your own connection to spirit without handing your power to anyone else.</p>
+              <div class="tl-soon-foot"><span class="tl-soon-badge">Coming Soon</span></div>
+            </article>
+            <article class="tl-soon text-reveal" id="c-explore-consciousness">
+              <span class="tl-place">Roots → Direct Experience</span>
+              <h3>Explore Your Consciousness</h3>
+              <p>Learning through what you actually experience, rather than belief or borrowed stories.</p>
+              <div class="tl-soon-foot"><span class="tl-soon-badge">Coming Soon</span></div>
+            </article>
+            <article class="tl-soon text-reveal" id="c-love">
+              <span class="tl-place">Roots → Love &amp; Truth</span>
+              <h3>Self-Love, Love &amp; Relationships</h3>
+              <p>Love and honesty — with yourself, and with the people in your life.</p>
+              <div class="tl-soon-foot"><span class="tl-soon-badge">Coming Soon</span></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== TRUNK ===================== -->
+      <section class="tl-group" id="trunk" data-group="trunk" data-label="The Trunk" aria-labelledby="trunkTitle">
+        <div class="wrap">
+          <div class="tl-heading">
+            <span class="eyebrow text-reveal">The Trunk — Core Daily Foundation</span>
+            <h2 id="trunkTitle" class="section-title text-reveal">The practices that hold everything up.</h2>
+            <p class="section-copy text-reveal">Breath, awareness, writing, and the body. You don’t need to begin all of them at once. Start with one, and make it small enough to repeat.</p>
+            <p class="tl-note text-reveal">Breath is usually the best place to begin.</p>
+          </div>
+
+          <!-- Trunk → Awareness -->
+          <div class="tl-collection" id="mind-tools" aria-labelledby="mindTitle">
+            <div class="tl-coll-head text-reveal">
+              <div>
+                <span class="tl-place">Trunk → Awareness</span>
+                <h3 id="mindTitle">The Five Mind Tools</h3>
+                <p>These tools are deeply connected. One helps you notice what is taking your attention. Another helps you stop feeding it. Another brings you back to one point. Flow is what you may begin to experience when less and less is getting in the way.</p>
+              </div>
+            </div>
+
+            <ol class="tl-series">
+              <li class="text-reveal">
+                <span class="tl-step" aria-hidden="true">01</span>
+                <article class="tl-card" data-keywords="thoughts notice mind background attention awareness beginner start mental loops">
+                  <a class="tl-card-media" href="teaching-cat-and-mouse.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/k0TA52HUjbs/hqdefault.jpg" alt="" loading="lazy"></a>
+                  <div class="tl-card-body">
+                    <span class="tl-badge">Mind Tool 01</span>
+                    <h3><a href="teaching-cat-and-mouse.html">The Cat and the Mouse Method</a></h3>
+                    <p>Notice each thought as it appears. If it doesn’t need you right now, let it pass and come back to what is actually here.</p>
+                    <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~3 min</span></div>
+                  </div>
+                </article>
+              </li>
+              <li class="text-reveal">
+                <span class="tl-step" aria-hidden="true">02</span>
+                <article class="tl-card" data-keywords="loop negative thoughts replace overthinking anxiety awareness mental loops">
+                  <a class="tl-card-media" href="replacement-loop.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/0isBXHY7R6I/hqdefault.jpg" alt="" loading="lazy"></a>
+                  <div class="tl-card-body">
+                    <span class="tl-badge">Mind Tool 02</span>
+                    <h3><a href="replacement-loop.html">The Replacement Loop</a></h3>
+                    <p>When a loop starts pulling you away, don’t fight it. Replace it with something real you can actually feel.</p>
+                    <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~3 min</span></div>
+                  </div>
+                </article>
+              </li>
+              <li class="text-reveal">
+                <span class="tl-step" aria-hidden="true">03</span>
+                <article class="tl-card" data-keywords="focus attention present concentration awareness">
+                  <a class="tl-card-media" href="single-point-focus.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/LUgaGi08B8E/hqdefault.jpg" alt="" loading="lazy"></a>
+                  <div class="tl-card-body">
+                    <span class="tl-badge">Mind Tool 03</span>
+                    <h3><a href="single-point-focus.html">Single Point Focus</a></h3>
+                    <p>Bring all of your attention to the one thing in front of you, and notice how different it feels.</p>
+                    <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~3 min</span></div>
+                  </div>
+                </article>
+              </li>
+              <li class="text-reveal">
+                <span class="tl-step" aria-hidden="true">04</span>
+                <article class="tl-card" data-keywords="flow state present effortless creativity work awareness">
+                  <a class="tl-card-media" href="flow-state.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/0sZLafQc3xM/hqdefault.jpg" alt="" loading="lazy"></a>
+                  <div class="tl-card-body">
+                    <span class="tl-badge">Mind Tool 04</span>
+                    <h3><a href="flow-state.html">How to Enter Flow State</a></h3>
+                    <p>Those moments when everything just clicks. Your mind gets quiet, and you’re fully here.</p>
+                    <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~4 min</span></div>
+                  </div>
+                </article>
+              </li>
+              <li class="text-reveal">
+                <span class="tl-step" aria-hidden="true">05</span>
+                <article class="tl-card" data-keywords="flow state distraction breath return awareness">
+                  <a class="tl-card-media" href="stay-in-flow-state.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/iYIyFlRidfI/hqdefault.jpg" alt="" loading="lazy"></a>
+                  <div class="tl-card-body">
+                    <span class="tl-badge">Mind Tool 05</span>
+                    <h3><a href="stay-in-flow-state.html">How to Stay in Flow State Longer</a></h3>
+                    <p>Notice the moment flow breaks, lighten up, and come back without forcing it.</p>
+                    <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~3 min</span></div>
+                  </div>
+                </article>
+              </li>
+            </ol>
+          </div>
+
+          <span class="tl-soon-label text-reveal">More From The Trunk</span>
+          <div class="tl-soon-grid">
+            <article class="tl-soon text-reveal" id="c-practices">
+              <span class="tl-place">Trunk → Breath</span>
+              <h3>Practices</h3>
+              <p>Simple practices you can return to every day — breath, meditation, gratitude, and rest.</p>
+              <div class="tl-soon-foot"><span class="tl-soon-badge">Coming Soon</span></div>
+            </article>
+            <article class="tl-soon text-reveal" id="c-manifestation">
+              <span class="tl-place">Trunk → Writing &amp; Reflection</span>
+              <h3>Manifestation</h3>
+              <p>What you repeatedly envision, examine, and return to begins shaping the life you’re creating.</p>
+              <div class="tl-soon-foot"><span class="tl-soon-badge">Coming Soon</span></div>
+            </article>
+            <article class="tl-soon text-reveal" id="c-ai">
+              <span class="tl-place">Trunk → Writing &amp; Reflection</span>
+              <h3>AI &amp; Consciousness</h3>
+              <p>Using AI as a mirror, not an authority — to think deeper, not less.</p>
+              <div class="tl-soon-foot"><span class="tl-soon-badge">Coming Soon</span></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== BRANCHES ===================== -->
+      <section class="tl-group tl-group--alt" id="branches" data-group="branches" data-label="The Branches" aria-labelledby="branchesTitle">
+        <div class="wrap">
+          <div class="tl-heading">
+            <span class="eyebrow text-reveal">The Branches — Fields Of Exploration</span>
+            <h2 id="branchesTitle" class="section-title text-reveal">Where you can go deeper.</h2>
+            <p class="section-copy text-reveal">The branches are not levels, and there’s no required order. Different people feel called to different areas at different times.</p>
+            <p class="tl-note text-reveal">Follow what feels alive for you, and stay grounded in what’s true in your own experience.</p>
+          </div>
+
+          <!-- Branches → Catalysts & Expanded States -->
+          <div class="tl-collection" id="catalysts" aria-labelledby="catalystsTitle">
+            <div class="tl-coll-head text-reveal">
+              <div>
+                <span class="tl-place">Branches → Catalysts &amp; Expanded States</span>
+                <h3 id="catalystsTitle">Psychedelics, Catalysts &amp; Expanded States</h3>
+                <p>What I’ve learned through 5-MeO-DMT and expanded states, and the integration that came after. Catalysts are optional. They can open a door, but they’re not the center of this path.</p>
+              </div>
+            </div>
+            <div class="tl-grid">
+              <article class="tl-card text-reveal" data-keywords="catalysts patterns change identity psychedelics">
+                <a class="tl-card-media" href="The%20Moment%20You%20Realize%20You%20Don%E2%80%99t%20Have%20to%20Keep%20Being%20the%20Same%20Person.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/EdjM1-BzdwY/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Catalysts</span>
+                  <h3><a href="The%20Moment%20You%20Realize%20You%20Don%E2%80%99t%20Have%20to%20Keep%20Being%20the%20Same%20Person.html">The Moment You Realize You Don’t Have to Keep Being the Same Person</a></h3>
+                  <p>Sometimes a catalyst gives you enough space to step outside a familiar pattern and finally see it from somewhere new.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~3 min</span></div>
+                </div>
+              </article>
+              <article class="tl-card text-reveal" data-keywords="5-meo-dmt 5meo dmt ego dissolution surrender psychedelics">
+                <a class="tl-card-media" href="5-MeO-DMT%20What%20It%20Taught%20Me.%20Is%20It%20Right%20for%20You%20The%20Most%20Profound%20Experience%20of%20My%20Life..html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/LAvisu4OUDA/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">5-MeO-DMT</span>
+                  <h3><a href="5-MeO-DMT%20What%20It%20Taught%20Me.%20Is%20It%20Right%20for%20You%20The%20Most%20Profound%20Experience%20of%20My%20Life..html">5-MeO-DMT: What It Taught Me. Is It Right for You?</a></h3>
+                  <p>What stayed with me was not the intensity. It was what I had to learn afterward about surrender, connection, and practice.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~6.5 min</span></div>
+                </div>
+              </article>
+              <article class="tl-card text-reveal" data-keywords="5-meo-dmt 5meo reactivations source integration psychedelics">
+                <a class="tl-card-media" href="What%27s%20Actually%20Happening%20and%20How%20You%20Can%20Use%20Reactivations%20to%20Connect%20More%20Deeply%20With%20Source.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/QW28c9C86FM/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">5-MeO-DMT</span>
+                  <h3><a href="What%27s%20Actually%20Happening%20and%20How%20You%20Can%20Use%20Reactivations%20to%20Connect%20More%20Deeply%20With%20Source.html">How You Can Use Reactivations to Connect More Deeply With Source</a></h3>
+                  <p>Do I resist it, or do I meet it with awareness?</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~4 min</span></div>
+                </div>
+              </article>
+              <article class="tl-card text-reveal" data-keywords="integration wisdom everyday life after experience 5-meo-dmt 5meo">
+                <a class="tl-card-media" href="The%20Most%20Profound%20Experience%20of%20Your%20Life%20and%20How%20Do%20You%20Bring%20Its%20Wisdom%20Back%20With%20You.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/KATCVllTmmk/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Integration</span>
+                  <h3><a href="The%20Most%20Profound%20Experience%20of%20Your%20Life%20and%20How%20Do%20You%20Bring%20Its%20Wisdom%20Back%20With%20You.html">The Most Profound Experience of Your Life — How Do You Bring Its Wisdom Back?</a></h3>
+                  <p>Eventually you come home, and normal life starts moving again. How do you bring any of that wisdom back with you?</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~3 min</span></div>
+                </div>
+              </article>
+              <article class="tl-card text-reveal" data-keywords="integration transformation change patterns psychedelics">
+                <a class="tl-card-media" href="Why%20Most%20Psychedelic%20Experiences%20Never%20Become%20Lasting%20Transformation.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/KXQ_DpxAz8g/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Integration</span>
+                  <h3><a href="Why%20Most%20Psychedelic%20Experiences%20Never%20Become%20Lasting%20Transformation.html">Why Most Psychedelic Experiences Never Become Lasting Transformation</a></h3>
+                  <p>The experience can show you something real. Integration is what determines whether it becomes part of your life.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~3 min</span></div>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <!-- Branches → Catalysts & Expanded States (Microdosing) -->
+          <div class="tl-collection" id="microdosing" aria-labelledby="microTitle">
+            <div class="tl-coll-head text-reveal">
+              <div>
+                <span class="tl-place">Branches → Catalysts &amp; Expanded States</span>
+                <h3 id="microTitle">Microdosing</h3>
+                <p>More than ten years of microdosing — what it’s taught me, and how to choose more intentionally.</p>
+              </div>
+            </div>
+            <div class="tl-grid">
+              <article class="tl-card text-reveal" data-keywords="microdosing mushrooms psilocybin psychedelics">
+                <a class="tl-card-media" href="Should%20You%20Microdose%20Mushrooms%20Here%E2%80%99s%20What%2010%20Years%20Taught%20Me.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/_HM765RNa2U/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Microdosing</span>
+                  <h3><a href="Should%20You%20Microdose%20Mushrooms%20Here%E2%80%99s%20What%2010%20Years%20Taught%20Me.html">Should You Microdose Mushrooms? Here’s What 10 Years Taught Me</a></h3>
+                  <p>Not some dramatic change. The smaller shifts — a little more presence, openness, and connection to what is already here.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~3.5 min</span></div>
+                </div>
+              </article>
+              <article class="tl-card text-reveal" data-keywords="microdosing lsd mushrooms difference psychedelics">
+                <a class="tl-card-media" href="Microdosing%20LSD%20vs%20Mushrooms%20The%20Real%20Differences%20Explained.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/JSjN9AV2j7I/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Microdosing</span>
+                  <h3><a href="Microdosing%20LSD%20vs%20Mushrooms%20The%20Real%20Differences%20Explained.html">Microdosing LSD vs Mushrooms: The Real Differences Explained</a></h3>
+                  <p>This is not about which one is better. It is about understanding the difference and choosing more intentionally.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~2 min</span></div>
+                </div>
+              </article>
+              <article class="tl-card text-reveal" data-keywords="microdosing medicines plant medicine psychedelics">
+                <a class="tl-card-media" href="I%20Microdosed%2011%20Different%20Medicines%20Here%E2%80%99s%20What%20Each%20One%20Taught%20Me.html" tabindex="-1" aria-hidden="true"><img src="https://img.youtube.com/vi/WvqBKVh3Wig/hqdefault.jpg" alt="" loading="lazy"></a>
+                <div class="tl-card-body">
+                  <span class="tl-badge">Microdosing</span>
+                  <h3><a href="I%20Microdosed%2011%20Different%20Medicines%20Here%E2%80%99s%20What%20Each%20One%20Taught%20Me.html">I Microdosed 11 Different Medicines: Here’s What Each One Taught Me</a></h3>
+                  <p>They do not all take you to the same place. Each one has its own character.</p>
+                  <div class="tl-watch"><span class="tl-watch-label">Open Teaching <span class="arrow" aria-hidden="true">→</span></span><span class="tl-watch-time">~4 min</span></div>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <span class="tl-soon-label text-reveal">More From The Branches</span>
+          <div class="tl-soon-grid">
+            <article class="tl-soon text-reveal" id="c-mind">
+              <span class="tl-place">Branches → Mind &amp; Nervous System</span>
+              <h3>Mind, Awareness &amp; Flow</h3>
+              <p>Attention, emotional loops, habits, focus, and flow — and how to work with your own mind.</p>
+              <div class="tl-soon-foot"><span class="tl-soon-badge">Coming Soon</span></div>
+            </article>
+            <article class="tl-soon text-reveal" id="c-living">
+              <span class="tl-place">Branches → Living The Practice</span>
+              <h3>Living the Practice</h3>
+              <p>Where insight gets tested — in relationships, work, decisions, and ordinary life.</p>
+              <div class="tl-soon-foot"><span class="tl-soon-badge">Coming Soon</span></div>
+            </article>
+            <article class="tl-soon text-reveal" id="c-identity">
+              <span class="tl-place">Branches → Identity &amp; Purpose</span>
+              <h3>Identity &amp; Purpose</h3>
+              <p>Who you are, and who you’re becoming.</p>
+              <div class="tl-soon-foot"><span class="tl-soon-badge">Coming Soon</span></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <div class="tl-empty wrap" id="tlEmpty" hidden>
+        <p>Nothing here matches that yet. New teachings are added over time.</p>
+        <button class="exp-btn exp-btn--primary" type="button" id="tlReset">Show All Teachings</button>
+      </div>
+    </div>
+
+    <!-- 4. WHERE THESE FIT -->
+    <section class="th-tree" id="tree" aria-labelledby="treeTitle">
+      <div class="wrap tl-heading">
+        <div>
+          <span class="eyebrow text-reveal">Where These Fit</span>
+          <h2 id="treeTitle" class="section-title text-reveal">Every teaching has a place in the Blueprint.</h2>
+        </div>
+        <p class="section-copy text-reveal">The Blueprint is here to help you see how these pieces connect—not to tell you which path you’re supposed to follow. Choose a part of the Tree to see what lives there.</p>
+        <p class="tl-note text-reveal">You decide what you explore, how deep you go, and what you leave alone.</p>
+      </div>
+
+      <div class="th-tree-stage">
+        <div class="th-tree-img">
+          <img src="assets/media/living-map-tree.jpg" alt="A single tree with deep roots beneath the ground and a wide canopy in golden light" loading="lazy">
+          <button class="th-spot" type="button" style="left:72%;top:13%" data-part="canopy" aria-pressed="false" aria-controls="treePanel"><span class="th-spot-dot" aria-hidden="true"></span><span class="th-spot-label">Canopy</span></button>
+          <button class="th-spot th-spot--left" type="button" style="left:52%;top:34%" data-part="branches" aria-pressed="false" aria-controls="treePanel"><span class="th-spot-dot" aria-hidden="true"></span><span class="th-spot-label">Branches</span></button>
+          <button class="th-spot" type="button" style="left:71%;top:57%" data-part="trunk" aria-pressed="true" aria-controls="treePanel"><span class="th-spot-dot" aria-hidden="true"></span><span class="th-spot-label">Trunk</span></button>
+          <button class="th-spot" type="button" style="left:68%;top:84%" data-part="roots" aria-pressed="false" aria-controls="treePanel"><span class="th-spot-dot" aria-hidden="true"></span><span class="th-spot-label">Roots</span></button>
+        </div>
+        <div class="th-panel-wrap" id="treePanel" aria-live="polite">
+          <div class="th-panel" data-panel="trunk">
+            <span class="eyebrow">The Trunk</span>
+            <h3>The Core Practices</h3>
+            <p>The practices I come back to again and again. They hold everything else up.</p>
+            <ul class="th-panel-list">
+              <li class="has"><span>Breath</span><span class="th-links"><a href="#c-practices" data-topic-link>Practices <span class="arrow" aria-hidden="true">→</span></a></span></li>
+              <li class="has"><span>Awareness</span><span class="th-links"><a href="#mind-tools" data-topic-link>The Five Mind Tools <span class="arrow" aria-hidden="true">→</span></a></span></li>
+              <li class="has"><span>Writing &amp; Reflection</span><span class="th-links"><a href="#c-manifestation" data-topic-link>Manifestation <span class="arrow" aria-hidden="true">→</span></a><a href="#c-ai" data-topic-link>AI &amp; Consciousness <span class="arrow" aria-hidden="true">→</span></a><a href="vision-writing.html">Vision Writing <span class="arrow" aria-hidden="true">→</span></a></span></li>
+              <li><span>Body Integration</span></li>
+            </ul>
+          </div>
+          <div class="th-panel" data-panel="branches" hidden>
+            <span class="eyebrow">The Branches</span>
+            <h3>Where You Go Deeper</h3>
+            <p>Branches are not levels. Each one is a direction you can follow when it calls to you.</p>
+            <ul class="th-panel-list">
+              <li><span>Ancient Wisdom</span></li>
+              <li class="has"><span>Mind &amp; Nervous System</span><span class="th-links"><a href="#c-mind" data-topic-link>Mind, Awareness &amp; Flow <span class="arrow" aria-hidden="true">→</span></a></span></li>
+              <li class="has"><span>Catalysts &amp; Expanded States</span><span class="th-links"><a href="#catalysts" data-topic-link>Psychedelics &amp; Catalysts <span class="arrow" aria-hidden="true">→</span></a><a href="#microdosing" data-topic-link>Microdosing <span class="arrow" aria-hidden="true">→</span></a></span></li>
+              <li class="has"><span>Living the Practice</span><span class="th-links"><a href="#c-living" data-topic-link>Living the Practice <span class="arrow" aria-hidden="true">→</span></a></span></li>
+              <li><span>Nature, Sound &amp; Environment</span></li>
+              <li class="has"><span>Identity &amp; Purpose</span><span class="th-links"><a href="#c-identity" data-topic-link>Identity &amp; Purpose <span class="arrow" aria-hidden="true">→</span></a></span></li>
+            </ul>
+          </div>
+          <div class="th-panel" data-panel="roots" hidden>
+            <span class="eyebrow">The Roots</span>
+            <h3>What Everything Grows From</h3>
+            <p>Underneath every teaching are the same roots. Less something to study, more something to live from.</p>
+            <ul class="th-panel-list">
+              <li class="has"><span>Inner Authority</span><span class="th-links"><a href="#c-spirituality" data-topic-link>Spirituality <span class="arrow" aria-hidden="true">→</span></a></span></li>
+              <li class="has"><span>Direct Experience</span><span class="th-links"><a href="#c-explore-consciousness" data-topic-link>Explore Your Consciousness <span class="arrow" aria-hidden="true">→</span></a></span></li>
+              <li class="has"><span>Daily Practice</span></li>
+              <li class="has"><span>Love &amp; Truth</span><span class="th-links"><a href="#c-love" data-topic-link>Self-Love &amp; Relationships <span class="arrow" aria-hidden="true">→</span></a></span></li>
+            </ul>
+          </div>
+          <div class="th-panel" data-panel="canopy" hidden>
+            <span class="eyebrow">The Canopy</span>
+            <h3>What It Grows Into</h3>
+            <p>Presence, clarity, purpose, love, and aliveness — not as ideas, but lived in your everyday life.</p>
+            <a class="th-panel-link" href="seeker.html#treeBlueprint" style="margin-top:18px">See The Full Blueprint <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. CLOSING -->
+    <section class="th-close" aria-labelledby="closeTitle">
+      <div class="wrap">
+        <div class="ink-divider text-reveal" aria-hidden="true">✦</div>
+        <h2 id="closeTitle" class="text-reveal">Take what serves you. Leave what doesn’t.</h2>
+        <p class="text-reveal">Let your experience guide you. New teachings are added over time — subscribe to follow along, or choose the path that fits where you are today.</p>
+        <div class="exp-btn-row text-reveal">
+          <a class="exp-btn exp-btn--primary" href="https://www.youtube.com/@seek_consciousness" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 8.3l6 3.7-6 3.7z"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>Subscribe On YouTube</a>
+          <a class="exp-btn" href="index.html#choose-path">Choose Your Path</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <a class="footer-logo" href="index.html" aria-label="Return to the homepage"><img src="assets/media/seek-consciousness-logo.png" alt="Seek Consciousness"></a>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="index.html#intro">Recognition</a>
+        <a href="index.html#mission">Seek Consciousness</a>
+        <a href="index.html#choose-path">Choose Your Path</a>
+        <a href="teachings.html">Teachings</a>
+        <a href="seeker.html">The Seeker</a>
+      </nav>
+    </div>
+    <p class="copyright">&copy; <span id="year"></span> Seek Consciousness. All rights reserved.</p>
+  </footer>
+
+  <script>
+  (()=>{
+    'use strict';
+    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Mobile nav
+    const toggle=document.querySelector('.nav-toggle'); const nav=document.getElementById('primaryNav');
+    const setNav=open=>{nav.classList.toggle('open',open);toggle.classList.toggle('open',open);toggle.setAttribute('aria-expanded',String(open));};
+    toggle?.addEventListener('click',()=>setNav(!nav.classList.contains('open')));
+    nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setNav(false)));
+
+    // Text reveal
+    const items=[...document.querySelectorAll('.text-reveal')];
+    if(reduced||!('IntersectionObserver'in window)) items.forEach(x=>x.classList.add('is-visible')); else {
+      const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -4%'});
+      items.forEach(x=>io.observe(x));
+    }
+
+    // Reading progress thread
+    const progressFill=document.getElementById('readProgressFill');
+    const updateProgress=()=>{
+      const doc=document.documentElement;
+      const scrollable=doc.scrollHeight-doc.clientHeight;
+      const pct=scrollable>0?Math.min(100,Math.max(0,(window.scrollY/scrollable)*100)):0;
+      if(progressFill) progressFill.style.width=pct+'%';
+    };
+    window.addEventListener('scroll',updateProgress,{passive:true});
+    window.addEventListener('resize',updateProgress);
+    updateProgress();
+
+    // ---------- Library: Tree-part buttons + search ----------
+    // Buttons are built from the .tl-group sections, so a new group adds its own button.
+    const groups=[...document.querySelectorAll('.tl-group')];
+    const topicBar=document.getElementById('tlTopics');
+    const search=document.getElementById('tlSearch');
+    const clearBtn=document.getElementById('tlClear');
+    const empty=document.getElementById('tlEmpty');
+    const library=document.getElementById('library');
+    let activeGroup='all';
+
+    const makeBtn=(value,label)=>{
+      const b=document.createElement('button');
+      b.type='button'; b.className='tl-topic-btn'; b.dataset.group=value; b.textContent=label;
+      b.setAttribute('aria-pressed',String(value===activeGroup));
+      b.addEventListener('click',()=>{ setGroup(value); library.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'}); });
+      topicBar.appendChild(b);
+    };
+    makeBtn('all','All Teachings');
+    groups.forEach(g=>makeBtn(g.dataset.group,g.dataset.label));
+
+    // Lower-case, drop accents/apostrophes, turn punctuation into spaces → ' word word '
+    const norm=s=>' '+s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[’']/g,'').replace(/[^a-z0-9]+/g,' ').trim()+' ';
+    groups.forEach(g=>{
+      g.querySelectorAll('.tl-collection').forEach(col=>{
+        const head=col.querySelector('.tl-coll-head');
+        col.dataset.text=norm(`${head?head.textContent:''} ${g.dataset.label}`);
+        col.querySelectorAll('.tl-card').forEach(c=>{ c.dataset.text=norm(`${c.textContent} ${c.dataset.keywords||''}`); });
+      });
+      g.querySelectorAll('.tl-soon').forEach(s=>{ s.dataset.text=norm(`${s.textContent} ${g.dataset.label}`); });
+    });
+
+    // every search word must match the start of a word (so "ai" doesn't match "again")
+    const has=(text,words)=>words.every(w=>text.includes(' '+w));
+    const apply=()=>{
+      const words=norm(search.value).trim().split(/\s+/).filter(Boolean);
+      let anyVisible=false;
+      groups.forEach(g=>{
+        let shown=0;
+        g.querySelectorAll('.tl-collection').forEach(col=>{
+          const colMatch=has(col.dataset.text,words);
+          let n=0;
+          col.querySelectorAll('.tl-card').forEach(c=>{
+            const match=colMatch||has(`${c.dataset.text} ${col.dataset.text}`,words);
+            const holder=c.closest('.tl-series > li')||c;
+            holder.hidden=!match;
+            if(match){ n++; holder.classList.add('is-visible'); }
+          });
+          col.hidden=n===0; shown+=n;
+        });
+        let soon=0;
+        g.querySelectorAll('.tl-soon').forEach(s=>{
+          const match=has(s.dataset.text,words);
+          s.hidden=!match; if(match){ soon++; s.classList.add('is-visible'); }
+        });
+        g.querySelectorAll('.tl-soon-grid').forEach(grid=>{ grid.hidden=soon===0; });
+        g.querySelectorAll('.tl-soon-label').forEach(l=>{ l.hidden=soon===0||shown===0; });
+        shown+=soon;
+        g.hidden=!((activeGroup==='all'||g.dataset.group===activeGroup)&&shown>0);
+        if(!g.hidden){ anyVisible=true; g.querySelectorAll('.text-reveal').forEach(x=>x.classList.add('is-visible')); }
+      });
+      empty.hidden=anyVisible;
+      clearBtn.hidden=!search.value;
+      updateProgress();
+    };
+    const setGroup=value=>{
+      activeGroup=value;
+      topicBar.querySelectorAll('.tl-topic-btn').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.group===value)));
+      apply();
+    };
+    search.addEventListener('input',apply);
+    clearBtn.addEventListener('click',()=>{ search.value=''; apply(); search.focus(); });
+    document.getElementById('tlReset').addEventListener('click',()=>{ search.value=''; setGroup('all'); });
+
+    // Tree links into a collection always land on something visible
+    document.querySelectorAll('[data-topic-link]').forEach(a=>a.addEventListener('click',()=>{
+      search.value=''; setGroup('all');
+    }));
+
+    // ---------- The Tree ----------
+    const spots=[...document.querySelectorAll('.th-spot')];
+    const panels=[...document.querySelectorAll('.th-panel')];
+    const showPart=part=>{
+      spots.forEach(s=>s.setAttribute('aria-pressed',String(s.dataset.part===part)));
+      panels.forEach(p=>{p.hidden=p.dataset.panel!==part;});
+    };
+    spots.forEach(s=>{
+      s.addEventListener('click',()=>showPart(s.dataset.part));
+      s.addEventListener('mouseenter',()=>{ if(window.matchMedia('(hover:hover)').matches) showPart(s.dataset.part); });
+    });
+
+    document.getElementById('year').textContent=new Date().getFullYear();
+  })();
+  </script>
+</body>
+</html>
