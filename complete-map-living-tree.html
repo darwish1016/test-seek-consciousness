@@ -811,7 +811,12 @@
     const transcriptToggle = document.getElementById('transcriptToggle');
     if(transcriptToggle && transcriptWrapper) {
       transcriptToggle.addEventListener('click', () => {
+        // Open to the transcript's real height, then drop the cap so long
+        // transcripts are never clipped (a fixed max-height cut this one off)
+        const scrollBox = transcriptWrapper.querySelector('.tv-transcript-scroll');
+        scrollBox.style.maxHeight = scrollBox.scrollHeight + 'px';
         transcriptWrapper.classList.add('is-expanded');
+        scrollBox.addEventListener('transitionend', () => { scrollBox.style.maxHeight = 'none'; }, { once: true });
       });
     }
 
