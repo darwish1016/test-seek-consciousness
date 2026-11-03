@@ -520,11 +520,27 @@
     <!-- 1, 5 & 6. VIDEO + COLLAPSIBLE TRANSCRIPT + FULL WIDTH CHAPTERS -->
     <section class="tv-video-section section-pad">
       <div class="tv-video-container">
-        <div class="tv-video-split" style="grid-template-columns:1fr;">
-          <div class="tv-transcript-col text-reveal" style="max-width:860px;">
+        <div class="tv-video-split">
+          <div class="tv-video-col">
+            <div class="tv-video-frame text-reveal">
+              <div class="tv-video-stage">
+                <iframe
+                  id="tvVideoFrame"
+                  src="https://www.youtube.com/embed/shDwmpBA9N0?rel=0&enablejsapi=1"
+                  title="The Missing Piece to Change the World"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <span class="tv-corner tl"></span><span class="tv-corner tr"></span><span class="tv-corner bl"></span><span class="tv-corner br"></span>
+            </div>
+          </div>
+
+          <div class="tv-transcript-col text-reveal">
             <div class="tv-transcript-eyebrow">
               <span>Full Transcript</span>
-              <span class="tv-transcript-caption">Use the chapters to jump</span>
+              <span class="tv-transcript-caption">Click any line to jump</span>
             </div>
             <div class="tv-transcript-wrapper" id="transcriptWrapper">
               <div class="tv-transcript-scroll">
@@ -727,6 +743,7 @@
         <h2 class="text-reveal">Why not you? Why not now?</h2>
         <p class="text-reveal">You want something better for this world, and you have something to give to it. If we want to make bigger changes, it has to start somewhere.</p>
         <div class="exp-btn-row text-reveal">
+          <a class="exp-btn exp-btn--primary" href="https://www.youtube.com/watch?v=shDwmpBA9N0" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 8.3l6 3.7-6 3.7z"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>Watch On YouTube</a>
           <a class="exp-btn" href="https://www.youtube.com/@seek_consciousness" target="_blank" rel="noopener">Subscribe For More</a>
         </div>
       </div>
@@ -892,16 +909,5 @@
   })();
   </script>
   <script src="https://www.youtube.com/iframe_api"></script>
-<script>
-  /* No video on this page yet: chapters open the transcript and scroll to their paragraph. */
-  document.querySelectorAll('.tv-chapter.js-seek').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var w=document.getElementById('transcriptWrapper');
-      var line=document.querySelector('.tv-transcript-line[data-seek="'+btn.dataset.seek+'"]');
-      if(w) w.classList.add('is-expanded');
-      if(line) setTimeout(function(){ line.scrollIntoView({behavior:'smooth',block:'center'}); },50);
-    });
-  });
-</script>
 </body>
 </html>
