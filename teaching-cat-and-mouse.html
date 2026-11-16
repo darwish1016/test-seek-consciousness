@@ -519,6 +519,17 @@
       .footer-inner{align-items:flex-start;flex-direction:column;gap:22px}
       .footer-logo img{width:230px}
     }
+    /* Short ↔ full teaching link — mirrors the card under the video on seekconsciousness.com */
+    .tv-link-card{display:flex;align-items:center;gap:12px;margin-top:18px;padding:12px 14px;background:#FAF5EE;border:1px solid rgba(149,102,44,.45);text-decoration:none;color:inherit;transition:background .3s,border .3s,box-shadow .3s,transform .4s}
+    .tv-link-card:hover{background:#FFFBF4;border-color:rgba(149,102,44,.85);box-shadow:0 14px 30px -22px rgba(63,38,17,.5);transform:translateY(-2px)}
+    .tv-link-thumb{flex:0 0 76px;width:76px;height:57px;object-fit:cover;display:block}
+    .tv-link-text{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:3px}
+    .tv-link-tag{font-family:"Cinzel",Georgia,serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:#95662C;line-height:1.4}
+    .tv-link-title{font-family:"Cormorant Garamond",Georgia,serif;font-size:18px;font-weight:600;line-height:1.25;color:#241B14;margin:0}
+    .tv-link-desc{font-family:"Cormorant Garamond",Georgia,serif;font-size:15px;line-height:1.45;color:#5A4E44;margin:0}
+    .tv-link-arrow{flex:0 0 auto;color:#95662C;font-size:1.2rem;padding:0 4px 0 8px;transition:transform .3s}
+    .tv-link-card:hover .tv-link-arrow{transform:translateX(4px)}
+    @media(max-width:520px){.tv-link-thumb{flex-basis:64px;width:64px;height:48px}.tv-link-desc{display:none}}
   </style>
 </head>
 <body>
@@ -584,6 +595,7 @@
                   allowfullscreen
                 ></iframe>
               </div>
+              <a class="tv-link-card" href="seek-in-60-one-thought.html"><img class="tv-link-thumb" src="https://img.youtube.com/vi/tbp3hC2a4Dk/mqdefault.jpg" alt="" loading="lazy"><span class="tv-link-text"><span class="tv-link-tag">Seek in 60 · The One-Minute Version</span><span class="tv-link-title">Short on time? One Thought Can Hijack Your Mind</span></span><span class="tv-link-arrow" aria-hidden="true">→</span></a>
               <span class="tv-corner tl"></span><span class="tv-corner tr"></span><span class="tv-corner bl"></span><span class="tv-corner br"></span>
             </div>
           </div>
