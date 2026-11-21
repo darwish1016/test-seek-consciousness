@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!-- Along the Path: email list landing page. An invitation, not a funnel.
+<!-- Along the Path: email list landing page. Light hero: cairn photo (along-the-path-hero.webp) under a cream fade, ink text. An invitation, not a funnel.
      Draft copy for Kurt: the four kinds of emails, "Not often" in Good to Know, and the list name itself.
-     The form is a demo until the email tool (MailerLite / Kit) is chosen. See the TODO above the form. -->
+     The form is a demo until it is connected to Kit. See the TODO above the form. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -85,6 +85,21 @@
     .exp-hero-scroll::after{content:'';width:1px;height:18px;background:var(--ochre-light);animation:scrollPulse 2.4s ease-in-out infinite}
     @keyframes scrollPulse{0%,100%{opacity:.3}50%{opacity:1}}
 
+    /* ===== Light hero for this page (Kurt prefers light backgrounds) ===== */
+    .exp-hero{background:var(--paper-light)}
+    .exp-hero-media{object-fit:cover;object-position:75% 60%;filter:none}
+    .exp-hero-scrim{background:linear-gradient(90deg,rgba(246,239,227,.9) 0%,rgba(246,239,227,.72) 34%,rgba(246,239,227,.25) 58%,rgba(246,239,227,0) 72%)}
+    .exp-breadcrumb,.exp-breadcrumb a{color:rgba(36,27,20,.6)}
+    .exp-breadcrumb a:hover{color:var(--ink)}
+    .exp-breadcrumb-sep{color:var(--ochre)}
+    .exp-breadcrumb-current{color:rgba(36,27,20,.85)}
+    .exp-hero-eyebrow{color:var(--ochre);text-shadow:none}
+    .exp-hero h1{color:var(--ink);text-shadow:none}
+    .exp-hero-text{color:rgba(36,27,20,.84);text-shadow:none}
+    .exp-hero-close{border-top-color:var(--line-strong);color:var(--ochre)}
+    .exp-hero-scroll{color:rgba(36,27,20,.7)}
+    .exp-hero-scroll::after{background:var(--ochre)}
+
     /* ===== Buttons (seeker.html exp-btn) ===== */
     .exp-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 30px;border:1px solid var(--ink);font-family:var(--display);font-size:.7rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--ink);background:transparent;cursor:pointer;transition:.3s var(--ease)}
     .exp-btn--primary{border-color:var(--ochre);color:var(--ochre)}
@@ -105,29 +120,12 @@
     .receive-card h3{font-size:clamp(1.2rem,1.6vw,1.45rem);line-height:1.2;margin-bottom:12px}
     .receive-card p{font-size:1.08rem;color:var(--muted);line-height:1.5}
 
-    /* ===== A sample ===== */
-    .sample-section{background:var(--paper)}
-    .sample-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(40px,7vw,100px);align-items:center}
-    .sample-copy .section-copy{margin-top:24px}
-    .sample-copy .text-link{margin-top:30px}
-    .sample-mail{position:relative;background:var(--paper-pale);border:1px solid var(--line-strong);box-shadow:0 1px 0 rgba(255,251,240,.6) inset,0 34px 80px rgba(63,38,17,.18)}
-    .sample-mail-head{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;padding:22px clamp(22px,3vw,36px);border-bottom:1px solid var(--line);font-size:1rem;color:var(--muted)}
-    .sample-mail-head dt{font-family:var(--display);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre);padding-top:3px}
-    .sample-mail-head dd{color:var(--ink)}
-    .sample-mail-body{padding:clamp(26px,3.4vw,42px) clamp(22px,3vw,36px) clamp(28px,3.4vw,40px);font-size:1.22rem;line-height:1.6;color:rgba(36,27,20,.86)}
-    .sample-mail-body p+p{margin-top:1rem}
-    .sample-mail-body .sign{margin-top:1.4rem;font-style:italic;color:var(--ochre)}
-    .sample-note{margin-top:14px;font-size:.95rem;font-style:italic;color:var(--muted)}
-
-    /* ===== Why I share this (Kurt's note) ===== */
-    .why-section{background:#0d0a07;color:#f8f0dd;overflow:hidden}
-    .why-section::before{content:'';position:absolute;left:62%;top:50%;width:min(900px,110vw);height:min(900px,110vw);transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(217,168,105,.14) 0%,rgba(217,168,105,.05) 38%,transparent 68%);pointer-events:none}
-    .why-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(40px,7vw,100px);align-items:center}
-    .why-section .eyebrow{color:var(--ochre-light)}
-    .why-section .section-title{color:#fff}
-    .why-section .section-copy{margin-top:26px;color:rgba(248,240,221,.84)}
+    /* ===== Why I share this (light, Kurt's signed note cut out of its black background) ===== */
+    .why-section{background:var(--paper)}
+    .why-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(40px,7vw,100px);align-items:center}
+    .why-section .section-copy{margin-top:26px}
     .why-note{justify-self:center;width:min(380px,100%)}
-    .why-note img{width:100%;height:auto;mix-blend-mode:lighten}
+    .why-note img{width:100%;height:auto;filter:drop-shadow(0 26px 40px rgba(63,38,17,.24));transform:rotate(-1.2deg)}
 
     /* ===== Good to know ===== */
     .know-section{background:var(--paper-pale)}
@@ -178,7 +176,7 @@
       .receive-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
     @media(max-width:900px){
-      .sample-grid,.why-grid,.join-grid{grid-template-columns:1fr}
+      .why-grid,.join-grid{grid-template-columns:1fr}
       .why-note{width:min(300px,80%)}
     }
     @media(max-width:760px){
@@ -191,8 +189,11 @@
       .primary-nav.open{opacity:1;visibility:visible;transform:none}
       .primary-nav a{padding:13px 0;border-top:1px solid var(--line)}
       .exp-hero{min-height:620px}
-      .exp-hero-media{object-position:62% 60%}
-      .exp-hero-scrim{background:linear-gradient(180deg,rgba(4,3,1,.35) 0%,rgba(4,3,1,.55) 42%,rgba(4,3,1,.55) 62%,rgba(4,3,1,.4) 100%),linear-gradient(90deg,rgba(4,3,1,.5) 0%,rgba(4,3,1,0) 85%)}
+      /* Phone: text first on paper, then the cairn photo fading in from the top */
+      .exp-hero{height:auto;min-height:0;flex-direction:column;align-items:stretch;padding-top:calc(var(--header-height) + 36px)}
+      .exp-hero-content{order:1}
+      .exp-hero-media{order:2;position:relative;inset:auto;height:min(380px,95vw);margin-top:20px;object-position:70% 75%;-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 28%);mask-image:linear-gradient(180deg,transparent 0%,#000 28%)}
+      .exp-hero-scrim{display:none}
       .exp-hero-content{padding:0 20px}
       .exp-hero h1{font-size:clamp(2.1rem,9vw,3.15rem);margin-bottom:14px}
       .exp-hero-text{font-size:1.16rem;line-height:1.5}
@@ -200,7 +201,6 @@
       .section-title{font-size:clamp(2.1rem,9vw,3.15rem)}
       .section-copy{font-size:1.16rem}
       .receive-grid{grid-template-columns:1fr}
-      .sample-mail-body{font-size:1.12rem}
       .know-item{grid-template-columns:1fr;gap:6px;padding:20px 0}
       .site-footer{padding:48px 6vw 24px}
       .footer-inner{align-items:flex-start;flex-direction:column;gap:22px}
@@ -230,7 +230,7 @@
   <main>
     <!-- 1. The invitation -->
     <section class="exp-hero" id="top" aria-labelledby="pageTitle">
-      <video class="exp-hero-media" id="heroVideo" src="assets/media/explorer-hero.mp4" poster="assets/media/along-the-path-poster.jpg" autoplay muted loop playsinline preload="auto" tabindex="-1" disablepictureinpicture aria-hidden="true"></video>
+      <img class="exp-hero-media" src="assets/media/along-the-path-hero.webp" alt="" aria-hidden="true" fetchpriority="high">
       <div class="exp-hero-scrim" aria-hidden="true"></div>
       <div class="exp-hero-content">
         <div class="exp-hero-copy">
@@ -242,8 +242,8 @@
           <span class="eyebrow exp-hero-eyebrow text-reveal">Other Ways To Explore</span>
           <h1 id="pageTitle" class="text-reveal">Along the Path</h1>
           <div class="exp-hero-text text-reveal">
-            <p>Some things don't fit in a video. A guide to go slower with. A practice to try over a few days. What I've been reflecting on, and a note when there's something new or a chance to sit together live.</p>
-            <p class="exp-hero-close">If that sounds useful, you're welcome to come along. If not, everything here stays open to you.</p>
+            <p>I can share a teaching in a video, but living it happens in your own day. These emails are how I stay with you there: something small to practice, what I've been reflecting on, and a note when there's something new or a chance to sit together live.</p>
+            <p class="exp-hero-close">If that sounds useful, you're welcome to come along.</p>
           </div>
         </div>
       </div>
@@ -256,13 +256,13 @@
         <div class="receive-head">
           <span class="eyebrow text-reveal">What You'd Receive</span>
           <h2 id="receiveTitle" class="section-title text-reveal">A little more than the videos.</h2>
-          <p class="section-copy text-reveal">The website is the map. The videos are the teachings. These emails are for the days in between, when you want something small and real to come back to.</p>
+          <p class="section-copy text-reveal">The website is the map. The videos are the teachings. These emails help you carry them into your day.</p>
         </div>
         <div class="receive-grid">
           <article class="receive-card text-reveal">
             <span class="receive-num">01</span>
             <h3>Guides</h3>
-            <p>Simple companions to the teachings, for when you'd rather sit with something than scroll past it.</p>
+            <p>Simple companions to the teachings, to take a little further on your own.</p>
           </article>
           <article class="receive-card text-reveal">
             <span class="receive-num">02</span>
@@ -283,35 +283,7 @@
       </div>
     </section>
 
-    <!-- 3. A sample: Kurt's own words from the Mini Meditation teaching (phone-check-meditation.html) -->
-    <section class="section-pad sample-section" id="sample" aria-labelledby="sampleTitle">
-      <div class="wrap sample-grid">
-        <div class="sample-copy">
-          <span class="eyebrow text-reveal">A Taste Of One</span>
-          <h2 id="sampleTitle" class="section-title text-reveal">Here's what one might look like.</h2>
-          <p class="section-copy text-reveal">Short enough to read in a minute. Simple enough to try before you put your phone down.</p>
-          <a class="text-link text-reveal" href="phone-check-meditation.html">Watch the full mini meditation <span aria-hidden="true">→</span></a>
-        </div>
-        <div class="text-reveal">
-          <div class="sample-mail">
-            <dl class="sample-mail-head">
-              <dt>From</dt><dd>Kurt, Seek Consciousness</dd>
-              <dt>Subject</dt><dd>Before you check your phone</dd>
-            </dl>
-            <div class="sample-mail-body">
-              <p>How many times a day do you pick up your phone without even knowing why? You're not checking a message. You're not looking for anything important. You just reach for it out of habit.</p>
-              <p>Next time, take 30 seconds. Take a nice full breath in, allowing your belly to expand. Then slowly exhale. Make your exhale a little longer than your inhale.</p>
-              <p>Now look around. Notice the light, the colors, the sounds, the little details you would normally overlook.</p>
-              <p>You don't meditate once and become enlightened. You keep coming back. Every time you return to awareness, you're making a little shift. And those shifts add up.</p>
-              <p class="sign">Kurt</p>
-            </div>
-          </div>
-          <p class="sample-note">In Kurt's words, from his mini meditation teaching.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. Why I share this: Kurt's signed note -->
+    <!-- 3. Why I share this -->
     <section class="section-pad why-section" id="why" aria-labelledby="whyTitle">
       <div class="wrap why-grid">
         <div>
@@ -319,21 +291,20 @@
           <h2 id="whyTitle" class="section-title text-reveal">The map I wish someone had handed me.</h2>
           <div class="section-copy text-reveal">
             <p>For years I wrote things down everywhere: notes, journals, documents, little pieces scattered all over the place. These emails are where some of those pieces go.</p>
-            <p>Take what serves you. Leave what doesn't.</p>
           </div>
         </div>
-        <figure class="why-note">
-          <img src="assets/media/kurt-note.jpg" alt="A handwritten note from Kurt: I spent decades exploring meditation, ancient wisdom, psychology, neuroscience, breathwork, and expanded states of consciousness. Seek Consciousness is the map I wish someone had handed me. My hope is that it helps you discover your own path." loading="lazy">
+        <figure class="why-note text-reveal">
+          <img src="assets/media/kurt-note-cutout.webp" alt="A handwritten note from Kurt: I spent decades exploring meditation, ancient wisdom, psychology, neuroscience, breathwork, and expanded states of consciousness. Seek Consciousness is the map I wish someone had handed me. My hope is that it helps you discover your own path." loading="lazy">
         </figure>
       </div>
     </section>
 
-    <!-- 5. Good to know -->
+    <!-- 4. Good to know -->
     <section class="section-pad know-section" id="know" aria-labelledby="knowTitle">
       <div class="wrap">
         <div class="know-head">
           <span class="eyebrow text-reveal">Good To Know</span>
-          <h2 id="knowTitle" class="section-title text-reveal">No pressure, either way.</h2>
+          <h2 id="knowTitle" class="section-title text-reveal">A few simple answers.</h2>
         </div>
         <div class="know-list">
           <div class="know-item text-reveal"><h3>Does it cost anything?</h3><p>No. Joining is free.</p></div>
@@ -345,14 +316,14 @@
       </div>
     </section>
 
-    <!-- 6. Join -->
-    <!-- TODO: point the form at the email tool's signup URL (MailerLite / Kit) with double opt-in, then remove the demo handler at the bottom. -->
+    <!-- 5. Join -->
+    <!-- TODO: replace this form with the Kit form (action = the Kit form URL, field names from Kit, double opt-in on), then remove the demo handler at the bottom. -->
     <section class="section-pad join-section" id="join" aria-labelledby="joinTitle">
       <div class="wrap join-grid">
         <div class="join-copy">
           <span class="eyebrow text-reveal">Whenever You're Ready</span>
-          <h2 id="joinTitle" class="section-title text-reveal">Come along, if it feels right.</h2>
-          <p class="section-copy text-reveal">Leave your email and the next one will find you. Or don't. The teachings are always open, and the path is yours either way.</p>
+          <h2 id="joinTitle" class="section-title text-reveal">Come along.</h2>
+          <p class="section-copy text-reveal">Leave your email and the next one will find you.</p>
           <div class="join-door text-reveal" aria-hidden="true"><img src="assets/media/recognition-question.jpg" alt="" loading="lazy"></div>
         </div>
         <div class="join-card text-reveal">
@@ -404,16 +375,12 @@
     toggle?.addEventListener('click',()=>{const open=!nav.classList.contains('open');nav.classList.toggle('open',open);toggle.setAttribute('aria-expanded',String(open));});
     nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
 
-    // Hero video holds still for people who prefer less motion (the poster frame shows instead)
-    const video=document.getElementById('heroVideo');
-    if(reduced&&video){video.removeAttribute('autoplay');video.pause();}
-
     const items=[...document.querySelectorAll('.text-reveal')];
     if(reduced||!('IntersectionObserver'in window)) items.forEach(x=>x.classList.add('is-visible')); else {
       const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -4%'});items.forEach(x=>io.observe(x));
     }
 
-    // Demo only: shows the thank-you message. Replace with the email tool's form action.
+    // Demo only: shows the thank-you message. Remove once the form posts to Kit.
     document.querySelectorAll('.join-form').forEach(f=>f.addEventListener('submit',e=>{
       e.preventDefault(); if(!f.checkValidity()){f.reportValidity();return;}
       f.hidden=true; f.nextElementSibling.hidden=false;
