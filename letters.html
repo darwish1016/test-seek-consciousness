@@ -287,9 +287,9 @@
   .light-pool{right:8%;top:30%}
 
   /* v5: hero photo fades into the next (sand) section */
-  .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:26%;z-index:1;pointer-events:none;
+  .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:10%;z-index:1;pointer-events:none;
     background:linear-gradient(180deg,rgba(223,207,180,0) 0%,rgba(223,207,180,.35) 45%,rgba(223,207,180,.85) 82%,#dfcfb4 100%)}
-  @media (max-width:760px){.hero::after{height:18%}}
+  @media (max-width:760px){.hero::after{height:10%}}
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation:none !important;transition:none !important}
     .reveal{opacity:1;transform:none}
