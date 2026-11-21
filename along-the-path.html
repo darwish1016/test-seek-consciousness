@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<!-- Along the Path: email list landing page. An invitation, not a funnel.
+     Draft copy for Kurt: the four kinds of emails, "Not often" in Good to Know, and the list name itself.
+     The form is a demo until the email tool (MailerLite / Kit) is chosen. See the TODO above the form. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Along the Path — Seek Consciousness</title>
+  <meta name="description" content="Guides, short practice series, notes from Kurt, and a quiet note when there's a new teaching or a chance to sit together live. Free, and yours to leave anytime.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    /* Brand tokens, header, hero, buttons and footer copied from seeker.html */
+    :root {
+      --paper:#eadfcb;
+      --paper-light:#f6efe3;
+      --paper-pale:#fbf7ee;
+      --paper-deep:#dfcfb4;
+      --ink:#241b14;
+      --muted:#726658;
+      --ochre:#95662c;
+      --ochre-soft:#c79859;
+      --ochre-light:#d9a869;
+      --line:rgba(61,43,25,.17);
+      --line-strong:rgba(149,102,44,.42);
+      --header-height:78px;
+      --serif:'Cormorant Garamond', Georgia, serif;
+      --display:'Cinzel', Georgia, serif;
+      --ease:cubic-bezier(.22,.61,.36,1);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{overflow-x:hidden;background:var(--paper-light);color:var(--ink);font-family:var(--serif);font-size:18px;font-weight:500;line-height:1.65;-webkit-font-smoothing:antialiased}
+    body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+      radial-gradient(circle at 12% 8%,rgba(199,152,89,.08),transparent 25%),
+      radial-gradient(circle at 88% 32%,rgba(149,102,44,.05),transparent 30%),
+      linear-gradient(90deg,rgba(80,55,28,.018) 1px,transparent 1px),
+      linear-gradient(rgba(80,55,28,.014) 1px,transparent 1px);background-size:auto,auto,44px 44px,44px 44px}
+    img{display:block;max-width:100%}
+    a{color:inherit;text-decoration:none}
+    button,input{font:inherit;color:inherit}
+    h1,h2,h3{font-family:var(--display);font-weight:500;line-height:1.1;letter-spacing:.01em}
+    p+p{margin-top:.55rem}
+    ::selection{background:var(--ochre);color:white}
+    section{scroll-margin-top:calc(var(--header-height) + 20px)}
+    .wrap{width:min(1280px,88vw);margin:0 auto}
+    .eyebrow{display:block;margin-bottom:16px;font-family:var(--display);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ochre)}
+    .text-reveal{opacity:0;transform:translateY(20px);transition:opacity .72s var(--ease),transform .72s var(--ease)}
+    .text-reveal.is-visible{opacity:1;transform:none}
+    .section-pad{padding:clamp(70px,8vw,110px) 0;position:relative}
+    .section-title{font-size:clamp(2.3rem,4.2vw,4.2rem);text-wrap:balance}
+    .section-copy{font-size:23px;color:rgba(36,27,20,.8);max-width:52ch}
+
+    /* ===== Header (same component as seeker.html) ===== */
+    .site-header{position:fixed;inset:0 0 auto;z-index:100;height:var(--header-height);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(22px,6vw,92px);color:var(--ink);background:rgba(244,236,222,.9);border-bottom:1px solid var(--line);box-shadow:0 12px 30px rgba(36,27,20,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+    .site-logo{display:block;line-height:0}
+    .site-logo img{width:clamp(122px,11vw,174px);height:auto;object-fit:contain;filter:brightness(.46) saturate(1.3) contrast(1.05);transition:filter .25s ease}
+    .site-logo:hover img{filter:brightness(.36) saturate(1.4) contrast(1.08)}
+    .primary-nav{display:flex;align-items:center;gap:28px}
+    .primary-nav a{position:relative;font-family:var(--display);font-size:.76rem;letter-spacing:.05em;color:rgba(36,27,20,.72);transition:color .25s ease}
+    .primary-nav a::after{content:'';position:absolute;left:0;right:100%;bottom:-6px;height:1px;background:var(--ochre);transition:right .3s var(--ease)}
+    .primary-nav a:hover{color:var(--ink)}
+    .primary-nav a:hover::after{right:0}
+    .nav-toggle{display:none;width:44px;height:44px;border:0;background:transparent;cursor:pointer}
+    .nav-toggle span{display:block;width:24px;height:1px;margin:6px auto;background:var(--ink);transition:.25s ease}
+
+    /* ===== Hero (same component as the path pages) ===== */
+    .exp-hero{position:relative;height:100svh;min-height:660px;display:flex;align-items:center;overflow:hidden;isolation:isolate;background:#040301}
+    .exp-hero-media{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;object-position:center 60%;filter:saturate(.9) contrast(1.03) brightness(.78);pointer-events:none}
+    .exp-hero-scrim{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg,rgba(4,3,1,0) 0%,rgba(4,3,1,.3) 42%,rgba(4,3,1,.88) 100%),linear-gradient(90deg,rgba(4,3,1,.72) 0%,rgba(4,3,1,.32) 38%,rgba(4,3,1,0) 68%)}
+    .exp-hero-content{position:relative;z-index:3;width:100%;padding:0 clamp(22px,6vw,92px)}
+    .exp-hero-copy{position:relative;max-width:min(640px,88vw)}
+    .exp-breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-family:var(--display);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,247,231,.68)}
+    .exp-breadcrumb a{position:relative;color:rgba(255,247,231,.68);transition:color .25s ease}
+    .exp-breadcrumb a:hover{color:#fff}
+    .exp-breadcrumb-sep{color:var(--ochre-light)}
+    .exp-breadcrumb-current{color:rgba(255,247,231,.92)}
+    .exp-hero-eyebrow{color:var(--ochre-light);letter-spacing:.13em;text-shadow:0 2px 16px rgba(0,0,0,.5)}
+    .exp-hero h1{font-size:clamp(2.3rem,5.2vw,3.9rem);color:#fff;text-transform:uppercase;letter-spacing:.005em;margin-bottom:22px;text-wrap:balance;text-shadow:0 4px 26px rgba(0,0,0,.55)}
+    .exp-hero-text{max-width:52ch;font-size:clamp(1.18rem,1.6vw,1.42rem);color:rgba(255,247,231,.92);line-height:1.55;text-shadow:0 2px 18px rgba(0,0,0,.5)}
+    .exp-hero-close{display:block;margin-top:1.2rem;padding-top:1.1rem;border-top:1px solid rgba(255,247,231,.28);color:var(--ochre-light);font-style:italic}
+    .exp-hero-scroll{position:absolute;bottom:28px;right:clamp(22px,6vw,92px);z-index:3;display:flex;align-items:center;gap:10px;padding:10px 16px;font-family:var(--display);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,247,231,.85)}
+    .exp-hero-scroll::after{content:'';width:1px;height:18px;background:var(--ochre-light);animation:scrollPulse 2.4s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+    /* ===== Buttons (seeker.html exp-btn) ===== */
+    .exp-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 30px;border:1px solid var(--ink);font-family:var(--display);font-size:.7rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--ink);background:transparent;cursor:pointer;transition:.3s var(--ease)}
+    .exp-btn--primary{border-color:var(--ochre);color:var(--ochre)}
+    .exp-btn:hover{background:var(--ink);color:var(--paper-light)}
+    .exp-btn--primary:hover{background:var(--ochre);color:#fff}
+    .text-link{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ochre)}
+    .text-link span{transition:transform .25s ease}
+    .text-link:hover span{transform:translateX(4px)}
+
+    /* ===== What you'd receive ===== */
+    .receive-section{background:var(--paper-pale)}
+    .receive-head{max-width:760px;margin-bottom:48px}
+    .receive-head .section-copy{margin-top:24px}
+    .receive-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+    .receive-card{display:flex;flex-direction:column;background:var(--paper-light);border:1px solid var(--line);padding:30px 26px 28px;transition:border-color .3s ease,transform .3s var(--ease)}
+    @media (hover:hover) and (pointer:fine){.receive-card:hover{border-color:rgba(149,102,44,.4);transform:translateY(-3px)}}
+    .receive-num{font-family:var(--display);font-size:.64rem;letter-spacing:.14em;color:var(--ochre);margin-bottom:18px}
+    .receive-card h3{font-size:clamp(1.2rem,1.6vw,1.45rem);line-height:1.2;margin-bottom:12px}
+    .receive-card p{font-size:1.08rem;color:var(--muted);line-height:1.5}
+
+    /* ===== A sample ===== */
+    .sample-section{background:var(--paper)}
+    .sample-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(40px,7vw,100px);align-items:center}
+    .sample-copy .section-copy{margin-top:24px}
+    .sample-copy .text-link{margin-top:30px}
+    .sample-mail{position:relative;background:var(--paper-pale);border:1px solid var(--line-strong);box-shadow:0 1px 0 rgba(255,251,240,.6) inset,0 34px 80px rgba(63,38,17,.18)}
+    .sample-mail-head{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;padding:22px clamp(22px,3vw,36px);border-bottom:1px solid var(--line);font-size:1rem;color:var(--muted)}
+    .sample-mail-head dt{font-family:var(--display);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre);padding-top:3px}
+    .sample-mail-head dd{color:var(--ink)}
+    .sample-mail-body{padding:clamp(26px,3.4vw,42px) clamp(22px,3vw,36px) clamp(28px,3.4vw,40px);font-size:1.22rem;line-height:1.6;color:rgba(36,27,20,.86)}
+    .sample-mail-body p+p{margin-top:1rem}
+    .sample-mail-body .sign{margin-top:1.4rem;font-style:italic;color:var(--ochre)}
+    .sample-note{margin-top:14px;font-size:.95rem;font-style:italic;color:var(--muted)}
+
+    /* ===== Why I share this (Kurt's note) ===== */
+    .why-section{background:#0d0a07;color:#f8f0dd;overflow:hidden}
+    .why-section::before{content:'';position:absolute;left:62%;top:50%;width:min(900px,110vw);height:min(900px,110vw);transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(217,168,105,.14) 0%,rgba(217,168,105,.05) 38%,transparent 68%);pointer-events:none}
+    .why-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(40px,7vw,100px);align-items:center}
+    .why-section .eyebrow{color:var(--ochre-light)}
+    .why-section .section-title{color:#fff}
+    .why-section .section-copy{margin-top:26px;color:rgba(248,240,221,.84)}
+    .why-note{justify-self:center;width:min(380px,100%)}
+    .why-note img{width:100%;height:auto;mix-blend-mode:lighten}
+
+    /* ===== Good to know ===== */
+    .know-section{background:var(--paper-pale)}
+    .know-head{max-width:620px;margin:0 auto 34px;text-align:center}
+    .know-list{max-width:800px;margin:0 auto;border-top:1px solid var(--line)}
+    .know-item{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:24px;padding:24px 0;border-bottom:1px solid var(--line)}
+    .know-item h3{font-size:1.06rem;line-height:1.35;padding-top:4px}
+    .know-item p{font-size:1.18rem;color:var(--muted);line-height:1.5}
+
+    /* ===== Join ===== */
+    .join-section{background:var(--paper)}
+    .join-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,7vw,100px);align-items:center}
+    .join-copy .section-copy{margin-top:24px}
+    .join-card{background:var(--paper-pale);border:1px solid var(--line-strong);padding:clamp(30px,4vw,46px);box-shadow:0 34px 80px rgba(63,38,17,.16)}
+    .join-card h3{font-size:1.5rem;margin-bottom:6px}
+    .join-card .join-sub{font-size:1.06rem;font-style:italic;color:var(--muted);margin-bottom:28px}
+    .join-card label{display:block;margin-bottom:6px;font-family:var(--display);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+    .join-card input{display:block;width:100%;margin-bottom:24px;padding:10px 2px;font-size:1.2rem;background:transparent;border:0;border-bottom:1px solid rgba(61,43,25,.35);border-radius:0;color:var(--ink)}
+    .join-card input::placeholder{color:rgba(114,102,88,.65)}
+    .join-card input:focus{outline:none;border-bottom-color:var(--ochre)}
+    .join-card .exp-btn{width:100%;margin-top:4px}
+    .join-fine{margin-top:16px;font-size:.98rem;text-align:center;color:var(--muted)}
+    .join-thanks h3{margin-bottom:14px}
+    .join-thanks p{font-size:1.18rem;color:rgba(36,27,20,.82)}
+    .join-thanks .text-link{margin-top:24px}
+    .join-door{margin-top:34px;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--line-strong);padding:8px;background:rgba(255,255,255,.22)}
+    .join-door img{width:100%;height:100%;object-fit:cover;object-position:80% 50%;filter:saturate(.9) sepia(.06)}
+
+    /* ===== Footer (same component as seeker.html) ===== */
+    .site-footer{position:relative;padding:64px 6vw 30px;background:var(--paper-deep);color:rgba(36,27,20,.7);border-top:1px solid var(--line)}
+    .site-footer::before{content:'';position:absolute;top:-1px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ochre) 50%,transparent)}
+    .footer-inner{width:min(1380px,100%);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:35px;flex-wrap:wrap}
+    .footer-logo img{width:clamp(180px,18vw,290px);height:auto;object-fit:contain;filter:brightness(.46) saturate(1.3) contrast(1.05)}
+    .footer-nav{display:flex;flex-wrap:wrap;gap:22px}
+    .footer-nav a{position:relative;font-family:var(--display);font-size:.67rem;letter-spacing:.08em;color:rgba(36,27,20,.68);transition:color .25s ease}
+    .footer-nav a::after{content:'';position:absolute;left:0;right:100%;bottom:-5px;height:1px;background:var(--ochre);transition:right .3s var(--ease)}
+    .footer-nav a:hover{color:var(--ink)}
+    .footer-nav a:hover::after{right:0}
+    .copyright{margin-top:28px;text-align:center;font-size:.82rem;color:rgba(36,27,20,.45)}
+    .footer-socials{display:flex;align-items:center;gap:10px}
+    .footer-social{width:42px;height:42px;display:grid;place-items:center;border:1px solid rgba(149,102,44,.38);border-radius:50%;color:#241b14;background:rgba(255,255,255,.12);transition:color .25s ease,background .25s ease,border-color .25s ease,transform .25s var(--ease)}
+    .footer-social svg{width:18px;height:18px;display:block}
+    .footer-social:hover{color:#fff;background:#95662c;border-color:#95662c;transform:translateY(-2px)}
+    .footer-social:focus-visible{outline:2px solid #95662c;outline-offset:4px}
+
+    /* ===== Responsive ===== */
+    @media(max-width:1100px){
+      .receive-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media(max-width:900px){
+      .sample-grid,.why-grid,.join-grid{grid-template-columns:1fr}
+      .why-note{width:min(300px,80%)}
+    }
+    @media(max-width:760px){
+      :root{--header-height:64px}
+      body{font-size:17px}
+      .site-header{padding:0 18px}
+      .site-logo img{width:90px}
+      .nav-toggle{display:block}
+      .primary-nav{position:absolute;top:100%;left:0;right:0;display:flex;flex-direction:column;align-items:stretch;gap:0;padding:8px 18px 18px;background:rgba(246,239,227,.98);border-bottom:1px solid var(--line);opacity:0;visibility:hidden;transform:translateY(-8px);transition:.25s ease}
+      .primary-nav.open{opacity:1;visibility:visible;transform:none}
+      .primary-nav a{padding:13px 0;border-top:1px solid var(--line)}
+      .exp-hero{min-height:620px}
+      .exp-hero-media{object-position:62% 60%}
+      .exp-hero-scrim{background:linear-gradient(180deg,rgba(4,3,1,.35) 0%,rgba(4,3,1,.55) 42%,rgba(4,3,1,.55) 62%,rgba(4,3,1,.4) 100%),linear-gradient(90deg,rgba(4,3,1,.5) 0%,rgba(4,3,1,0) 85%)}
+      .exp-hero-content{padding:0 20px}
+      .exp-hero h1{font-size:clamp(2.1rem,9vw,3.15rem);margin-bottom:14px}
+      .exp-hero-text{font-size:1.16rem;line-height:1.5}
+      .exp-hero-scroll{display:none}
+      .section-title{font-size:clamp(2.1rem,9vw,3.15rem)}
+      .section-copy{font-size:1.16rem}
+      .receive-grid{grid-template-columns:1fr}
+      .sample-mail-body{font-size:1.12rem}
+      .know-item{grid-template-columns:1fr;gap:6px;padding:20px 0}
+      .site-footer{padding:48px 6vw 24px}
+      .footer-inner{align-items:flex-start;flex-direction:column;gap:22px}
+      .footer-logo img{width:230px}
+      .footer-nav{gap:16px 20px}
+      .footer-social{width:40px;height:40px}
+    }
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}.text-reveal{opacity:1!important;transform:none!important}}
+  </style>
+</head>
+<body>
+  <header class="site-header" id="siteHeader">
+    <a class="site-logo" href="index.html" aria-label="Seek Consciousness home"><img src="assets/media/seek-consciousness-logo.png" alt="Seek Consciousness"></a>
+    <button class="nav-toggle" type="button" aria-controls="primaryNav" aria-expanded="false" aria-label="Open navigation">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="primary-nav" id="primaryNav" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="index.html#choose-path">Choose Your Path</a>
+      <a href="teachings.html">Teachings</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 1. The invitation -->
+    <section class="exp-hero" id="top" aria-labelledby="pageTitle">
+      <video class="exp-hero-media" id="heroVideo" src="assets/media/explorer-hero.mp4" poster="assets/media/along-the-path-poster.jpg" autoplay muted loop playsinline preload="auto" tabindex="-1" disablepictureinpicture aria-hidden="true"></video>
+      <div class="exp-hero-scrim" aria-hidden="true"></div>
+      <div class="exp-hero-content">
+        <div class="exp-hero-copy">
+          <nav class="exp-breadcrumb text-reveal" aria-label="Breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="exp-breadcrumb-sep" aria-hidden="true">/</span>
+            <span class="exp-breadcrumb-current" aria-current="page">Along the Path</span>
+          </nav>
+          <span class="eyebrow exp-hero-eyebrow text-reveal">Other Ways To Explore</span>
+          <h1 id="pageTitle" class="text-reveal">Along the Path</h1>
+          <div class="exp-hero-text text-reveal">
+            <p>Some things don't fit in a video. A guide to go slower with. A practice to try over a few days. What I've been reflecting on, and a note when there's something new or a chance to sit together live.</p>
+            <p class="exp-hero-close">If that sounds useful, you're welcome to come along. If not, everything here stays open to you.</p>
+          </div>
+        </div>
+      </div>
+      <a class="exp-hero-scroll" href="#receive">See What's Inside</a>
+    </section>
+
+    <!-- 2. What you'd receive -->
+    <section class="section-pad receive-section" id="receive" aria-labelledby="receiveTitle">
+      <div class="wrap">
+        <div class="receive-head">
+          <span class="eyebrow text-reveal">What You'd Receive</span>
+          <h2 id="receiveTitle" class="section-title text-reveal">A little more than the videos.</h2>
+          <p class="section-copy text-reveal">The website is the map. The videos are the teachings. These emails are for the days in between, when you want something small and real to come back to.</p>
+        </div>
+        <div class="receive-grid">
+          <article class="receive-card text-reveal">
+            <span class="receive-num">01</span>
+            <h3>Guides</h3>
+            <p>Simple companions to the teachings, for when you'd rather sit with something than scroll past it.</p>
+          </article>
+          <article class="receive-card text-reveal">
+            <span class="receive-num">02</span>
+            <h3>Practice Series</h3>
+            <p>A few short practices over several days, so you can try something slowly and notice what it opens up.</p>
+          </article>
+          <article class="receive-card text-reveal">
+            <span class="receive-num">03</span>
+            <h3>Notes From Kurt</h3>
+            <p>What I'm noticing, practicing, and still figuring out. Some of it never makes it into a video.</p>
+          </article>
+          <article class="receive-card text-reveal">
+            <span class="receive-num">04</span>
+            <h3>When Something's Happening</h3>
+            <p>A quiet note when a new teaching is out, or when we can sit together live.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. A sample: Kurt's own words from the Mini Meditation teaching (phone-check-meditation.html) -->
+    <section class="section-pad sample-section" id="sample" aria-labelledby="sampleTitle">
+      <div class="wrap sample-grid">
+        <div class="sample-copy">
+          <span class="eyebrow text-reveal">A Taste Of One</span>
+          <h2 id="sampleTitle" class="section-title text-reveal">Here's what one might look like.</h2>
+          <p class="section-copy text-reveal">Short enough to read in a minute. Simple enough to try before you put your phone down.</p>
+          <a class="text-link text-reveal" href="phone-check-meditation.html">Watch the full mini meditation <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="text-reveal">
+          <div class="sample-mail">
+            <dl class="sample-mail-head">
+              <dt>From</dt><dd>Kurt, Seek Consciousness</dd>
+              <dt>Subject</dt><dd>Before you check your phone</dd>
+            </dl>
+            <div class="sample-mail-body">
+              <p>How many times a day do you pick up your phone without even knowing why? You're not checking a message. You're not looking for anything important. You just reach for it out of habit.</p>
+              <p>Next time, take 30 seconds. Take a nice full breath in, allowing your belly to expand. Then slowly exhale. Make your exhale a little longer than your inhale.</p>
+              <p>Now look around. Notice the light, the colors, the sounds, the little details you would normally overlook.</p>
+              <p>You don't meditate once and become enlightened. You keep coming back. Every time you return to awareness, you're making a little shift. And those shifts add up.</p>
+              <p class="sign">Kurt</p>
+            </div>
+          </div>
+          <p class="sample-note">In Kurt's words, from his mini meditation teaching.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Why I share this: Kurt's signed note -->
+    <section class="section-pad why-section" id="why" aria-labelledby="whyTitle">
+      <div class="wrap why-grid">
+        <div>
+          <span class="eyebrow text-reveal">Why I Share This</span>
+          <h2 id="whyTitle" class="section-title text-reveal">The map I wish someone had handed me.</h2>
+          <div class="section-copy text-reveal">
+            <p>For years I wrote things down everywhere: notes, journals, documents, little pieces scattered all over the place. These emails are where some of those pieces go.</p>
+            <p>Take what serves you. Leave what doesn't.</p>
+          </div>
+        </div>
+        <figure class="why-note">
+          <img src="assets/media/kurt-note.jpg" alt="A handwritten note from Kurt: I spent decades exploring meditation, ancient wisdom, psychology, neuroscience, breathwork, and expanded states of consciousness. Seek Consciousness is the map I wish someone had handed me. My hope is that it helps you discover your own path." loading="lazy">
+        </figure>
+      </div>
+    </section>
+
+    <!-- 5. Good to know -->
+    <section class="section-pad know-section" id="know" aria-labelledby="knowTitle">
+      <div class="wrap">
+        <div class="know-head">
+          <span class="eyebrow text-reveal">Good To Know</span>
+          <h2 id="knowTitle" class="section-title text-reveal">No pressure, either way.</h2>
+        </div>
+        <div class="know-list">
+          <div class="know-item text-reveal"><h3>Does it cost anything?</h3><p>No. Joining is free.</p></div>
+          <div class="know-item text-reveal"><h3>How often will I hear from you?</h3><p>Not often. Only when there's something worth sharing.</p></div>
+          <div class="know-item text-reveal"><h3>Do I have to read them right away?</h3><p>Not at all. Each one waits in your inbox until you're ready for it.</p></div>
+          <div class="know-item text-reveal"><h3>What if it's not for me?</h3><p>Every email has an unsubscribe link. Stay as long as it serves you.</p></div>
+          <div class="know-item text-reveal"><h3>What happens to my email?</h3><p>It's only used to send these. It's never sold or shared.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Join -->
+    <!-- TODO: point the form at the email tool's signup URL (MailerLite / Kit) with double opt-in, then remove the demo handler at the bottom. -->
+    <section class="section-pad join-section" id="join" aria-labelledby="joinTitle">
+      <div class="wrap join-grid">
+        <div class="join-copy">
+          <span class="eyebrow text-reveal">Whenever You're Ready</span>
+          <h2 id="joinTitle" class="section-title text-reveal">Come along, if it feels right.</h2>
+          <p class="section-copy text-reveal">Leave your email and the next one will find you. Or don't. The teachings are always open, and the path is yours either way.</p>
+          <div class="join-door text-reveal" aria-hidden="true"><img src="assets/media/recognition-question.jpg" alt="" loading="lazy"></div>
+        </div>
+        <div class="join-card text-reveal">
+          <form class="join-form" action="#" method="post">
+            <h3>Along the Path</h3>
+            <p class="join-sub">Guides, practices, and notes from Kurt.</p>
+            <label for="firstName">Name (optional)</label>
+            <input id="firstName" name="first_name" type="text" placeholder="What should I call you?" autocomplete="given-name">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required autocomplete="email">
+            <button class="exp-btn exp-btn--primary" type="submit">Come Along</button>
+            <p class="join-fine">Free. Leave anytime with one click.</p>
+          </form>
+          <div class="join-thanks" hidden>
+            <h3>You're in.</h3>
+            <p>Check your inbox to confirm your email. Until the first one arrives, keep seeking.</p>
+            <a class="text-link" href="teachings.html#c-start-here">Start here <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <a class="footer-logo" href="index.html" aria-label="Return to the homepage"><img src="assets/media/seek-consciousness-logo.png" alt="Seek Consciousness"></a>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="index.html#intro">Recognition</a>
+        <a href="index.html#mission">Seek Consciousness</a>
+        <a href="index.html#choose-path">Choose Your Path</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="footer-socials" aria-label="Seek Consciousness on social media">
+        <a class="footer-social" href="https://www.instagram.com/seek_consciousness/" target="_blank" rel="noopener noreferrer" aria-label="Seek Consciousness on Instagram" title="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.6" r=".9" fill="currentColor" stroke="none"></circle></svg></a>
+        <a class="footer-social" href="https://www.facebook.com/seekconsciousness/" target="_blank" rel="noopener noreferrer" aria-label="Seek Consciousness on Facebook" title="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 3.5h-1.8a3.7 3.7 0 0 0-3.7 3.7v2.6H6.8v3.4H9v7.3h3.4v-7.3h2.6l.5-3.4h-3.1V7.6c0-.6.5-1 1-1h1.1Z"></path></svg></a>
+        <a class="footer-social" href="https://www.tiktok.com/@seek_consciousness" target="_blank" rel="noopener noreferrer" aria-label="Seek Consciousness on TikTok" title="TikTok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3.5v11.3a3.7 3.7 0 1 1-3.7-3.7"></path><path d="M14 3.5c.4 2.7 2.2 4.4 4.9 4.6"></path></svg></a>
+        <a class="footer-social" href="https://www.threads.com/@seek_consciousness" target="_blank" rel="noopener noreferrer" aria-label="Seek Consciousness on Threads" title="Threads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.6"></circle><path d="M15.6 8.4v4.4a2.6 2.6 0 0 0 5.2 0V12a8.8 8.8 0 1 0-3.4 6.95"></path></svg></a>
+        <a class="footer-social" href="https://www.youtube.com/@seek_consciousness" target="_blank" rel="noopener noreferrer" aria-label="Seek Consciousness on YouTube" title="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8.2c-.2-1.6-1.2-2.7-2.8-2.9C16.5 5 14.4 5 12 5s-4.5 0-6.2.3C4.2 5.5 3.2 6.6 3 8.2A29 29 0 0 0 2.8 12c0 1.5.1 2.8.2 3.8.2 1.6 1.2 2.7 2.8 2.9 1.7.3 3.8.3 6.2.3s4.5 0 6.2-.3c1.6-.2 2.6-1.3 2.8-2.9.1-1 .2-2.3.2-3.8s-.1-2.8-.2-3.8Z"></path><path d="m10 9 5 3-5 3V9Z" fill="currentColor" stroke="none"></path></svg></a>
+      </div>
+    </div>
+    <p class="copyright">&copy; <span id="year"></span> Seek Consciousness. All rights reserved.</p>
+  </footer>
+
+  <script>
+  (()=>{
+    'use strict';
+    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const toggle=document.querySelector('.nav-toggle'); const nav=document.getElementById('primaryNav');
+    toggle?.addEventListener('click',()=>{const open=!nav.classList.contains('open');nav.classList.toggle('open',open);toggle.setAttribute('aria-expanded',String(open));});
+    nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+
+    // Hero video holds still for people who prefer less motion (the poster frame shows instead)
+    const video=document.getElementById('heroVideo');
+    if(reduced&&video){video.removeAttribute('autoplay');video.pause();}
+
+    const items=[...document.querySelectorAll('.text-reveal')];
+    if(reduced||!('IntersectionObserver'in window)) items.forEach(x=>x.classList.add('is-visible')); else {
+      const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -4%'});items.forEach(x=>io.observe(x));
+    }
+
+    // Demo only: shows the thank-you message. Replace with the email tool's form action.
+    document.querySelectorAll('.join-form').forEach(f=>f.addEventListener('submit',e=>{
+      e.preventDefault(); if(!f.checkValidity()){f.reportValidity();return;}
+      f.hidden=true; f.nextElementSibling.hidden=false;
+    }));
+
+    document.getElementById('year').textContent=new Date().getFullYear();
+  })();
+  </script>
+</body>
+</html>
