@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Letters (email list) landing page. Hero: dark background with animated light rays (no photo). Form is a demo until the email tool is chosen. -->
+<!-- Letters (email list) landing page. Hero: assets/media/hero-letters.jpg (Canva) with animated light rays. Form is a demo until the email tool is chosen. -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -68,7 +68,6 @@
   .s-paper{background:var(--paper)}
   .head{max-width:680px;margin-bottom:56px}
   .head h2{margin:18px 0 20px}
-  .head:last-child{margin-bottom:0}
 
   /* Hero */
   .hero{min-height:calc(88vh - var(--header-height));display:flex;align-items:center}
@@ -148,7 +147,7 @@
   /* Hero: photo background with slow drift + parallax, like About's hero */
   .s-dark.hero{background:#0d0a07}
   .s-dark::before{display:none}
-  .hero-bg{position:absolute;inset:-8% 0;background:radial-gradient(ellipse at 18% 0%,rgba(149,102,44,.28) 0%,rgba(13,10,7,0) 55%),radial-gradient(ellipse at 80% 85%,rgba(217,168,105,.10) 0%,rgba(13,10,7,0) 60%),#0d0a07;}
+  .hero-bg{position:absolute;inset:-8% 0;background:url("assets/media/hero-letters.jpg") center 55%/cover no-repeat,radial-gradient(ellipse at 18% 0%,rgba(149,102,44,.28) 0%,rgba(13,10,7,0) 55%),radial-gradient(ellipse at 80% 85%,rgba(217,168,105,.10) 0%,rgba(13,10,7,0) 60%),#0d0a07;will-change:transform;animation:heroDrift 28s ease-in-out infinite alternate}
   .hero-scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,6,4,.86) 0%,rgba(8,6,4,.62) 42%,rgba(8,6,4,.25) 72%,rgba(8,6,4,.18) 100%),linear-gradient(rgba(8,6,4,.25) 0%,rgba(8,6,4,.1) 30%,rgba(8,6,4,.6) 100%)}
   .hero .wrap{position:relative;z-index:2;width:100%}
   @keyframes heroDrift{from{transform:scale(1.04) translate3d(0,var(--py,0px),0)}to{transform:scale(1.12) translate3d(-1.5%,var(--py,0px),0)}}
@@ -283,7 +282,7 @@
   .s-night .motes i{background:rgba(255,236,200,.9)}
 
   /* v4: hero without photo, light rays carry it */
-  .hero-scrim{background:linear-gradient(90deg,rgba(8,6,4,.35) 0%,rgba(8,6,4,0) 60%) !important}
+  .hero-scrim{background:linear-gradient(90deg,rgba(8,6,4,.86) 0%,rgba(8,6,4,.6) 42%,rgba(8,6,4,.22) 75%,rgba(8,6,4,.15) 100%),linear-gradient(rgba(8,6,4,.2) 0%,rgba(8,6,4,0) 30%,rgba(8,6,4,.5) 100%) !important}
   .light-rays .ray{background:linear-gradient(180deg,rgba(255,214,150,.55) 0%,rgba(255,200,130,.26) 45%,rgba(255,190,120,0) 88%)}
   .light-pool{right:8%;top:30%}
   @media (prefers-reduced-motion:reduce){
@@ -331,8 +330,8 @@
     <div class="wrap">
       <div class="head">
         <span class="eyebrow reveal">What arrives</span>
-        <h2 class=" reveal">The website is the map.</h2>
-        <p class="lead muted reveal">The letters are something smaller you can carry with you, and come back to on the days you need them.</p>
+        <h2 class=" reveal">Another way to explore.</h2>
+        <p class="lead muted reveal">The website is the map. The letters are something smaller you can carry with you, and come back to on the days you need them.</p>
       </div>
       <div class="grid">
         <div class="card reveal">
@@ -361,7 +360,7 @@
         <span class="eyebrow reveal">Notes from Kurt</span>
         <h2 class="reveal">Written the way I'd write to a friend.</h2>
         <p class="lead muted reveal">Some of what I share starts as a few lines in a notebook. The letters are where those notes go first: what I'm noticing, what I'm practicing, and what I'm still figuring out.</p>
-        <blockquote class="reveal">"The work stops being something you study and becomes something you live."</blockquote>
+        <blockquote class="reveal">"My hope is that it helps you discover your own path."</blockquote>
       </div>
     </div>
   </section>
@@ -372,7 +371,24 @@
       <div class="head">
         <span class="eyebrow reveal">On your own time</span>
         <h2 class=" reveal">Something to open when you have a moment</h2>
-        <p class="lead muted reveal">Think of them as messages in a bottle. Each one waits in your inbox until you're ready to sit with it.</p>
+        <p class="lead muted reveal">Think of them as messages in a bottle, washed up one at a time. There's no rush to open them; each letter isn't meant to be read the second it lands. Each one drifts in on its own and waits quietly in your inbox until you're ready to sit with it.</p>
+      </div>
+      <div class="grid">
+        <div class="card reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v2M5.6 5.6l1.4 1.4M3 12h2M19 12h2M17 7l1.4-1.4"/><path d="M7 16a5 5 0 0 1 10 0"/><path d="M3 20h18"/></svg></div>
+          <span class="num">01</span><h3>In the morning</h3>
+          <p>Read one with your coffee, before the day starts asking things of you.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 3v3M12 3v3"/></svg></div>
+          <span class="num">02</span><h3>On a break</h3>
+          <p>A few quiet minutes away from the noise, wherever you are.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></div>
+          <span class="num">03</span><h3>Whenever you're ready</h3>
+          <p>Tonight, next week, or the day you need it most. There's no rush.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -384,7 +400,7 @@
     <div class="motes" aria-hidden="true"></div>
     <div class="wrap">
       <div class="rule reveal"></div>
-      <p class="reveal" style="--d:.3s">There's no right pace for this.<br>Take what serves you. Leave what doesn't.</p>
+      <p class="reveal" style="--d:.3s">There's no right pace for this.<br>Take what speaks to you, and leave the rest.</p>
     </div>
   </section>
 
@@ -393,12 +409,12 @@
     <div class="wrap">
       <div class="head">
         <span class="eyebrow reveal">Good to know</span>
-        <h2 class=" reveal">What to expect.</h2>
+        <h2 class=" reveal">A few honest answers.</h2>
       </div>
       <div class="faq">
         <div class="faq-item reveal">
           <h3>What will I receive?</h3>
-          <p>Guides, practice series, and notes from me: what I've been reflecting on, and a quiet note when something new is ready or when there's a chance to gather in real time.</p>
+          <p>Guides, practice series, and notes from Kurt: what he's been reflecting on, and a quiet note when something new is ready or when there's a chance to gather in real time.</p>
         </div>
         <div class="faq-item reveal">
           <h3>Do I have to read them right away?</h3>
@@ -426,7 +442,7 @@
         <form class="signup" action="#" method="post">
           <h3>Letters from the Path</h3>
           <label for="fname">Name (optional)</label>
-          <input id="fname" name="first_name" type="text" placeholder="What should I call you?" autocomplete="given-name">
+          <input id="fname" name="first_name" type="text" placeholder="What should we call you?" autocomplete="given-name">
           <label for="email1">Email</label>
           <input id="email1" name="email" type="email" placeholder="you@example.com" required autocomplete="email">
           <button class="btn btn--solid" type="submit">Receive the Letters</button>
