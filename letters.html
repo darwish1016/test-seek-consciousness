@@ -263,6 +263,23 @@
   .card .icon svg{stroke:var(--ochre)}
   .card:hover{border-color:rgba(149,102,44,.55);box-shadow:inset 0 0 40px rgba(149,102,44,.14),0 22px 40px -24px rgba(61,43,25,.5)}
   .card:hover .icon{background:rgba(255,248,230,.75)}
+
+  /* ===== v3: cards like Home "Choose Your Path" path cards ===== */
+  .s-cards{background:var(--paper-deep) !important}
+  .card,.s-light .card{background:rgba(255,255,255,.36) !important;border:1px solid var(--line) !important;box-shadow:none !important;color:var(--ink);padding:30px !important;transition:transform .45s var(--ease),box-shadow .45s var(--ease),background .45s var(--ease)}
+  .card:hover{transform:translateY(-6px);background:rgba(255,255,255,.5) !important;box-shadow:0 24px 44px -26px rgba(61,43,25,.45) !important}
+  .card .icon{display:none}
+  .card .num{display:block;font-family:var(--display);font-size:10.9px;letter-spacing:.18em;color:var(--ochre);margin-bottom:14px}
+  .card h3{font-size:clamp(24px,2.2vw,32px);line-height:1.15;color:var(--ink);margin-bottom:16px}
+  .card p{font-size:21px;color:var(--muted)}
+
+  /* ===== v3: dark starry signup section ===== */
+  .s-night{background:var(--dark) !important;color:#fff;position:relative;overflow:hidden}
+  .s-night .wrap{position:relative;z-index:2}
+  .s-night .eyebrow{color:var(--ochre-light)}
+  .s-night h2{color:#fff}
+  .s-night .lead.muted{color:rgba(248,240,221,.82)}
+  .s-night .motes i{background:rgba(255,236,200,.9)}
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation:none !important;transition:none !important}
     .reveal{opacity:1;transform:none}
@@ -304,7 +321,7 @@
   </section>
 
   <!-- What arrives -->
-  <section class="s-light">
+  <section class="s-light s-cards">
     <div class="wrap">
       <div class="head">
         <span class="eyebrow reveal">What arrives</span>
@@ -314,17 +331,17 @@
       <div class="grid">
         <div class="card reveal">
           <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"/><path d="M8 9h6M8 13h6"/></svg></div>
-          <h3>Guides</h3>
+          <span class="num">01</span><h3>Guides</h3>
           <p>Simple companions to the teachings, for when you'd rather sit with something than scroll past it.</p>
         </div>
         <div class="card reveal">
           <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div>
-          <h3>Practice Series</h3>
+          <span class="num">02</span><h3>Practice Series</h3>
           <p>A few short practices sent over several days, so you can try something gently and notice what it opens up.</p>
         </div>
         <div class="card reveal">
           <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 8.3l6 3.7-6 3.7z"/><circle cx="12" cy="12" r="10"/></svg></div>
-          <h3>Notes from Kurt</h3>
+          <span class="num">03</span><h3>Notes from Kurt</h3>
           <p>What I've been reflecting on lately, and a quiet note when something new is ready or when we can sit together in real time.</p>
         </div>
       </div>
@@ -344,7 +361,7 @@
   </section>
 
   <!-- On your own time -->
-  <section class="s-light">
+  <section class="s-light s-cards">
     <div class="wrap">
       <div class="head">
         <span class="eyebrow reveal">On your own time</span>
@@ -354,17 +371,17 @@
       <div class="grid">
         <div class="card reveal">
           <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v2M5.6 5.6l1.4 1.4M3 12h2M19 12h2M17 7l1.4-1.4"/><path d="M7 16a5 5 0 0 1 10 0"/><path d="M3 20h18"/></svg></div>
-          <h3>In the morning</h3>
+          <span class="num">01</span><h3>In the morning</h3>
           <p>Read one with your coffee, before the day starts asking things of you.</p>
         </div>
         <div class="card reveal">
           <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 3v3M12 3v3"/></svg></div>
-          <h3>On a break</h3>
+          <span class="num">02</span><h3>On a break</h3>
           <p>A few quiet minutes away from the noise, wherever you are.</p>
         </div>
         <div class="card reveal">
           <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></div>
-          <h3>Whenever you're ready</h3>
+          <span class="num">03</span><h3>Whenever you're ready</h3>
           <p>Tonight, next week, or the day you need it most. There's no rush.</p>
         </div>
       </div>
@@ -408,7 +425,8 @@
 
   <!-- The one form -->
   <!-- TODO: set the form action to the email tool's signup URL (MailerLite / Mailchimp / Kit) and remove the demo script at the bottom. -->
-  <section class="s-light" id="join">
+  <section class="s-night" id="join">
+    <div class="motes motes-join" aria-hidden="true"></div>
     <div class="wrap join">
       <div>
         <span class="eyebrow reveal">Whenever you're ready</span>
@@ -482,8 +500,9 @@
     var ld=document.querySelector('.light-dust');
     for(var k=0;k<22;k++){var q=document.createElement('i');q.style.left=(5+Math.random()*55)+'%';q.style.top=(Math.random()*70)+'%';q.style.animationDuration=(8+Math.random()*10)+'s';q.style.animationDelay=(-Math.random()*15)+'s';q.style.setProperty('--dx',(30+Math.random()*90)+'px');q.style.setProperty('--dy',(40+Math.random()*120)+'px');ld.appendChild(q)}
     // light motes
-    var m=document.querySelector('.motes');
+    document.querySelectorAll('.motes').forEach(function(m){
     for(var i=0;i<26;i++){var d=document.createElement('i');d.style.left=(Math.random()*100)+'%';d.style.animationDuration=(10+Math.random()*14)+'s';d.style.animationDelay=(-Math.random()*20)+'s';d.style.setProperty('--dx',((Math.random()-.5)*120)+'px');var s=1+Math.random()*2.5;d.style.width=d.style.height=s+'px';m.appendChild(d)}
+    });
     // parallax
     var hb=document.querySelector('.hero-bg'), tb=document.querySelector('.tree-bg'), tr=document.querySelector('.reflect.tree');
     function onScroll(){var y=window.scrollY;hb.style.setProperty('--py',(y*0.25)+'px');var r=tr.getBoundingClientRect();var p=(r.top+r.height/2-innerHeight/2)*-0.15;tb.style.transform='translate3d(0,'+p+'px,0)'}
